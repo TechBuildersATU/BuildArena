@@ -76,7 +76,7 @@ Deliberate deviations from the prototype, decided with the club:
 | Fonts         | @fontsource Bricolage Grotesque + Plus Jakarta Sans + JetBrains Mono, bundled locally       |
 | Tests         | Vitest + React Testing Library + jsdom + fake-indexeddb; Playwright (tablet profile) + axe  |
 | Lint / format | oxlint (`.oxlintrc.json`, includes `react/no-danger`) + Prettier                            |
-| Staff PIN     | @noble/hashes PBKDF2-SHA-256; default PIN 1234 (change before the event)                    |
+| Staff PIN     | @noble/hashes PBKDF2-SHA-256; public default 1234, real PIN set on the tablet (device only) |
 
 ## Commands
 

@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router'
 import { resetTutorial } from '@/app/firstLaunch'
 import { isNativeApp } from '@/app/native'
 import { ROUTES } from '@/app/routes'
+import { DEFAULT_PIN_TEXT, hasCustomPin } from '@/app/staffPin'
 import { useGoBack } from '@/app/useGoBack'
 import { usePressGuard } from '@/app/usePress'
 import { sfx } from '@/audio/sfx'
 import { Icon } from '@/components/Icon'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
-import { PinDialog } from '@/components/PinDialog'
+import { PinDialog, PinSetDialog } from '@/components/PinDialog'
 import { Logo, VolumeSlider } from '@/components/Bits'
 import { findScenario, shortName } from '@/data/scenarioBank'
 import { archiveAndReset, useDuels, useScores } from '@/db/database'
@@ -377,6 +378,8 @@ function SettingsPane() {
   const settings = useSettingsStore()
   const showToast = useUiStore((st) => st.showToast)
   const [confirming, setConfirming] = useState(false)
+  const [changingPin, setChangingPin] = useState(false)
+  const [customPin, setCustomPin] = useState(hasCustomPin)
 
   const seg = (key: 'duelSec' | 'stepSec', values: readonly number[]) => (
     <div className={s.seg3} role="group">
@@ -416,7 +419,7 @@ function SettingsPane() {
 
   return (
     <div className={s.pane} data-testid="pane-set">
-      <div className={s.adm} style={{ width: 760, left: 260 }}>
+      <div className={s.adm} style={{ width: 860, left: 210 }}>
         <h2>Ayarlar</h2>
         <div className={s.setg}>
           <div className={s.setr}>
@@ -502,12 +505,50 @@ function SettingsPane() {
             <Icon name="database" />
             Örnek verileri yükle
           </button>
+          <button
+            type="button"
+            className={s.btn}
+            data-testid="admin-pin"
+            onClick={() => {
+              sfx.tap()
+              setChangingPin(true)
+            }}
+          >
+            <Icon name="key-round" />
+            PIN&apos;i değiştir
+          </button>
         </div>
         <div className={s.anote}>
           <Icon name="info" />
-          Sıfırlanan gün silinmez, tarihli bir arşive taşınır. Varsayılan PIN: 1234.
+          Sıfırlanan gün silinmez, tarihli bir arşive taşınır.
+        </div>
+        <div className={s.anote} data-testid="admin-pin-state" data-custom={customPin}>
+          {customPin ? (
+            <>
+              <Icon name="shield-check" />
+              PIN yalnızca bu tablette saklanır, kodda ve GitHub&apos;da görünmez. Not edin:
+              unutulursa veriler silinmeden açılamaz.
+            </>
+          ) : (
+            <>
+              <Icon name="triangle-alert" />
+              Herkesin bildiği varsayılan PIN ({DEFAULT_PIN_TEXT}) kullanılıyor; etkinlikten önce bu
+              tablete özel bir PIN belirleyin.
+            </>
+          )}
         </div>
       </div>
+
+      {changingPin && (
+        <PinSetDialog
+          onClose={() => setChangingPin(false)}
+          onDone={() => {
+            setChangingPin(false)
+            setCustomPin(true)
+            showToast('key-round', 'Yeni PIN bu tablete kaydedildi')
+          }}
+        />
+      )}
 
       {confirming && (
         <ConfirmDialog

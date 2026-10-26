@@ -2747,8 +2747,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 8px 18px;
-  min-height: 72px;
+  padding: 4px 18px;
+  min-height: 64px;
   border-bottom: 1.5px solid var(--sunk);
   font-weight: 700;
 }

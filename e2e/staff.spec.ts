@@ -239,3 +239,53 @@ test('leaving the staff menu locks it again', async ({ page }) => {
   await expect(page.getByTestId('pin-dialog')).toBeVisible()
   await expect(page.getByTestId('admin')).toHaveCount(0)
 })
+
+test("PIN'i değiştir: a PIN only this tablet knows replaces the public 1234", async ({ page }) => {
+  await openStaffMenu(page)
+  await page.getByTestId('tab-set').tap()
+  const state = page.getByTestId('admin-pin-state')
+  await expect(state).toHaveAttribute('data-custom', 'false')
+  await expect(state).toContainText('varsayılan PIN (1234)')
+
+  const change = page.getByTestId('admin-pin')
+  await expectTouchTarget(change)
+  // everything fits the 1280×800 kiosk without scrolling: the four buttons share one row
+  const pinBox = (await change.boundingBox())!
+  expect(pinBox.y).toBe((await page.getByTestId('admin-reset-tutorial').boundingBox())!.y)
+  const stateBox = (await state.boundingBox())!
+  expect(stateBox.y + stateBox.height).toBeLessThanOrEqual(800)
+  expect(await page.evaluate(() => document.scrollingElement!.scrollTop)).toBe(0)
+  await change.tap()
+  const dialog = page.getByTestId('pin-set-dialog')
+  await expect(dialog).toBeVisible()
+  await expect(page.getByTestId('pin-set-hint')).toHaveText("Yeni 4 haneli PIN'i gir")
+  await page.waitForTimeout(300) // the overlay's fade-in
+  expect(await scanA11y(page)).toEqual([])
+  // the public default is refused
+  await enterPin(page, '1234')
+  await expect(page.getByTestId('pin-set-hint')).toHaveAttribute('data-step', 'default')
+  await expect(page.getByTestId('pin-dots')).toHaveAttribute('data-error', 'false')
+  await enterPin(page, '2580')
+  await expect(page.getByTestId('pin-set-hint')).toHaveAttribute('data-step', 'repeat')
+  await enterPin(page, '2580')
+  await expect(page.getByTestId('toast')).toContainText('Yeni PIN bu tablete kaydedildi')
+  await expect(dialog).toHaveCount(0)
+  await expect(state).toHaveAttribute('data-custom', 'true')
+  await expect(state).toContainText('kodda ve GitHub')
+  // only a salted hash is stored, never the digits
+  const stored = await page.evaluate(() => JSON.stringify(window.localStorage))
+  expect(stored).not.toContain('2580')
+
+  // 1234 no longer opens the menu; the new PIN does, after a full page load too
+  await page.getByTestId('btn-home').tap()
+  await page.getByTestId('btn-settings').tap()
+  await enterPin(page, '1234')
+  await expect(page.getByTestId('pin-dots')).toHaveAttribute('data-error', 'true')
+  await expect(page.getByTestId('pin-dots')).toHaveAttribute('data-error', 'false')
+  await expect(page.getByTestId('admin')).toHaveCount(0)
+  await page.goto('/?skipTutorial=1') // a full page load
+  await page.getByTestId('btn-settings').tap()
+  await expect(page.getByTestId('pin-dialog')).toBeVisible()
+  await enterPin(page, '2580')
+  await expect(page.getByTestId('admin')).toBeVisible()
+})

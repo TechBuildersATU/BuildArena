@@ -8,6 +8,8 @@ export const STORAGE_KEYS = {
   lastScenario: 'buildarena.senaryo.son',
   /** Staff PIN lockout: { failures, lockedUntil }. */
   pinLock: 'buildarena.pinLock',
+  /** This device's own staff PIN: { salt, hash } (never in the source code). */
+  pin: 'buildarena.pin',
 } as const
 
 export function readFlag(key: string): boolean {
