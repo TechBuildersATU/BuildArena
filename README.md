@@ -140,11 +140,17 @@ ana sayfaya döner.
 ## Görevli menüsü
 
 Skor tablosundaki **Görevli** düğmesi, ana ekrandaki ayar düğmesi ya da logoya 3 sn basılı
-tutmak → PIN (varsayılan **1234**, etkinlikten önce değiştirin). 5 hatalı denemede tuş takımı
-5 dakika kilitlenir. Sekmeler: **İlk 3** (paylaşım izni verenler; 1080×1350 gönderi ve
+tutmak → PIN. 5 hatalı denemede tuş takımı 5 dakika kilitlenir.
+
+**PIN kodda değil, tablette:** Kod GitHub'da açık olduğu için içinde yalnızca ilk açılış için
+herkesin bildiği **1234** vardır. Etkinlikten önce her tablette **Ayarlar → PIN'i değiştir** ile
+yeni bir PIN iki kez girilir. Yeni PIN yalnızca o tablette, cihaza özel rastgele tuzla
+PBKDF2 özeti olarak saklanır; koda, repoya ve GitHub'a hiç girmez (1234 yeni PIN olarak
+seçilemez). Yeni PIN bir yere not edilmeli: unutulursa uygulamanın verisi silinmeden görevli
+menüsü açılamaz. Sekmeler: **İlk 3** (paylaşım izni verenler; 1080×1350 gönderi ve
 1080×1920 hikâye PNG), **Gün sonu** (kişisel veri içermeyen özet + iki PNG), **Ayarlar**
 (düello 45/60/90 sn, adım 15/20/25 sn, ses seviyesi, ses, müzik, titreşim, bekleme modunda
-tutorial, tutorial'ı sıfırla, günü arşivle ve sıfırla, örnek verileri yükle).
+tutorial, tutorial'ı sıfırla, günü arşivle ve sıfırla, örnek verileri yükle, PIN'i değiştir).
 
 Düello sonucunda **Rövanş yok**: stant meşgul kalmasın, sıradaki ikili oynasın diye yalnızca Ana
 Menü ve Günün Liderleri var.

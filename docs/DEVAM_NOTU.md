@@ -39,6 +39,7 @@ Kaynaklar: `docs/tam_prototip/` (kulübün Tam Prototip v0.3'ü, tüm ekranlar b
 3. Açık temanın stant ışığında parlaması (paletteki öneri: tablet parlaklığı %60–70) ya da koyu
    temanın ışıkta okunurluğu — stantta hangisi iyi duruyorsa o seçilir.
 4. PWA kurulumu, tam ekran / kiosk kilidi, yatay yön; yeni logolu ikon.
-5. Varsayılan PIN 1234'ün değiştirilmesi (`src/app/staffPin.ts`).
+5. Her tablette PIN'in değiştirilmesi: Görevli → Ayarlar → PIN'i değiştir (yeni PIN yalnızca
+   tablette saklanır, kodda/GitHub'da görünmez; bir yere not edin).
 6. Linktree QR kodunun stantta telefon kamerasıyla okunması (ekran parlaklığı, mesafe).
 7. APK açılış animasyonunun gerçek tablette akıcılığı (emülatör yavaş olduğu için orada ölçülemedi).
