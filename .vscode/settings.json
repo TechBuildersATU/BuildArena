@@ -1,0 +1,16 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "files.associations": { "*.css": "tailwindcss" },
+  "tailwindCSS.experimental.configFile": "src/index.css",
+  "tailwindCSS.classFunctions": ["cn"],
+  "search.exclude": {
+    "**/node_modules": true,
+    "dist": true,
+    "dev-dist": true,
+    "docs/assets/tasarim_kaynak/lucide.min.js": true
+  },
+  "files.exclude": { "test-results": true, "playwright-report": true }
+}

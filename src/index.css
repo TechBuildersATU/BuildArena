@@ -1,0 +1,259 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+
+/* Expose the design tokens as Tailwind utilities: bg-card, text-ink-2, border-ink, rounded-md… */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-sunk: var(--sunk);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-note: var(--note);
+  --color-brand: var(--brand);
+  --color-brand-tint: var(--brand-tint);
+  --color-p1: var(--p1);
+  --color-p1-tint: var(--p1-tint);
+  --color-p2: var(--p2);
+  --color-p2-tint: var(--p2-tint);
+  --color-scn: var(--scn);
+  --color-scn-tint: var(--scn-tint);
+  --color-gold: var(--gold);
+  --color-ok: var(--ok);
+  --color-bad: var(--bad);
+  --color-warn: var(--warn);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+
+  --spacing-touch: var(--touch-min);
+  --spacing-touch-nav: var(--touch-nav);
+
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-digits);
+}
+
+/* Kiosk behaviour: no scrolling, zoom, long-press menu or text selection (§13.5) */
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+input,
+textarea {
+  user-select: text;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Headings and button labels use the display face (Renk Paleti: Bricolage Grotesque). */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+/* Every screen is laid out on a fixed 1280×800 stage that scales to fit the tablet
+   (same approach as the scenario-mode prototype). */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1280px;
+  height: 800px;
+  overflow: hidden;
+  transform-origin: center;
+  background: var(--paper);
+  /* slides up and back when the on-screen keyboard would cover a field (src/app/keyboard.ts) */
+  transition: transform 0.25s var(--ease);
+}
+
+.stage-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lucide {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+  flex: none;
+}
+
+/* FX layer elements created by src/game/fx.ts */
+.fx-bfly {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 44px;
+  height: 36px;
+  z-index: 31;
+  pointer-events: none;
+}
+.fx-bf .fx-wl,
+.fx-bf .fx-wr {
+  transform-origin: 20px 16px;
+  animation: fx-flap 0.15s ease-in-out infinite alternate;
+}
+.fx-trail {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: fx-fade 0.7s ease-out forwards;
+}
+.fx-rip {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid var(--scn-ink);
+  pointer-events: none;
+  animation: fx-rip 0.8s ease-out forwards;
+}
+@keyframes fx-flap {
+  to {
+    transform: scaleX(0.28);
+  }
+}
+@keyframes fx-fade {
+  to {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+@keyframes fx-rip {
+  from {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(2.8);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Logo sparkles on the home and tutorial hero (src/game/heroSparks.ts) */
+.hero-cf {
+  position: absolute;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+.hero-cf-rect {
+  width: 4px;
+  height: 8px;
+  border-radius: 1.5px;
+}
+.hero-cf-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.hero-cf-tri {
+  width: 9px;
+  height: 8px;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.hero-glint {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  filter: drop-shadow(0 0 6px #fff);
+}
+
+/* The card a duel player is dragging (src/screens/DuelGame.tsx), on the stage FX layer */
+.duel-ghost {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 2px solid var(--pci);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  z-index: 35;
+  box-shadow: 4px 4px 0 var(--pci);
+  pointer-events: none;
+  will-change: transform;
+}
+.duel-ghost-p1 {
+  --pc: var(--p1);
+  --pci: var(--p1-ink);
+}
+.duel-ghost-p2 {
+  --pc: var(--p2);
+  --pci: var(--p2-ink);
+}
+.duel-ghost-ic {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--rule);
+  background: var(--pc);
+  display: grid;
+  place-items: center;
+}
+.duel-ghost-ic .lucide {
+  width: 24px;
+  height: 24px;
+  color: var(--on);
+}
+.duel-ghost span {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.15;
+  padding: 0 4px;
+}

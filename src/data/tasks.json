@@ -1,0 +1,573 @@
+{
+  "aciklama": "Düello görev bankası (proje dokümanı Bölüm 10): her görevde 3 kritik (3) + 4 önemli (2) + 1 destek (1) = 8 gerekli kart (toplam ağırlık 18), 6 tuzak ve 2–3 birleşim (birleşim puanı tamamlanan birleşimlerin payıdır).",
+  "gorevler": [
+    {
+      "id": "hbys",
+      "no": "01",
+      "baslik": "Hastane Bilgi Yönetim Sistemi",
+      "kisa": "Hastane",
+      "ikon": "hospital",
+      "aciklama": "Hastaların randevu alabildiği, doktorların hasta kayıtlarına güvenle ulaşabildiği bir hastane sistemi tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Hasta",
+          "ikon": "user"
+        },
+        {
+          "ad": "Doktor",
+          "ikon": "stethoscope"
+        },
+        {
+          "ad": "Hemşire",
+          "ikon": "heart-pulse"
+        }
+      ],
+      "kritik": ["randevu", "hastakaydi", "sifreleme"],
+      "onemli": ["rbac", "recete", "tahlil", "denetim"],
+      "destek": ["vital"],
+      "tuzak": ["sepet", "kampanya", "paylas", "sadakat", "qrmenu", "rozet"],
+      "birlesimler": [
+        {
+          "ad": "Doğru kişi, doğru veri",
+          "kartlar": ["hastakaydi", "rbac"]
+        },
+        {
+          "ad": "KVKK uyumu",
+          "kartlar": ["hastakaydi", "sifreleme"]
+        },
+        {
+          "ad": "Tetkikten reçeteye",
+          "kartlar": ["tahlil", "recete"]
+        }
+      ]
+    },
+    {
+      "id": "magaza",
+      "no": "02",
+      "baslik": "Online Giyim Mağazası",
+      "kisa": "Mağaza",
+      "ikon": "shopping-bag",
+      "aciklama": "Gençlere yönelik bir online giyim mağazası uygulaması tasarla. Black Friday'de de çökmemeli.",
+      "hedefKitle": [
+        {
+          "ad": "Müşteri",
+          "ikon": "user"
+        },
+        {
+          "ad": "Yönetici",
+          "ikon": "store"
+        },
+        {
+          "ad": "Kargo",
+          "ikon": "truck"
+        }
+      ],
+      "kritik": ["urunler", "sepet", "odeme"],
+      "onemli": ["filtre", "kargo", "iade", "olcek"],
+      "destek": ["kampanya"],
+      "tuzak": ["randevu", "recete", "turnike", "gecikme", "mutfak", "rozet"],
+      "birlesimler": [
+        {
+          "ad": "Sorunsuz ödeme",
+          "kartlar": ["sepet", "odeme"]
+        },
+        {
+          "ad": "Sipariş döngüsü",
+          "kartlar": ["kargo", "iade"]
+        },
+        {
+          "ad": "Aradığını hızlı bul",
+          "kartlar": ["urunler", "filtre"]
+        }
+      ]
+    },
+    {
+      "id": "kutuphane",
+      "no": "03",
+      "baslik": "Kütüphane Otomasyon Sistemi",
+      "kisa": "Kütüphane",
+      "ikon": "library",
+      "aciklama": "Üniversite kütüphanesi için öğrencilerin kitap bulup ödünç alabildiği bir sistem tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Akademisyen",
+          "ikon": "presentation"
+        },
+        {
+          "ad": "Kütüphaneci",
+          "ikon": "book-open-check"
+        }
+      ],
+      "kritik": ["katalog", "odunc", "envanter"],
+      "onemli": ["rezervasyon", "gecikme", "hatirlatma", "kilit"],
+      "destek": ["isbn"],
+      "tuzak": ["sepet", "kalori", "mutfak", "recete", "kargo", "sadakat"],
+      "birlesimler": [
+        {
+          "ad": "Hızlı kitap girişi",
+          "kartlar": ["katalog", "isbn"]
+        },
+        {
+          "ad": "Zamanında iade",
+          "kartlar": ["odunc", "gecikme"]
+        },
+        {
+          "ad": "Adil rezervasyon",
+          "kartlar": ["rezervasyon", "kilit"]
+        }
+      ]
+    },
+    {
+      "id": "yemekhane",
+      "no": "04",
+      "baslik": "Yemekhane Bilgi Sistemi",
+      "kisa": "Yemekhane",
+      "ikon": "utensils-crossed",
+      "aciklama": "Kampüs yemekhanesi için turnikeli, bakiyeli bir sistem tasarla. Öğle saatinde 3.000 öğrenci geliyor.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Personel",
+          "ikon": "chef-hat"
+        },
+        {
+          "ad": "Yönetici",
+          "ikon": "briefcase"
+        }
+      ],
+      "kritik": ["bakiye", "turnike", "atomik"],
+      "onemli": ["menu", "gecmis", "gecikmesiz", "rapor"],
+      "destek": ["kalori"],
+      "tuzak": ["sepet", "adisyon", "kargo", "katalog", "randevu", "kampanya"],
+      "birlesimler": [
+        {
+          "ad": "Tutarlı geçiş",
+          "kartlar": ["turnike", "atomik"]
+        },
+        {
+          "ad": "Şeffaf bakiye",
+          "kartlar": ["bakiye", "gecmis"]
+        },
+        {
+          "ad": "Akan kuyruk",
+          "kartlar": ["turnike", "gecikmesiz"]
+        }
+      ]
+    },
+    {
+      "id": "kafe",
+      "no": "05",
+      "baslik": "Kafe Otomasyon ve Sipariş Sistemi",
+      "kisa": "Kafe",
+      "ikon": "coffee",
+      "aciklama": "Kampüs kafesi için masadan QR ile sipariş verilebilen bir sistem tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Müşteri",
+          "ikon": "user"
+        },
+        {
+          "ad": "Barista",
+          "ikon": "coffee"
+        },
+        {
+          "ad": "Kasa",
+          "ikon": "receipt"
+        }
+      ],
+      "kritik": ["qrmenu", "sepet", "mutfak"],
+      "onemli": ["adisyon", "stok", "sadakat", "cevrimdisi"],
+      "destek": ["paket"],
+      "tuzak": ["turnike", "randevu", "gecikme", "hastakaydi", "beden", "kargo"],
+      "birlesimler": [
+        {
+          "ad": "Masadan sipariş",
+          "kartlar": ["qrmenu", "sepet"]
+        },
+        {
+          "ad": "Mutfağa anında",
+          "kartlar": ["sepet", "mutfak"]
+        },
+        {
+          "ad": "İnternetsiz mutfak",
+          "kartlar": ["mutfak", "cevrimdisi"]
+        }
+      ]
+    },
+    {
+      "id": "ring",
+      "no": "06",
+      "baslik": "Kampüs Ring Servisi Uygulaması",
+      "kisa": "Ring",
+      "ikon": "bus",
+      "aciklama": "Öğrencilerin ring otobüsünü canlı takip edip derse zamanında yetişebildiği bir uygulama tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Şoför",
+          "ikon": "bus"
+        },
+        {
+          "ad": "Ulaşım Birimi",
+          "ikon": "map"
+        }
+      ],
+      "kritik": ["canlikonum", "varis", "harita"],
+      "onemli": ["bildirim", "doluluk", "sefer", "cevrimdisi"],
+      "destek": ["erisilebilirlik"],
+      "tuzak": ["sepet", "kampanya", "kalori", "adisyon", "rozet", "beden"],
+      "birlesimler": [
+        {
+          "ad": "Durağa tam vaktinde",
+          "kartlar": ["canlikonum", "varis"]
+        },
+        {
+          "ad": "Gecikmeyi önceden bil",
+          "kartlar": ["sefer", "bildirim"]
+        },
+        {
+          "ad": "Dolu ringe binme",
+          "kartlar": ["doluluk", "canlikonum"]
+        }
+      ]
+    },
+    {
+      "id": "etkinlik",
+      "no": "07",
+      "baslik": "Kulüp Etkinlik Uygulaması",
+      "kisa": "Etkinlik",
+      "ikon": "calendar-days",
+      "aciklama": "Öğrenci kulüplerinin etkinlik duyurup kayıt alabildiği, kapıda bilet okutabildiği bir uygulama tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Kulüp Başkanı",
+          "ikon": "users"
+        },
+        {
+          "ad": "SKS",
+          "ikon": "landmark"
+        }
+      ],
+      "kritik": ["etkinlik", "katilim", "kontenjan"],
+      "onemli": ["qrgiris", "bildirim", "duyuru", "rbac"],
+      "destek": ["paylas"],
+      "tuzak": ["recete", "vital", "kargo", "beden", "isbn", "adisyon"],
+      "birlesimler": [
+        {
+          "ad": "Kapıda sorunsuz giriş",
+          "kartlar": ["katilim", "qrgiris"]
+        },
+        {
+          "ad": "Kimse boşuna gelmesin",
+          "kartlar": ["kontenjan", "bildirim"]
+        }
+      ]
+    },
+    {
+      "id": "otopark",
+      "no": "08",
+      "baslik": "Kampüs Otopark Sistemi",
+      "kisa": "Otopark",
+      "ikon": "square-parking",
+      "aciklama": "Personel ve öğrencilerin boş yer bulup bariyerde beklemeden park edebildiği bir otopark sistemi tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Personel",
+          "ikon": "briefcase"
+        },
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Güvenlik",
+          "ikon": "shield-check"
+        }
+      ],
+      "kritik": ["plaka", "bosyer", "rbac"],
+      "onemli": ["rezervasyon", "sarj", "ihlal", "gecikmesiz"],
+      "destek": ["harita"],
+      "tuzak": ["menu", "kalori", "recete", "isbn", "rozet", "paylas"],
+      "birlesimler": [
+        {
+          "ad": "Bariyer anında açılsın",
+          "kartlar": ["plaka", "gecikmesiz"]
+        },
+        {
+          "ad": "Yer garantili giriş",
+          "kartlar": ["rezervasyon", "bosyer"]
+        }
+      ]
+    },
+    {
+      "id": "sinav",
+      "no": "09",
+      "baslik": "Online Sınav Sistemi",
+      "kisa": "Sınav",
+      "ikon": "monitor",
+      "aciklama": "Yüzlerce öğrencinin aynı anda girdiği, kopyaya karşı güvenli ve kesintiye dayanıklı bir online sınav sistemi tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Akademisyen",
+          "ikon": "presentation"
+        },
+        {
+          "ad": "Bilgi İşlem",
+          "ikon": "server"
+        }
+      ],
+      "kritik": ["kimlik", "sayac", "otokayit"],
+      "onemli": ["soruhavuzu", "olcek", "denetim", "sonuc"],
+      "destek": ["erisilebilirlik"],
+      "tuzak": ["paylas", "canliskor", "sepet", "kampanya", "qrmenu", "kalori"],
+      "birlesimler": [
+        {
+          "ad": "Kesintide cevap kaybolmaz",
+          "kartlar": ["otokayit", "olcek"]
+        },
+        {
+          "ad": "Adil sınav",
+          "kartlar": ["kimlik", "denetim"]
+        },
+        {
+          "ad": "Herkese uygun süre",
+          "kartlar": ["sayac", "erisilebilirlik"]
+        }
+      ]
+    },
+    {
+      "id": "kayip",
+      "no": "10",
+      "baslik": "Kayıp Eşya Uygulaması",
+      "kisa": "Kayıp Eşya",
+      "ikon": "package-check",
+      "aciklama": "Kampüste kaybolan eşyaların ilan edildiği, bulunduğu ve sahibine güvenle teslim edildiği bir uygulama tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Güvenlik",
+          "ikon": "shield-check"
+        },
+        {
+          "ad": "Personel",
+          "ikon": "briefcase"
+        }
+      ],
+      "kritik": ["ilan", "fotograf", "teslim"],
+      "onemli": ["katalog", "konum", "bildirim", "kimlik"],
+      "destek": ["rapor"],
+      "tuzak": ["kalori", "recete", "beden", "kampanya", "canliskor", "adisyon"],
+      "birlesimler": [
+        {
+          "ad": "Doğru sahibine teslim",
+          "kartlar": ["teslim", "kimlik"]
+        },
+        {
+          "ad": "Görünce tanı",
+          "kartlar": ["ilan", "fotograf"]
+        }
+      ]
+    },
+    {
+      "id": "spor",
+      "no": "11",
+      "baslik": "Spor Salonu Rezervasyonu",
+      "kisa": "Spor Salonu",
+      "ikon": "dumbbell",
+      "aciklama": "Öğrencilerin kampüs spor salonunda seans ayırıp turnikeden geçebildiği ve doluluğu görebildiği bir sistem tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Antrenör",
+          "ikon": "users"
+        },
+        {
+          "ad": "Tesis Yönetimi",
+          "ikon": "landmark"
+        }
+      ],
+      "kritik": ["rezervasyon", "doluluk", "turnike"],
+      "onemli": ["seans", "bekleme", "antrenman", "kilit"],
+      "destek": ["rozet"],
+      "tuzak": ["recete", "kargo", "isbn", "adisyon", "stok", "qrmenu"],
+      "birlesimler": [
+        {
+          "ad": "Çifte rezervasyon yok",
+          "kartlar": ["rezervasyon", "kilit"]
+        },
+        {
+          "ad": "Boşalan yer kapılır",
+          "kartlar": ["bekleme", "seans"]
+        }
+      ]
+    },
+    {
+      "id": "camasir",
+      "no": "12",
+      "baslik": "Yurt Çamaşırhane Uygulaması",
+      "kisa": "Çamaşırhane",
+      "ikon": "washing-machine",
+      "aciklama": "Yurtta boş makineyi görüp sıra alabildiğin ve ödemeyi telefondan yaptığın bir çamaşırhane uygulaması tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Yurt Görevlisi",
+          "ikon": "user"
+        },
+        {
+          "ad": "Teknik Servis",
+          "ikon": "wrench"
+        }
+      ],
+      "kritik": ["makine", "sira", "odeme"],
+      "onemli": ["bildirim", "ariza", "bakiye", "gecmis"],
+      "destek": ["rapor"],
+      "tuzak": ["kalori", "recete", "rozet", "paylas", "beden", "isbn"],
+      "birlesimler": [
+        {
+          "ad": "Makine boşalınca haber",
+          "kartlar": ["makine", "bildirim"]
+        },
+        {
+          "ad": "Ödeme güvencesi",
+          "kartlar": ["odeme", "gecmis"]
+        }
+      ]
+    },
+    {
+      "id": "derslik",
+      "no": "13",
+      "baslik": "Boş Derslik Bulucu",
+      "kisa": "Derslik",
+      "ikon": "door-open",
+      "aciklama": "Öğrencilerin çalışmak için boş derslik bulup kısa süreliğine ayırabildiği bir kampüs uygulaması tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Akademisyen",
+          "ikon": "presentation"
+        },
+        {
+          "ad": "Yapı İşleri",
+          "ikon": "construction"
+        }
+      ],
+      "kritik": ["bosderslik", "dersprogrami", "harita"],
+      "onemli": ["rezervasyon", "sensor", "rbac", "cevrimdisi"],
+      "destek": ["erisilebilirlik"],
+      "tuzak": ["sepet", "kampanya", "kalori", "recete", "kargo", "adisyon"],
+      "birlesimler": [
+        {
+          "ad": "Ders yoksa boş",
+          "kartlar": ["dersprogrami", "bosderslik"]
+        },
+        {
+          "ad": "Gerçekten boş mu?",
+          "kartlar": ["sensor", "bosderslik"]
+        }
+      ]
+    },
+    {
+      "id": "kan",
+      "no": "14",
+      "baslik": "Kan Bağışı Kampanyası",
+      "kisa": "Kan Bağışı",
+      "ikon": "droplet",
+      "aciklama": "Kampüste kan bağışına uygun gönüllülerin randevu alabildiği ve ihtiyaç anında haber verildiği bir sistem tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Bağışçı",
+          "ikon": "heart-handshake"
+        },
+        {
+          "ad": "Sağlık Ekibi",
+          "ikon": "stethoscope"
+        },
+        {
+          "ad": "Kızılay",
+          "ikon": "hospital"
+        }
+      ],
+      "kritik": ["uygunluk", "randevu", "sifreleme"],
+      "onemli": ["kangrubu", "bildirim", "harita", "denetim"],
+      "destek": ["paylas"],
+      "tuzak": ["sepet", "kampanya", "beden", "rozet", "isbn", "adisyon"],
+      "birlesimler": [
+        {
+          "ad": "Doğru kan, doğru an",
+          "kartlar": ["kangrubu", "bildirim"]
+        },
+        {
+          "ad": "Sağlık verisi korunur",
+          "kartlar": ["uygunluk", "sifreleme"]
+        }
+      ]
+    },
+    {
+      "id": "kariyer",
+      "no": "15",
+      "baslik": "Mezun Kariyer Platformu",
+      "kisa": "Kariyer",
+      "ikon": "briefcase",
+      "aciklama": "Öğrencilerin staj ve iş ilanlarına başvurup mezunlarla tanışabildiği bir kariyer platformu tasarla.",
+      "hedefKitle": [
+        {
+          "ad": "Öğrenci",
+          "ikon": "graduation-cap"
+        },
+        {
+          "ad": "Mezun",
+          "ikon": "user-check"
+        },
+        {
+          "ad": "İşveren",
+          "ikon": "briefcase"
+        }
+      ],
+      "kritik": ["cv", "isilani", "basvuru"],
+      "onemli": ["filtre", "mesaj", "bildirim", "sifreleme"],
+      "destek": ["rozet"],
+      "tuzak": ["kalori", "recete", "adisyon", "qrmenu", "turnike", "kargo"],
+      "birlesimler": [
+        {
+          "ad": "Doğru ilana doğru aday",
+          "kartlar": ["cv", "filtre"]
+        },
+        {
+          "ad": "Başvuruda neredeyim?",
+          "kartlar": ["basvuru", "bildirim"]
+        }
+      ]
+    }
+  ]
+}

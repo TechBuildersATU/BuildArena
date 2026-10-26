@@ -1,0 +1,509 @@
+{
+  "aciklama": "Gereksinim kartı kataloğu (proje dokümanı Bölüm 9): 84 kart, her biri 1 Lucide ikonu + en fazla 2 kelime. nfr: fonksiyonel olmayan gereksinim.",
+  "kartlar": [
+    {
+      "id": "katalog",
+      "ad": "Katalog Arama",
+      "ikon": "search",
+      "nfr": false
+    },
+    {
+      "id": "envanter",
+      "ad": "Kitap Envanteri",
+      "ikon": "library",
+      "nfr": false
+    },
+    {
+      "id": "odunc",
+      "ad": "Ödünç / İade",
+      "ikon": "book-open-check",
+      "nfr": false
+    },
+    {
+      "id": "rezervasyon",
+      "ad": "Rezervasyon",
+      "ikon": "bookmark",
+      "nfr": false
+    },
+    {
+      "id": "gecikme",
+      "ad": "Gecikme Cezası",
+      "ikon": "coins",
+      "nfr": false
+    },
+    {
+      "id": "hatirlatma",
+      "ad": "İade Hatırlatma",
+      "ikon": "bell-ring",
+      "nfr": false
+    },
+    {
+      "id": "kilit",
+      "ad": "Eşzamanlı Kilit",
+      "ikon": "lock-keyhole",
+      "nfr": true
+    },
+    {
+      "id": "isbn",
+      "ad": "ISBN Tarama",
+      "ikon": "scan-barcode",
+      "nfr": false
+    },
+    {
+      "id": "bakiye",
+      "ad": "Bakiye Yükleme",
+      "ikon": "wallet",
+      "nfr": false
+    },
+    {
+      "id": "turnike",
+      "ad": "Turnike Geçişi",
+      "ikon": "nfc",
+      "nfr": false
+    },
+    {
+      "id": "atomik",
+      "ad": "Atomik İşlem",
+      "ikon": "shield-check",
+      "nfr": true
+    },
+    {
+      "id": "menu",
+      "ad": "Günlük Menü",
+      "ikon": "utensils",
+      "nfr": false
+    },
+    {
+      "id": "gecmis",
+      "ad": "İşlem Geçmişi",
+      "ikon": "history",
+      "nfr": false
+    },
+    {
+      "id": "gecikmesiz",
+      "ad": "Düşük Gecikme",
+      "ikon": "zap",
+      "nfr": true
+    },
+    {
+      "id": "rapor",
+      "ad": "Gün Sonu Rapor",
+      "ikon": "chart-column",
+      "nfr": false
+    },
+    {
+      "id": "kalori",
+      "ad": "Kalori Bilgisi",
+      "ikon": "flame",
+      "nfr": false
+    },
+    {
+      "id": "qrmenu",
+      "ad": "QR Menü",
+      "ikon": "qr-code",
+      "nfr": false
+    },
+    {
+      "id": "sepet",
+      "ad": "Sepet",
+      "ikon": "shopping-cart",
+      "nfr": false
+    },
+    {
+      "id": "mutfak",
+      "ad": "Mutfak Ekranı",
+      "ikon": "chef-hat",
+      "nfr": false
+    },
+    {
+      "id": "adisyon",
+      "ad": "Masa Adisyonu",
+      "ikon": "receipt",
+      "nfr": false
+    },
+    {
+      "id": "stok",
+      "ad": "Stok Düşümü",
+      "ikon": "package-minus",
+      "nfr": false
+    },
+    {
+      "id": "sadakat",
+      "ad": "Sadakat Puanı",
+      "ikon": "gift",
+      "nfr": false
+    },
+    {
+      "id": "cevrimdisi",
+      "ad": "Çevrimdışı Mod",
+      "ikon": "wifi-off",
+      "nfr": true
+    },
+    {
+      "id": "paket",
+      "ad": "Paket Sipariş",
+      "ikon": "shopping-bag",
+      "nfr": false
+    },
+    {
+      "id": "randevu",
+      "ad": "Randevu Al",
+      "ikon": "calendar-plus",
+      "nfr": false
+    },
+    {
+      "id": "hastakaydi",
+      "ad": "Hasta Kaydı",
+      "ikon": "clipboard-list",
+      "nfr": false
+    },
+    {
+      "id": "sifreleme",
+      "ad": "Veri Şifreleme",
+      "ikon": "lock",
+      "nfr": true
+    },
+    {
+      "id": "rbac",
+      "ad": "Rol Bazlı Erişim",
+      "ikon": "key-round",
+      "nfr": true
+    },
+    {
+      "id": "recete",
+      "ad": "E-Reçete",
+      "ikon": "pill",
+      "nfr": false
+    },
+    {
+      "id": "tahlil",
+      "ad": "Tahlil Sonucu",
+      "ikon": "flask-conical",
+      "nfr": false
+    },
+    {
+      "id": "denetim",
+      "ad": "Denetim İzi",
+      "ikon": "scroll-text",
+      "nfr": true
+    },
+    {
+      "id": "vital",
+      "ad": "Vital Takibi",
+      "ikon": "heart-pulse",
+      "nfr": false
+    },
+    {
+      "id": "urunler",
+      "ad": "Ürün Kataloğu",
+      "ikon": "store",
+      "nfr": false
+    },
+    {
+      "id": "odeme",
+      "ad": "Güvenli Ödeme",
+      "ikon": "credit-card",
+      "nfr": false
+    },
+    {
+      "id": "filtre",
+      "ad": "Filtreleme",
+      "ikon": "sliders-horizontal",
+      "nfr": false
+    },
+    {
+      "id": "kargo",
+      "ad": "Kargo Takibi",
+      "ikon": "truck",
+      "nfr": false
+    },
+    {
+      "id": "iade",
+      "ad": "İade Talebi",
+      "ikon": "undo-2",
+      "nfr": false
+    },
+    {
+      "id": "olcek",
+      "ad": "Yatay Ölçek",
+      "ikon": "server",
+      "nfr": true
+    },
+    {
+      "id": "kampanya",
+      "ad": "Kampanya Kodu",
+      "ikon": "badge-percent",
+      "nfr": false
+    },
+    {
+      "id": "beden",
+      "ad": "Beden Seçimi",
+      "ikon": "ruler",
+      "nfr": false
+    },
+    {
+      "id": "onbellek",
+      "ad": "Önbellek",
+      "ikon": "database-zap",
+      "nfr": true
+    },
+    {
+      "id": "paylas",
+      "ad": "Sosyal Paylaşım",
+      "ikon": "share-2",
+      "nfr": false
+    },
+    {
+      "id": "rozet",
+      "ad": "Rozet Kazan",
+      "ikon": "award",
+      "nfr": false
+    },
+    {
+      "id": "canliskor",
+      "ad": "Canlı Skor",
+      "ikon": "trophy",
+      "nfr": false
+    },
+    {
+      "id": "bildirim",
+      "ad": "Anlık Bildirim",
+      "ikon": "bell-ring",
+      "nfr": false
+    },
+    {
+      "id": "canlikonum",
+      "ad": "Canlı Konum",
+      "ikon": "navigation",
+      "nfr": false
+    },
+    {
+      "id": "varis",
+      "ad": "Varış Tahmini",
+      "ikon": "clock",
+      "nfr": false
+    },
+    {
+      "id": "harita",
+      "ad": "Kampüs Haritası",
+      "ikon": "map",
+      "nfr": false
+    },
+    {
+      "id": "doluluk",
+      "ad": "Doluluk Bilgisi",
+      "ikon": "users-round",
+      "nfr": false
+    },
+    {
+      "id": "sefer",
+      "ad": "Sefer Planı",
+      "ikon": "calendar-clock",
+      "nfr": false
+    },
+    {
+      "id": "erisilebilirlik",
+      "ad": "Erişilebilirlik",
+      "ikon": "accessibility",
+      "nfr": true
+    },
+    {
+      "id": "etkinlik",
+      "ad": "Etkinlik Takvimi",
+      "ikon": "calendar-days",
+      "nfr": false
+    },
+    {
+      "id": "katilim",
+      "ad": "Katılım Kaydı",
+      "ikon": "user-check",
+      "nfr": false
+    },
+    {
+      "id": "kontenjan",
+      "ad": "Kontenjan Takibi",
+      "ikon": "ticket",
+      "nfr": false
+    },
+    {
+      "id": "qrgiris",
+      "ad": "QR Giriş",
+      "ikon": "scan-line",
+      "nfr": false
+    },
+    {
+      "id": "duyuru",
+      "ad": "Duyuru Paneli",
+      "ikon": "megaphone",
+      "nfr": false
+    },
+    {
+      "id": "plaka",
+      "ad": "Plaka Tanıma",
+      "ikon": "car-front",
+      "nfr": false
+    },
+    {
+      "id": "bosyer",
+      "ad": "Boş Yer Sayacı",
+      "ikon": "square-parking",
+      "nfr": false
+    },
+    {
+      "id": "sarj",
+      "ad": "Şarj İstasyonu",
+      "ikon": "plug-zap",
+      "nfr": false
+    },
+    {
+      "id": "ihlal",
+      "ad": "İhlal Kaydı",
+      "ikon": "badge-alert",
+      "nfr": false
+    },
+    {
+      "id": "kimlik",
+      "ad": "Kimlik Doğrulama",
+      "ikon": "fingerprint-pattern",
+      "nfr": true
+    },
+    {
+      "id": "sayac",
+      "ad": "Süre Sayacı",
+      "ikon": "timer",
+      "nfr": false
+    },
+    {
+      "id": "otokayit",
+      "ad": "Otomatik Kayıt",
+      "ikon": "save",
+      "nfr": true
+    },
+    {
+      "id": "soruhavuzu",
+      "ad": "Soru Havuzu",
+      "ikon": "layers",
+      "nfr": false
+    },
+    {
+      "id": "sonuc",
+      "ad": "Sonuç Duyurusu",
+      "ikon": "badge-check",
+      "nfr": false
+    },
+    {
+      "id": "ilan",
+      "ad": "Kayıp İlanı",
+      "ikon": "flag",
+      "nfr": false
+    },
+    {
+      "id": "fotograf",
+      "ad": "Fotoğraf Ekle",
+      "ikon": "camera",
+      "nfr": false
+    },
+    {
+      "id": "teslim",
+      "ad": "Teslim Tutanağı",
+      "ikon": "file-check",
+      "nfr": false
+    },
+    {
+      "id": "konum",
+      "ad": "Bulunduğu Yer",
+      "ikon": "map-pin",
+      "nfr": false
+    },
+    {
+      "id": "seans",
+      "ad": "Seans Hatırlatma",
+      "ikon": "alarm-clock",
+      "nfr": false
+    },
+    {
+      "id": "bekleme",
+      "ad": "Bekleme Listesi",
+      "ikon": "list-ordered",
+      "nfr": false
+    },
+    {
+      "id": "antrenman",
+      "ad": "Antrenman Planı",
+      "ikon": "dumbbell",
+      "nfr": false
+    },
+    {
+      "id": "makine",
+      "ad": "Makine Durumu",
+      "ikon": "washing-machine",
+      "nfr": false
+    },
+    {
+      "id": "sira",
+      "ad": "Sıra Al",
+      "ikon": "hourglass",
+      "nfr": false
+    },
+    {
+      "id": "ariza",
+      "ad": "Arıza Bildirimi",
+      "ikon": "wrench",
+      "nfr": false
+    },
+    {
+      "id": "bosderslik",
+      "ad": "Boş Derslik",
+      "ikon": "door-open",
+      "nfr": false
+    },
+    {
+      "id": "dersprogrami",
+      "ad": "Ders Programı",
+      "ikon": "school",
+      "nfr": false
+    },
+    {
+      "id": "sensor",
+      "ad": "Doluluk Sensörü",
+      "ikon": "radio",
+      "nfr": false
+    },
+    {
+      "id": "uygunluk",
+      "ad": "Uygunluk Testi",
+      "ikon": "clipboard-check",
+      "nfr": false
+    },
+    {
+      "id": "kangrubu",
+      "ad": "Kan Grubu",
+      "ikon": "droplet",
+      "nfr": false
+    },
+    {
+      "id": "cv",
+      "ad": "CV Profili",
+      "ikon": "file-user",
+      "nfr": false
+    },
+    {
+      "id": "isilani",
+      "ad": "İş İlanları",
+      "ikon": "briefcase",
+      "nfr": false
+    },
+    {
+      "id": "basvuru",
+      "ad": "Başvuru Takibi",
+      "ikon": "list-checks",
+      "nfr": false
+    },
+    {
+      "id": "mesaj",
+      "ad": "Mesajlaşma",
+      "ikon": "message-circle",
+      "nfr": false
+    }
+  ]
+}

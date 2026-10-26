@@ -1,0 +1,464 @@
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+ATÜ TECHBUILDERS · 4 KASIM 2026 STANT ETKİNLİĞİ
+
+BuildArena Tam Prototip
+
+Ana ekran, tutorial, Düello, Senaryo, skor tablosu ve görevli menüsü tek
+uygulamada — Kullanım Kılavuzu ve Test Raporu
+
+Proje 1 + Proje 2 birleşik · Stant tableti için · Kurulumsuz, çevrimdışı çalışır
+
+       Görsel 1 — Ana ekran: dönen ATÜ • TECHBUILDERS halkası, logodan çıkan konfeti ve iki mod kartı
+
+Sürüm  Tarih         Kaynak                Hazırlayan
+0.3    25 Ekim 2026
+                     BuildArena Proje Dokümanı v1.2 + 01 Düello (v0.2) ATÜ TechBuilders Yazılım Ekibi
+                     + 02 Senaryo Modu (v0.1)
+
+                             Sayfa 1 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+1. Bir Bakışta
+
+Bu klasör, 01 (Düello) ve 02 (Senaryo) dokümanlarındaki tasarımı tek bir çalışan uygulamada birleştirir. Stant
+tableti gün boyu bu uygulamayı açık tutar: ilk açılışta kısa bir tutorial gösterilir, sonra ana ekrandan iki mod
+oynanır, sonuçlar ortak skor tablosuna yazılır, gün sonunda görevli paylaşım görsellerini indirir.
+
+Bölüm           Ne yapar?
+Tutorial        5 slayt, yalnızca ilk açılışta bir kez. Atla, geri/ileri, kaydırma; basılı tutunca durur.
+Ana ekran       Logo, dönen halka, konfeti, Düello ve Senaryo kartları; günün ilk 3'ü.
+Bekleme modu    60 sn dokunulmazsa açılır. "Dokun ve oyna" çağrısı ve günün ilk 3'ü şeridi; ilk dokunuş
+                yalnızca uyandırır.
+Düello          İki oyuncu aynı tablette; gerçek çoklu dokunma ve ekran izolasyonu; 90 sn; Bölüm 11.1
+                puanı; komik lakap ve yorum.
+Senaryo         Takma ad, kriz çarkı (8 kriz, 3'ü yeni kampüs krizi), 5 karar × 20 puan, kelebek etkisi, unvan.
+Skor tablosu    İki sekme: Senaryo (podyum, liste, kriz filtresi) ve Günün Düelloları.
+Görevli menüsü  PIN ile açılır. İlk 3 paylaşım görseli, Gün sonu özeti ve görseli, Ayarlar.
+
+01 ve 02'ye göre yeni olanlar
+• İki mod artık tek uygulamada; ortak skor tablosu ve ortak ayarlar.
+• İlk açılış tutorial'ı ve stant için bekleme modu.
+• Üç yeni kampüs krizi: OBS ders kaydı, kampüs servisi, yurt başvurusu (Bölüm 5.2).
+• Görevli menüsünde Gün sonu özeti ve 1080 × 1350 / 1080 × 1920 paylaşım görseli.
+• Ayarlar sekmesi: düello ve adım süresi, ses, tutorial döngüsü, günü arşivleme.
+• Düellolar da kaydedilir ve skor tablosunda ayrı sekmede görünür.
+
+                Görsel 2 — Uygulama haritası: ekranlar ve aralarındaki geçişler
+                                                    Sayfa 2 / 18
+                         ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+2. Kurulum ve Açma
+
+   1. uygulama/ klasörünün tamamını tablete kopyala (USB, Drive ya da kablo).
+   2. index.html dosyasını Chrome ya da Edge ile aç. Kurulum gerekmez.
+   3. Tam ekrana al: bilgisayarda F11; Android'de tarayıcı menüsünden "Ana ekrana ekle" ile açıp ekran
+
+        sabitlemeyi kullan.
+   4. İlk açılışta tutorial gelir; "Hadi Başlayalım" ile ana ekrana geçilir ve tutorial bir daha gösterilmez.
+   5. Görevli menüsünden ayarları kontrol et (Bölüm 7.3).
+İnternet yalnızca yazı tipleri için kullanılır; bağlantı yoksa uygulama sistem yazı tipiyle aynen çalışır. Veriler
+tabletin tarayıcısında saklanır.
+
+2.1 Adres parametreleri
+
+index.html adresinin sonuna eklenir. Normal stant kullanımında hiçbiri gerekmez.
+
+Parametre  Ne işe yarar
+(yok)      Normal mod. İlk açılışta boş tabloyla başlar.
+?ornek     Örnek verilerle başlar (36 senaryo oyunu, 16 düello). Prova ve sunum için.
+?oto       Tanıtım modu: oyun kendi kendine oynar. Hiçbir şey kaydedilmez.
+?sure=8    Senaryo adım süresini değiştirir (saniye). Test için.
+?dsure=30  Düello süresini değiştirir (saniye). Test için.
+?ekran=…   Tek ekranı örnek veriyle açar (ekran görüntüsü için). Örnek: ?ekran=duel, ?ekran=final,
+           ?ekran=admin-stats, ?ekran=tut&s=3. Kayıt yapmaz.
+
+   Görevli erişimi
+   Skor tablosundaki Görevli düğmesi ya da ana ekranda logoya 3 sn basılı tutma → PIN.
+   Prototip PIN'i 1234. Stanttan önce js/ortak.js içindeki PIN_KOD değeri değiştirilmeli.
+
+2.2 Stant günü kontrol listesi
+
+    • Sabah: uygulamayı parametresiz aç. Prova verisi kaldıysa Görevli → Ayarlar → Günü arşivle ve sıfırla.
+    • Ayarlar: düello süresi (önerilen 90 sn), senaryo adım süresi (20 sn), ses açık mı? Kalabalıkta ses
+
+        kapatılabilir.
+    • Tablet: şarj kablosu takılı, ekran kapanma süresi "hiçbir zaman", parlaklık yüksek, bildirimler kapalı.
+    • Gün içinde: sonuç ekranları 60 sn sonra kendiliğinden ana ekrana döner; ana ekran 60 sn sonra bekleme
+
+        moduna geçer.
+    • Akşam: Görevli → İlk 3 ve Gün sonu sekmelerinden PNG'leri indir, sosyal medya ekibine ver.
+
+           Sayfa 3 / 18
+                                                                     ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+3. Tutorial, Ana Ekran ve Bekleme Modu
+
+Tutorial, oyunu hiç bilmeyen birine iki dakikada ne yapacağını anlatır. Her slayt kendi süresinde ilerler; üstteki
+bölümlü çubuk ilerlemeyi gösterir.
+
+#  Başlık                                  Anlattığı                                            Süre
+
+1  BuildArena'ya hoş geldin!               İki mod ve oyunun amacı                              5 sn
+
+2  Her özellik iyi değildir                Gereksinim nedir: hastane için randevu evet, sepet hayır 6 sn
+
+3  Sürükle, bırak, kapış!                  Düello: kartı kendi kutuna sürükle, tuzaklardan kaç  7 sn
+
+4  Her karar sonrakini etkiler             Senaryo: 5 karar zinciri                             7 sn
+
+5  Yapay zekâ puanlar, sen zirveye çık 100 üzerinden puan ve skor tablosu; "Hadi Başlayalım"    6 sn
+
+    • Kontroller: İleri / Geri, sağ üstte Atla, sola-sağa kaydırma; slayta basılı tutunca otomatik ilerleme durur.
+    • Yalnızca ilk açılışta gösterilir. Görevli → Ayarlar → Tutorial'ı sıfırla ile yeniden gösterilir.
+    • Ayarlardaki Bekleme modunda tutorial döngüsü açılırsa, bekleme ekranında slaytlar kendiliğinden
+
+        döner.
+
+3.1 Bekleme modu
+
+Ana ekranda 60 sn dokunulmazsa logo büyür, "Dokun ve oyna" çağrısı ve günün ilk 3'ü şeridi görünür. Geçen
+birinin ilk dokunuşu yalnızca uyandırır; böylece yanlışlıkla bir mod başlamaz. Düello sonucu, senaryo finali ve
+skor tablosu da 60 sn dokunulmazsa ana ekrana döner.
+
+   Tutorial slayt 3: Düello nasıl oynanır                Bekleme modu: "Dokun ve oyna" ve günün ilk 3'ü
+
+                                           Sayfa 4 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+4. Düello
+
+İki oyuncu tabletin iki yanında karşılıklı oynar. Görev kartında rastgele bir görev (ör. Hastane Bilgi Yönetim
+Sistemi) ve hedef kitle görünür. Her oyuncunun takma adını değiştirmek için bir zar hakkı vardır. İki oyuncu da
+Hazırım deyince 3-2-1 sayılır ve 90 sn başlar.
+
+                                  Görsel 3 — Görev kartı: görev, hedef kitle, takma adlar ve iki "Hazırım" düğmesi
+
+                        Görsel 4 — Oyun: iki oyuncu aynı anda kendi havuzundan kendi telefon kutusuna kart sürükler
+                                                                                    Sayfa 5 / 18
+                                                           ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+4.1 Ekran izolasyonu
+
+Proje dokümanının "oyuncular birbirine müdahale etmesin" şartı şu kurallarla sağlanır. Hepsi gerçek iki
+parmakla test edildi (Bölüm 9).
+
+Kural                 Nasıl çalışır
+Sahiplik              Dokunuş hangi yarıda başladıysa o oyuncunundur; parmak karşıya kaysa bile sahibi
+                      değişmez.
+Ölü bölge             Ortadaki 628–652 px şeritte başlayan dokunuş yok sayılır.
+Sınır kilidi          Sürüklenen kart sahibinin yarısından çıkamaz; sınırda durur.
+Tek parmak            Her oyuncu aynı anda tek kart taşır; aynı taraftaki ikinci parmak yok sayılır.
+Avuç koruması         Temas alanı 60 px'ten büyükse (avuç, bilek) dokunuş yok sayılır.
+Bitir                 0,6 sn basılı tutunca onaylanır; kısa dokunuş oyunu bitirmez.
+Geri al / Temizle     Yalnızca kendi kutusunu etkiler.
+
+4.2 Puanlama (proje dokümanı Bölüm 11.1)
+
+Bileşen               Hesap                                                                         En çok
+
+Hedef kitle uyumu     Kutudaki kartların ağırlığı (kritik 3, önemli 2, destek 1): round(ağırlık / 18 50
+                      × 50)
+Gereksizden kaçınma
+Birleşimler           max(0, 20 − 5 × tuzak kart sayısı)                                            20
+
+                      round(tamamlanan birleşim / 3 × 20)                                           20
+
+Süre bonusu           Uyum en az 25 ise round(kalan süre / toplam süre × 10), değilse 0             10
+
+Eşitlikte az tuzak koyan, o da eşitse çok süre bırakan kazanır. Uygulamada 5 görev ve 44 kart vardır. Sonuçta
+
+her oyuncuya puanına ve seçimlerine göre komik bir lakap ("Minimalist Mimar", "Gecikme Cezası
+
+Koleksiyoncusu") ve tek cümlelik yorum verilir; prototipte yerel şablon yazar, yapay zekâ bağlanınca aynı
+
+alanları o doldurur.
+
+                      Görsel 5 — Sonuç: puan halkaları, puan çubukları, komik lakap ve jüri yorumu
+                                                                    Sayfa 6 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+5. Senaryo
+
+Tek oyunculu karar oyunu. Oyuncu takma adını uygulama içi Türkçe klavyeyle yazar (3–16 karakter, uygunsuz
+kelime filtresi, aynı ad gelirse otomatik ek: Korkut_2). Zar düğmesi hazır ad önerir. Paylaşım izni anahtarı ilk 3'e
+girerse sosyal medyada paylaşılmayı kabul ettiğini gösterir.
+
+                                  Görsel 6 — Takma ad: uygulama içi TR-Q klavye, canlı kurallar ve paylaşım izni
+
+Kriz çarkı 8 kriz arasından birini seçer; son oynanan kriz arka arkaya gelmez. Kriz girişi saati, yeri ve ölçeği
+gösterir. Sonra 5 karar gelir: her biri 20 sn, süre dolarsa o adım 0 puan. Her seçimden sonra kelebek etkisi
+kartı kararın sonucunu 2,6 sn gösterir (dokununca geçer).
+
+                                                                                    Sayfa 7 / 18
+                                                                         ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+                    Görsel 7 — Kriz çarkı: 8 kriz, 4 × 2 ızgara
+Görsel 8 — Karar adımı: zincir, durum, soru, dört seçenek ve süre halkası
+
+                                          Sayfa 8 / 18
+        ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+        Görsel 9 — Kelebek etkisi: seçilen kararın sonucu bir sonraki adıma taşınır
+
+Puan    Görsel 10 — Final: karar zinciri, puan halkası, unvan damgası, jüri analizi ve sıra
+90–100          Unvan
+75–89           Baş Analist
+55–74           Senior Analist
+35–54           Mid Analist
+                Junior Analist
+
+                                                        Sayfa 9 / 18
+                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+Puan                   Unvan
+0–34                   Stajyer (ama umut var!)
+
+5.1 Kriz bankası (8 kriz)          Sistem                              Saat   Ölçek
+                                                                              3.000 öğrenci
+ # Kriz                            Yemekhane Bilgi Sistemi             11:58  1.200 öğrenci
+ 1 Yemekhane: Öğle Saati Krizi                                                200 öğrenci, 2 barista
+ 2 Kütüphane: Final Haftası        Kütüphane Otomasyon Sistemi         09:00  40 hasta, 6 doktor
+ 3 Kafe: Sabah 9 Dersi Öncesi                                                 50.000 ziyaretçi
+ 4 Hastane: Acil Serviste Bir Gün  Kafe Otomasyon ve Sipariş Sistemi 08:47    25.000 öğrenci
+ 5 Mağaza: Black Friday Gecesi                                                600 öğrenci, 3 servis
+ 6 OBS: Ders Kayıt Haftası (yeni)  Hastane Bilgi Yönetim Sistemi       02:14
+ 7 Kampüs Servisi: Sabah 8 Seferi
+                                   Mağaza / E-Ticaret Uygulaması       23:59
+          (yeni)
+ 8 Yurt Başvurusu: Son Gün (yeni)  Öğrenci Bilgi Sistemi (OBS)         10:00
+
+                                   Servis Takip Sistemi                07:42
+
+                                   Yurt Başvuru Sistemi                23:47  4.000 başvuru
+
+5.2 Yeni kampüs krizleri
+
+Ziyaretçilerin hepsi bu sistemleri kendisi yaşadığı için hemen bağ kurar. Her krizde 4 detay adımı ve 1 genel
+adım (en kritik fonksiyonel olmayan gereksinim) vardır; seçenek puanları 20 / orta / düşük / 0 dengesindedir.
+
+OBS: Ders Kayıt Haftası · 10:00 · 25.000 öğrenci
+Saat 10:00. Ders kaydı açıldı ve 25.000 öğrenci aynı saniyede "Kaydet" tuşuna bastı. Herkes aynı seçmeli derse
+yazılmak istiyor.
+
+Adım  Konu                  Soru                                       En iyi seçim (20 puan)
+1     giriş yoğunluğu       Kayda giriş nasıl düzenlensin?             Sanal bekleme sırası
+2     kontenjan çakışması   Kontenjan nasıl korunsun?                  Kilitli işlem: önce gelen alır
+3     ön koşul kontrolü     Ön koşullu ders nasıl kontrol edilsin?     Kayıt anında otomatik kontrol
+4     ders saati çakışması  Saat çakışması nasıl gösterilsin?          Takvimde anında kırmızı uyarı
+5     kritik gereksinim     Bu sistemin en kritik fonksiyonel olmayan  Yük altında ölçeklenebilirlik
+                            gereksinimi nedir?
+
+Kampüs Servisi: Sabah 8 Seferi · 07:42 · 600 öğrenci, 3 servis
+Saat 07:42 ve yağmur yağıyor. 8:00 dersine yetişmesi gereken 600 öğrenci var; durakta yalnızca 3 servis
+bekliyor.
+
+Adım  Konu                  Soru                                       En iyi seçim (20 puan)
+1     servis konumu         Servisin yeri nasıl gösterilsin?           Canlı konum + varış süresi
+2     kapasite              Kalabalık nasıl yönetilsin?                Doluluk göstergesi + ek sefer
+3     biniş doğrulama       Biniş nasıl doğrulansın?                   Öğrenci kartıyla NFC okutma
+
+                                                Sayfa 10 / 18
+                                                               ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+Adım  Konu                   Soru                                      En iyi seçim (20 puan)
+4     gecikme bildirimi                                                Anlık bildirim + alternatif güzergâh
+5     kritik gereksinim      Öğrencilere nasıl haber verilsin?         Gerçek zamanlı ve güvenilir konum
+
+                             En kritik fonksiyonel olmayan gereksinim
+                             nedir?
+
+Yurt Başvurusu: Son Gün · 23:47 · 4.000 başvuru
+Saat 23:47. Yurt başvurusunun son gününe 13 dakika kaldı; 4.000 öğrenci aynı anda belge yüklemeye çalışıyor.
+
+Adım  Konu                   Soru                                      En iyi seçim (20 puan)
+1     belge yükleme          Belge yükleme nasıl çalışsın?             Telefon fotoğrafı, otomatik
+                                                                       küçültme
+2     yarım kalan başvuru    Yarım kalan başvuru ne olsun?             Otomatik taslak kaydı
+                                                                       Sıra + anında alındı onayı
+3     son dakika yoğunluğu Son dakika yükü nasıl karşılansın?          Kişiye özel ekranda, girişle
+                                                                       Kişisel veri güvenliği (KVKK)
+4     sonuç ve kişisel veri  Sonuçlar nasıl duyurulsun?
+
+5     kritik gereksinim      En kritik fonksiyonel olmayan gereksinim
+                             nedir?
+
+                             Görsel 11 — Kriz girişi: OBS ders kayıt haftası, saat 10:00
+                                                            Sayfa 11 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+6. Skor Tablosu
+
+Skor tablosunda yalnızca takma adlar görünür. Senaryo sekmesinde ilk 3 podyumda, 4–13 listede durur;
+oyuncu ilk 13'te değilse kendi satırı altta "SEN" etiketiyle gösterilir. Krize göre filtrelenebilir; paylaşım izni veren
+oyuncuların yanında küçük bir paylaşım işareti vardır. Günün Düelloları sekmesi son düelloları, kazananın
+yanında taçla listeler.
+
+                                Görsel 12 — Senaryo sekmesi: podyum, liste, kriz filtresi ve oyuncunun kendi satırı
+
+                                                            Görsel 13 — Günün Düelloları sekmesi
+                                                                                   Sayfa 12 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+7. Görevli Menüsü
+
+PIN ile açılır (Bölüm 2.1). Üç sekmesi vardır.
+
+7.1 İlk 3
+
+Paylaşım izni veren oyuncular arasından en yüksek puanlı 3 kişi. İzin vermediği için atlanan oyuncular ekranda
+ayrıca yazılır. Instagram gönderisi (1080 × 1350) ve hikâye (1080 × 1920) PNG olarak indirilir; otomatik
+paylaşım yoktur, sosyal medya ekibi kontrol edip paylaşır.
+
+                        Görsel 14 — Görevli · İlk 3: liste ve iki paylaşım görseli
+
+7.2 Gün sonu özeti
+
+Günün verisinden otomatik çıkar ve hiçbir kişisel veri içermez; kulüp hesabında "bugün standımızda neler oldu"
+paylaşımı için hazırdır.
+
+Ölçü                    Nasıl hesaplanır
+Kriz çözüldü            Günün senaryo oyunu sayısı
+Düello oynandı          Günün düello sayısı
+Ortalama senaryo puanı  Tüm senaryo puanlarının ortalaması
+En zor karar            En az 3 kez oynanan adımlar arasında en iyi seçeneği bulanların oranı en düşük
+                        olan
+En popüler kriz         En çok oynanan kriz
+En çok düşülen tuzak    Düellolarda kutuya en sık konan tuzak kart
+En yoğun saat           En çok oyunun oynandığı saat dilimi
+Unvan dağılımı          Baş Analist'ten Stajyer'e kaç kişi
+
+                        Sayfa 13 / 18
+                                                            ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+Ölçü                               Nasıl hesaplanır
+Günün en yüksek puanı              En yüksek senaryo puanı
+
+                       Görsel 15 — Görevli · Gün sonu: sayılar, öne çıkanlar ve iki paylaşım görseli
+
+7.3 Ayarlar                        Seçenekler
+                                   60 / 90 / 120 sn (varsayılan 90)
+ Ayar                              15 / 20 / 25 sn (varsayılan 20)
+ Düello süresi                     Açık / kapalı; kalabalıkta kapatılabilir
+ Senaryo adım süresi               Açıksa bekleme ekranında tutorial slaytları döner
+ Ses efektleri                     Tutorial bir sonraki açılışta yeniden gösterilir
+ Bekleme modunda tutorial döngüsü  Skorlar ve düellolar arşive taşınır, tablolar boşalır (onay ister)
+ Tutorial'ı sıfırla                Prova için örnek skorlar ve düellolar
+ Günü arşivle ve sıfırla
+ Örnek verileri yükle
+
+                                   Sayfa 14 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+8. Paylaşım Görselleri
+
+Görseller tablette, tarayıcı içinde çizilir; kulüp logosu ve uygulamanın renkleri kullanılır. Aşağıdakiler örnek
+verilerle üretilmiştir; gerçek boyutlu PNG'ler gorseller/ klasöründedir.
+
+8.1 Gün sonu özeti
+
+                            Gönderi · 1080 × 1350                 Hikâye · 1080 × 1920
+
+8.2 Günün ilk 3'ü
+
+Gönderi · 1080 × 1350                                             Hikâye · 1080 × 1920
+
+                                                   Sayfa 15 / 18
+                                                                                                                  ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+9. Test Raporu
+
+Uygulama, Edge tarayıcısında otomatik olarak baştan sona oynatıldı (puppeteer). Düello testlerinde dokunuşlar
+tarayıcının dokunma arayüzünden (CDP Input.dispatchTouchEvent) gönderildi; yani iki parmak gerçekten aynı
+anda ekrana basıyor. Her test temiz tarayıcı verisiyle başladı.
+
+   Sonuç
+   27 / 27 test geçti, konsol hatası yok.
+   ?oto tanıtım modu baştan sona döndü (ana ekran → takma ad → çark → giriş → 5 karar → final → skor tablosu)
+   ve hiçbir kayıt yapmadı.
+   25 ekran ve paylaşım görseli hatasız üretildi.
+
+Bölüm     Test                                                            Sonuç
+Tutorial  ilk açılışta tutorial gösterilir                                Geçti
+Düello    5. slaytta "Hadi Başlayalım" çıkar                              Geçti
+          tutorial kaydı tutulur                                          Geçti
+Senaryo   ikinci açılışta doğrudan ana ekran                              Geçti
+Görevli   zar ile takma ad değişir (bir kez)                              Geçti
+          iki "Hazırım" sonrası 3-2-1 ve oyun başlar                      Geçti
+          iki parmak aynı anda: iki kart da kendi kutusuna düştü          Geçti
+          sınır kilidi: P1 kartı P2 kutusuna giremez                      Geçti
+          ölü bölge (628–652 px) dokunuşu yok sayılır                     Geçti
+          tek parmak kuralı: aynı tarafta ikinci parmak yok sayılır       Geçti
+          kutu içinde sıralama değişir                                    Geçti
+          kutudan dışarı sürüklenen kart havuza döner                     Geçti
+          Geri al son hamleyi geri getirir                                Geçti
+          fare ile de sürüklenir                                          Geçti
+          kısa dokunuş Bitir değildir                                     Geçti
+          düello puanları formülle birebir (Bölüm 11.1)                   Geçti
+          ekran klavyesi Türkçe karakter yazar                            Geçti
+          senaryo puanı = seçimlerin toplamı, kayıt ve seçimler saklanır  Geçti
+          skor tablosunda oyuncu vurgulanır                               Geçti
+          Günün Düelloları sekmesinde düello listelenir                   Geçti
+          gün sonu özeti hesaplanır                                       Geçti
+          ayar kaydedilir (düello 60 sn)                                  Geçti
+
+          Sayfa 16 / 18
+                                                          ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+Bölüm         Test                                        Sonuç
+Bekleme modu  tutorial sıfırlanır                         Geçti
+              örnek veriler yüklenir                      Geçti
+              ana ekran düello süresini ayardan gösterir  Geçti
+              60 sn dokunulmazsa bekleme modu             Geçti
+              ilk dokunuş yalnızca uyandırır              Geçti
+
+9.1 Testlerde bulunup düzeltilen hatalar
+
+    • Ekran geçişinde dokunuş kaçması: kaybolmakta olan ekran 0,45 sn boyunca dokunuşları yakalıyordu;
+        düellodan ana ekrana dönünce Senaryo kartına hemen dokunan oyuncu sonuç ekranına basmış
+        oluyordu. Artık görünür olmayan ekranlar hiç dokunuş almıyor.
+
+    • Görünmez sekme paneli: gizli ekrandaki bir sekme paneli görünür kalıp tıklamaları yutuyordu.
+        Düzeltildi.
+
+    • Sınıf adı çakışması: tutorial'daki doğru/yanlış işaretleri düellodaki "VS" rozetinin stilini alıyordu.
+        Düzeltildi.
+
+    • Tanıtım modunda kayıt: ?oto ve ?ekran= modları skor tablosuna yazıyordu. Artık yazmıyor.
+Gerçek tablette denenmesi gerekenler: dokunma gecikmesi, avuç koruması eşiği (60 px), iki kişinin tablete aynı
+anda uzanırken rahat edip etmediği, parlak ortamda kontrast. Öneri: 2 Kasım provasında 10 inçlik tablette 5–6
+düello oynatılsın.
+
+              Sayfa 17 / 18
+                                                                       ATÜ TechBuilders · BuildArena · Tam Prototip v0.3
+
+10. Sınırlar ve Sonraki Adımlar
+
+Konu                      Prototipte                                   Gerçek uygulamada
+Yapay zekâ                Lakap, yorum ve jüri analizi yerel           NVIDIA API Kataloğu (henüz kesinleşmedi); aynı
+                          şablondan                                    JSON alanları. Anahtar tablet koduna
+Veri                                                                   gömülmemeli, küçük bir sunucu üzerinden
+Birden fazla tablet       Tarayıcının localStorage'ı; tarayıcı verisi  çağrılmalı
+Uygunsuz kelime filtresi  silinirse kaybolur                           IndexedDB (Dexie) + gün sonu yedeği
+PIN                       Her tabletin kendi tablosu
+Ses                                                                    Ortak tablo için Supabase ücretsiz katmanı (proje
+                          Kısa örnek liste                             dokümanı 13.2)
+                          Koda gömülü (PIN_KOD)                        Kulübün hazırladığı geniş liste
+                          Tarayıcıda üretilen kısa sesler              Ayarlardan değiştirilebilir PIN
+                                                                       İstenirse hazır ses dosyaları
+
+10.1 02 klasörüyle ilişkisi
+
+02_BuildArena_Senaryo_Modu klasöründeki prototip yalnızca Senaryo modunu ve ilk 5 krizi içerir; o
+dokümandaki kurallar aynen geçerlidir. Güncel kriz bankası bu klasördeki veri/senaryolar.json dosyasıdır (8
+kriz).
+
+10.2 Klasördeki dosyalar
+
+    • BuildArena_Tam_Prototip_Kilavuz.docx / .pdf: bu doküman
+    • uygulama/: çalışan uygulama (index.html, css/, js/). Tablete bu klasör kopyalanır.
+    • veri/senaryolar.json: 8 krizin tamamı (puanlar, etkiler, özetler)
+    • gorseller/: dokümandaki 25 ekran ve paylaşım görseli ile uygulama haritası, yüksek çözünürlükte
+    • test/: uçtan uca test betiği ve sonuç dosyası (test_sonuclari.json)
+
+                          Sayfa 18 / 18
+

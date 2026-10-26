@@ -1,0 +1,124 @@
+/*
+ * BuildArena design tokens — "Kâğıt, mürekkep ve dört baskı rengi" (BuildArena Renk Paleti).
+ * A board-game look instead of a dark screen: warm paper, dark ink lines and four printed colors
+ * taken from the club logo, all from Open Color 1.9.1 (only shades 0–1 and 9, no purple).
+ * Component language: 2 px ink border, 3 px hard ink shadow, measured corners; a pressed button
+ * loses its shadow and sinks in (translate 3 px). Contrast ratios are on the paper background.
+ *
+ * Colours by role, so the palette has a night version (data-theme="dark", end of file):
+ *   --ink text · --rule lines · --shade hard shadows · --on text on a coloured fill (always white)
+ *   --on-gold text on gold and medals (always dark) · --bezel always-dark surfaces (phone frame)
+ *   --brand / --p1 / --p2 / --scn are fills; their "-ink" twins are for text and outlines.
+ */
+:root {
+  /* Paper and ink */
+  --paper: #fff4e6; /* orange 0 — background, a warm cream that doesn't glare */
+  --card: #ffffff; /* cards, phone screen, text on colored buttons */
+  --sunk: #f1f3f5; /* gray 1 — empty areas, tracks, table heads */
+  --ink: #212529; /* gray 9 — text, 2 px lines, hard shadow, 14.2:1 */
+  --ink-2: #495057; /* gray 7 — secondary text, 7.5:1 */
+  --note: #fff9db; /* yellow 0 — the butterfly-effect note */
+
+  /* Play (the one warm call to action per screen) */
+  --brand: #a61e4d; /* pink 9 — Oyna, Başla, "Arena", 6.63:1; white text 7.21:1 */
+  --brand-tint: #ffdeeb; /* pink 1 — selected tab */
+
+  /* Duel */
+  --p1: #1864ab; /* blue 9 — Player 1, 5.60:1; white text 6.09:1 */
+  --p1-tint: #d0ebff; /* blue 1 — Player 1's half */
+  --p2: #d9480f; /* orange 9 — Player 2, 3.96:1; white text 4.30:1 only at 19 px+ bold */
+  --p2-tint: #ffe8cc; /* orange 1 — Player 2's half */
+
+  /* Scenario */
+  --scn: #087f5b; /* teal 9 — mode color, chosen option, 4.61:1; white text 5.00:1 */
+  --scn-tint: #c3fae8; /* teal 1 — chosen option background (ink text on it) */
+
+  /* Reward and feedback (results only; no red during play) */
+  --gold: #fcc419; /* yellow 5 — crown, winner, top 3, last 20 s; ink text on it 9.59:1 */
+  --ok: #2b8a3e; /* green 9 — icon only; text stays ink */
+  --bad: #c92a2a; /* red 9 — unnecessary card, last 10 s, 5.02:1 */
+  --warn: #e67700; /* yellow 9 — missed card (!) icon only */
+  --ok-tint: #d3f9d8; /* green 1 */
+  --warn-tint: #fff3bf; /* yellow 1 */
+
+  /* Ranking only: gold, silver, bronze fills with ink numbers (the rank is always written) */
+  --silver: var(--sunk);
+  --bronze: var(--p2-tint);
+
+  /* Roles (same values as above in the light theme) */
+  --rule: #212529;
+  --shade: #212529;
+  --bezel: #212529;
+  --on: #ffffff;
+  --on-gold: #212529;
+  --brand-ink: var(--brand);
+  --p1-ink: var(--p1);
+  --p2-ink: var(--p2);
+  --scn-ink: var(--scn);
+
+  /* Component language */
+  --border: 2px solid var(--rule);
+  --shadow: 3px 3px 0 var(--shade); /* pressed: translate(3px, 3px) + shadow 0 */
+  --shadow-lg: 4px 4px 0 var(--shade); /* cards */
+  --radius: 10px;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 14px;
+
+  /* Touch targets (§14.3, §16.5) */
+  --touch-min: 56px;
+  --touch-nav: 64px; /* tutorial Back / Next */
+
+  /* Duel touch isolation (§13.5) */
+  --dead-zone: 24px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --spring: cubic-bezier(0.3, 1.5, 0.5, 1);
+
+  /* Typography */
+  --font-display:
+    'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif; /* headings, buttons */
+  --font-ui: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-digits: 'JetBrains Mono', ui-monospace, monospace; /* stopwatch, scores, stamp tags */
+}
+
+/*
+ * Night version of the same palette: ink becomes the table, paper becomes the writing. Cards are
+ * dark board pieces with cream lines and black hard shadows; the four printed colours keep their
+ * Open Color 9 fills (white text on them is unchanged) and use their shade 4 for text and outlines
+ * on the dark surfaces. Tints are the printed colours mixed into the board.
+ */
+:root[data-theme='dark'] {
+  --paper: #1c1e21;
+  --card: #2a2e33;
+  --sunk: #212428;
+  --ink: #fff4e6; /* orange 0 — the light theme's paper, 13.5:1 on the board */
+  --ink-2: #adb5bd; /* gray 5 — 7.7:1 */
+  --note: color-mix(in srgb, #fcc419 14%, #2a2e33);
+
+  --brand-tint: color-mix(in srgb, #a61e4d 35%, #2a2e33);
+  --p1-tint: color-mix(in srgb, #1864ab 30%, #1c1e21);
+  --p2-tint: color-mix(in srgb, #d9480f 26%, #1c1e21);
+  --scn-tint: color-mix(in srgb, #087f5b 35%, #2a2e33);
+
+  --ok: #51cf66; /* green 5 */
+  --bad: #ff6b6b; /* red 5 */
+  --warn: #fab005; /* yellow 6 */
+  --ok-tint: color-mix(in srgb, #2b8a3e 30%, #2a2e33);
+  --warn-tint: color-mix(in srgb, #fcc419 18%, #2a2e33);
+
+  --silver: #dee2e6; /* gray 3 */
+  --bronze: #ffd8a8; /* orange 2 */
+
+  --rule: #fff4e6;
+  --shade: #08090a;
+  --bezel: #0e0f11;
+  --brand-ink: #f783ac; /* pink 4 */
+  --p1-ink: #4dabf7; /* blue 4 */
+  --p2-ink: #ffa94d; /* orange 4 */
+  --scn-ink: #38d9a9; /* teal 4 */
+}

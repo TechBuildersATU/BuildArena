@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#131218">
+<title>BuildArena — ATÜ TechBuilders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/uygulama.css">
+</head>
+<body>
+<div id="stage">
+
+  <!-- ============ 0 · TUTORIAL ============ -->
+  <section class="screen" id="s-tut">
+    <div class="tbar">
+      <img class="logo-sm" data-logo alt="">
+      <span class="club">ATÜ TECHBUILDERS</span>
+      <div class="segs" id="tSegs"></div>
+      <button class="skip" data-act="tut-skip">Atla <i data-lucide="skip-forward"></i></button>
+    </div>
+    <div class="tslides" id="tSlides"></div>
+    <div class="tnav">
+      <button class="btn" data-act="tut-prev" id="tPrev"><i data-lucide="chevron-left"></i>Geri</button>
+      <div class="tdots" id="tDots"></div>
+      <button class="btn pri" data-act="tut-next" id="tNext">İleri<i data-lucide="chevron-right"></i></button>
+    </div>
+  </section>
+
+  <!-- ============ 1 · ANA EKRAN ============ -->
+  <section class="screen" id="s-home">
+    <svg class="traces l" viewBox="0 0 420 260" fill="none" stroke-width="2" stroke-linecap="round">
+      <g stroke="rgba(242,143,75,.16)"><path d="M0 200 H120 L150 170 H260"/><circle cx="266" cy="170" r="5"/><path d="M0 236 H180 L210 206 H330"/><circle cx="336" cy="206" r="5"/></g>
+      <g stroke="rgba(226,73,143,.14)"><path d="M60 260 V150 L90 120 H170"/><circle cx="176" cy="120" r="5"/><path d="M110 260 V214 L140 184"/><circle cx="144" cy="180" r="5"/></g>
+      <g stroke="rgba(75,158,255,.14)"><path d="M0 120 H40 L70 90 H110"/><circle cx="116" cy="90" r="5"/></g>
+    </svg>
+    <svg class="traces r" viewBox="0 0 420 260" fill="none" stroke-width="2" stroke-linecap="round">
+      <g stroke="rgba(75,158,255,.15)"><path d="M0 200 H120 L150 170 H260"/><circle cx="266" cy="170" r="5"/><path d="M0 236 H180 L210 206 H330"/><circle cx="336" cy="206" r="5"/></g>
+      <g stroke="rgba(226,73,143,.14)"><path d="M60 260 V150 L90 120 H170"/><circle cx="176" cy="120" r="5"/></g>
+      <g stroke="rgba(242,143,75,.14)"><path d="M0 120 H40 L70 90 H110"/><circle cx="116" cy="90" r="5"/></g>
+    </svg>
+    <div class="club">ATÜ TECHBUILDERS · STUDENT CLUB</div>
+    <div class="icons">
+      <button class="ib" data-act="board" aria-label="Skor tablosu"><i data-lucide="trophy"></i></button>
+      <button class="ib" data-act="tutorial" aria-label="Nasıl oynanır"><i data-lucide="info"></i></button>
+      <button class="ib" data-act="pin" aria-label="Ayarlar"><i data-lucide="settings"></i></button>
+    </div>
+    <div class="hero" data-hero></div>
+    <div class="htitle">Build<span>Arena</span></div>
+    <div class="htag"><span><i data-lucide="users"></i>Hedef kitleyi anla</span><span><i data-lucide="hand"></i>Sürükle</span><span><i data-lucide="trophy"></i>Kazan</span></div>
+    <div class="modes">
+      <button class="mode duel" data-act="duel">
+        <div class="mic"><i data-lucide="swords"></i></div>
+        <div><h3>Düello</h3><div class="meta"><span class="chip"><i data-lucide="users"></i>2 oyuncu</span><span class="chip" id="hDuelSec"><i data-lucide="timer"></i>90 sn</span></div></div>
+        <div class="go"><i data-lucide="chevron-right"></i></div>
+      </button>
+      <button class="mode scen" data-act="scenario">
+        <div class="mic"><i data-lucide="route"></i></div>
+        <div><h3>Senaryo</h3><div class="meta"><span class="chip"><i data-lucide="user"></i>1 oyuncu</span><span class="chip"><i data-lucide="git-commit-horizontal"></i>5 adım</span></div></div>
+        <div class="go"><i data-lucide="chevron-right"></i></div>
+      </button>
+    </div>
+    <div class="idlebox"><div class="tapme"><i data-lucide="hand"></i>Dokun ve oyna</div><div class="top3tick" id="top3tick"></div></div>
+    <div class="hfoot"><i data-lucide="hand"></i>Başlamak için bir moda dokun <span class="dot"></span> 4 Kasım Stant Etkinliği</div>
+  </section>
+
+  <!-- ============ 2 · DÜELLO GÖREV KARTI ============ -->
+  <section class="screen" id="s-dcard">
+    <div class="floor l"></div><div class="floor r"></div>
+    <header class="bar clear">
+      <div class="brand"><img class="logo-sm" data-logo alt="">BuildArena <span class="chip" style="margin-left:6px"><i data-lucide="swords"></i>Düello</span></div>
+      <div class="bar-r"><button class="ib" data-act="home" aria-label="Ana ekran"><i data-lucide="house"></i></button></div>
+    </header>
+    <div class="dcard">
+      <span class="eyebrow" style="justify-content:center"><i data-lucide="clipboard-list"></i><span id="dcNo">GÖREV #01 · ORTA</span></span>
+      <div class="big-ic" id="dcIc"></div>
+      <h1 id="dcTitle"></h1>
+      <p class="desc" id="dcDesc"></p>
+      <div class="lbl2">HEDEF KİTLE</div>
+      <div class="aud" id="dcAud"></div>
+      <div class="rules2"><span class="chip"><i data-lucide="layout-grid"></i>14 kart</span><span class="chip"><i data-lucide="smartphone"></i>8 slot</span><span class="chip" id="dcSec"><i data-lucide="timer"></i>90 sn</span><span class="chip"><i data-lucide="target"></i>100 puan</span></div>
+    </div>
+    <div class="who p1"><div class="avatar p1">1</div><span id="dcN1"></span><button class="rr" data-act="reroll" data-p="0" aria-label="Yeni ad"><i data-lucide="dices"></i></button><small id="dcS1">Bekleniyor…</small></div>
+    <button class="ready p1" data-act="ready" data-p="0"><i data-lucide="hand"></i><span>Hazırım</span></button>
+    <div class="who p2"><div class="avatar p2">2</div><span id="dcN2"></span><button class="rr" data-act="reroll" data-p="1" aria-label="Yeni ad"><i data-lucide="dices"></i></button><small id="dcS2">Bekleniyor…</small></div>
+    <button class="ready p2" data-act="ready" data-p="1"><i data-lucide="hand"></i><span>Hazırım</span></button>
+    <div class="dstart"><i data-lucide="hourglass"></i><span>İki oyuncu da hazır olunca</span><b>3</b><b>2</b><b>1</b></div>
+  </section>
+
+  <!-- ============ 3 · DÜELLO OYUN ============ -->
+  <section class="screen" id="s-duel">
+    <header class="dtop">
+      <div class="brand"><img class="logo-sm" data-logo alt="">BuildArena</div>
+      <div class="dtask"><div class="tic" id="dgIc"></div><div><div class="tl"><i data-lucide="clipboard-list"></i>GÖREV <b id="dgNo">#01</b></div><div class="tt" id="dgTitle"></div></div><div class="aud2" id="dgAud"></div></div>
+      <div class="meta"><span class="chip"><i data-lucide="gauge"></i>Orta</span></div>
+    </header>
+    <section class="half p1" id="dh0"></section>
+    <div class="ddiv"><div class="vs">VS</div></div>
+    <section class="half p2" id="dh1"></section>
+    <div class="dtimer" id="dTimer"><svg viewBox="0 0 80 80"><defs><linearGradient id="tgr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4B9EFF"/><stop offset="1" stop-color="#F28F4B"/></linearGradient></defs>
+      <circle cx="40" cy="40" r="35" fill="#19181F" stroke="#312E3A" stroke-width="6"/><circle class="arc" id="dArc" cx="40" cy="40" r="35" fill="none" stroke="url(#tgr)" stroke-width="6" stroke-linecap="round" stroke-dasharray="219.9" stroke-dashoffset="0"/></svg><b id="dNum">1:30</b></div>
+  </section>
+
+  <!-- ============ 4 · DÜELLO SONUÇ ============ -->
+  <section class="screen" id="s-dres">
+    <header class="rtop"><div class="t"><i data-lucide="trophy"></i>Sonuçlar</div><span class="chip" id="drTask"></span></header>
+    <section class="rhalf p1" id="dr0"></section>
+    <div class="rdiv"></div>
+    <section class="rhalf p2" id="dr1"></section>
+    <div class="rbottom">
+      <button class="btn pri" data-act="rematch"><i data-lucide="rotate-ccw"></i>Rövanş</button>
+      <button class="btn" data-act="home"><i data-lucide="house"></i>Ana Menü</button>
+      <button class="btn" data-act="board-duel"><i data-lucide="trophy"></i>Günün Liderleri</button>
+    </div>
+  </section>
+
+  <!-- ============ 5 · SENARYO: TAKMA AD ============ -->
+  <section class="screen" id="s-nick">
+    <header class="bar clear">
+      <div class="brand"><img class="logo-sm" data-logo alt="">BuildArena <span class="chip br"><i data-lucide="route"></i>Senaryo</span></div>
+      <div class="bar-r"><button class="ib" data-act="sound" aria-label="Ses"><i data-lucide="volume-2"></i></button><button class="ib" data-act="board" aria-label="Skor tablosu"><i data-lucide="trophy"></i></button><button class="ib" data-act="home" aria-label="Ana ekran"><i data-lucide="house"></i></button></div>
+    </header>
+    <div class="nl">
+      <div class="eyebrow"><i data-lucide="route"></i>SENARYO MODU · 1 OYUNCU</div>
+      <h1>Kriz masasına <span>hoş geldin.</span></h1>
+      <p class="lead">5 karar, her biri <span data-stepsec>20</span> saniye. Her seçim bir sonraki durumu etkiler; sonunda karar zincirin 100 üzerinden puanlanır ve skor tablosuna yazılır.</p>
+      <div class="facts"><span class="chip"><i data-lucide="git-commit-horizontal"></i>5 karar</span><span class="chip"><i data-lucide="timer"></i><span data-stepsec>20</span> sn / karar</span><span class="chip"><i data-lucide="target"></i>100 puan</span><span class="chip"><i data-lucide="trophy"></i>Skor tablosu</span></div>
+      <div class="eyebrow"><i data-lucide="tag"></i>TAKMA ADIN</div>
+      <div class="field" id="field"><span class="tx" id="nickTx"></span><i class="caret"></i><span class="ph" id="nickPh">Takma adını yaz…</span><span class="cnt" id="nickCnt">0/16</span><button class="dice" data-act="dice" aria-label="Rastgele ad"><i data-lucide="dices"></i></button></div>
+      <ul class="rules" id="rules">
+        <li data-r="len"><span class="st"><i data-lucide="check"></i></span>3–16 karakter</li>
+        <li data-r="chars"><span class="st"><i data-lucide="check"></i></span>Harf, rakam, boşluk, _ ve -</li>
+        <li data-r="clean"><span class="st"><i data-lucide="check"></i></span><span id="cleanTx">Herkese uygun bir ad</span></li>
+      </ul>
+      <div class="dup" id="dup"><i data-lucide="info"></i><span id="dupTx"></span></div>
+      <button class="consent" data-act="consent"><span class="switch on" id="consent"></span><span>Takma adımın ve puanımın ATÜ TechBuilders sosyal medya hesaplarında paylaşılmasına izin veriyorum.<small>İzin vermesen de oynar ve skor tablosunda görünürsün.</small></span></button>
+      <div class="startrow"><button class="btn pri" id="startBtn" data-act="start" disabled>Krize gir <i data-lucide="arrow-right"></i></button><span class="priv"><i data-lucide="shield-check"></i>Gerçek ad, telefon ve e-posta istenmez.</span></div>
+    </div>
+    <div class="nr">
+      <div class="pv"><div class="eyebrow"><i data-lucide="eye"></i>SKOR TABLOSUNDA BÖYLE GÖRÜNECEKSİN</div>
+        <div class="pv-row"><span class="rk">#?</span><span class="av" id="pvAv">?</span><b id="pvNm" class="empty">Takma adın</b><span class="sc">— / 100</span></div></div>
+      <div class="kb" id="kb"></div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · SENARYO: KRİZ ÇARKI ============ -->
+  <section class="screen" id="s-wheel">
+    <header class="bar clear"><div class="brand"><img class="logo-sm" data-logo alt="">BuildArena <span class="chip br"><i data-lucide="route"></i>Senaryo</span></div></header>
+    <div class="wh"><h2>Kriz çarkı dönüyor…</h2><p>Hazır ol, <b id="wName">Korkut</b>! Bugünkü krizini kampüsün sistemlerinden biri seçiyor.</p></div>
+    <div class="wtiles" id="wtiles"></div>
+    <div class="wstamp" id="wstamp"><span><i data-lucide="siren"></i>KRİZ SEÇİLDİ</span></div>
+    <div class="whint">Senaryolar her oyunda yeniden karıştırılır · son oynanan kriz tekrar gelmez</div>
+  </section>
+
+  <!-- ============ 7 · SENARYO: KRİZ GİRİŞİ ============ -->
+  <section class="screen" id="s-intro">
+    <div class="siren"></div>
+    <div class="hz"><div class="stripes"></div><div class="mq" id="mq"></div></div>
+    <div class="clock"><div class="eyebrow"><i data-lucide="clock"></i>SAAT</div><div class="t" id="iClock">11<i>:</i>58</div><div class="cl"><span class="chip" id="iYer"></span><span class="chip" id="iOlcek"></span></div></div>
+    <div class="imain">
+      <div class="ibig" id="iIc"></div>
+      <h1 id="iTitle"></h1>
+      <p class="tw" id="iText"></p>
+      <div class="eyebrow">ETKİLENENLER</div>
+      <div class="aud" id="iAud"></div>
+      <div class="ibtns"><button class="btn pri" data-act="go">Krizi başlat <i data-lucide="play"></i></button><span class="chip"><i data-lucide="git-commit-horizontal"></i>5 karar · <span data-stepsec>20</span> sn</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · SENARYO: KARAR ADIMI ============ -->
+  <section class="screen" id="s-step">
+    <header class="bar">
+      <img class="logo-sm" data-logo alt="">
+      <div class="gttl"><small>SENARYO</small><b id="gTitle"></b></div>
+      <div class="bar-r">
+        <span class="chip" id="gStep"></span>
+        <div class="timer" id="timer"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="23" fill="none" stroke="#312E3A" stroke-width="5"/><circle class="arc" id="tArc" cx="28" cy="28" r="23" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="0"/></svg><span class="tn" id="tNum">20</span></div>
+        <span class="nickchip"><span class="av" id="gAv">K</span><span id="gNick">Korkut</span></span>
+        <button class="ib" data-act="sound" aria-label="Ses"><i data-lucide="volume-2"></i></button>
+      </div>
+    </header>
+    <div class="chain" id="chain"></div>
+    <div class="durum"><div class="eyebrow" id="dLbl"></div><p class="dt" id="dText"></p><p class="dq" id="dQ"></p></div>
+    <div class="opts" id="opts"></div>
+    <div class="hint"><i data-lucide="pointer"></i>Bir seçeneğe dokun · süre dolarsa bu adım 0 puan</div>
+    <div class="sheet" id="sheet" data-act="next"><div class="sl" id="shLbl"></div><p id="shText"></p><button class="nx" data-act="next">Devam <i data-lucide="arrow-right"></i></button><div class="pb"><i id="shBar"></i></div></div>
+  </section>
+
+  <!-- ============ 9 · SENARYO: FİNAL ============ -->
+  <section class="screen" id="s-final">
+    <header class="bar">
+      <img class="logo-sm" data-logo alt="">
+      <div class="gttl"><small>KARAR ZİNCİRİ</small><b id="fTitle"></b></div>
+      <div class="bar-r"><span class="nickchip"><span class="av" id="fAv">K</span><span id="fNick">Korkut</span></span><button class="ib" data-act="sound" aria-label="Ses"><i data-lucide="volume-2"></i></button></div>
+    </header>
+    <div class="fc" id="fc"></div>
+    <div class="fscore">
+      <div class="ring"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="none" stroke="rgba(226,73,143,.16)" stroke-width="16"/><circle id="fArc" cx="100" cy="100" r="86" fill="none" stroke="#E2498F" stroke-width="16" stroke-linecap="round" stroke-dasharray="540.35" stroke-dashoffset="540.35"/></svg><div class="v"><b id="fNum">0</b><small>/ 100</small></div></div>
+      <div class="unv"><div class="eyebrow"><i data-lucide="badge-check"></i>UNVANIN</div><b id="fUnvan"></b><div class="meta" id="fMeta"></div></div>
+    </div>
+    <div class="fbars" id="fbars"></div>
+    <div class="fside">
+      <div class="ana"><div class="eyebrow"><i data-lucide="message-circle"></i>JÜRİ ANALİZİ</div><p id="fAna"></p></div>
+      <div class="rank"><div class="rn" id="fRank">#–</div><div class="rt"><b>Skor tablosuna eklendi</b><span id="fRankS"></span></div><span class="chip" id="fIzin"></span></div>
+    </div>
+    <div class="fbtns"><button class="btn" data-act="scenario"><i data-lucide="user-plus"></i>Yeni oyuncu</button><button class="btn" data-act="home"><i data-lucide="house"></i>Ana Menü</button><button class="btn pri" data-act="board"><i data-lucide="trophy"></i>Skor tablosu</button></div>
+  </section>
+
+  <!-- ============ 10 · SKOR TABLOSU ============ -->
+  <section class="screen" id="s-board">
+    <header class="bar">
+      <div class="brand"><img class="logo-sm" data-logo alt="">Günün Skor Tablosu</div>
+      <span class="chip"><i data-lucide="calendar"></i><span id="bDate"></span></span>
+      <div class="bar-r"><div class="tabs" id="bTabs"><button data-tab="sen" class="on"><i data-lucide="route"></i>Senaryo</button><button data-tab="duel"><i data-lucide="swords"></i>Günün Düelloları</button></div></div>
+    </header>
+    <div class="pane on" id="paneSen">
+      <div class="fltrow"><span class="eyebrow"><i data-lucide="filter"></i>SENARYO</span><div class="flt" id="flt"></div></div>
+      <div class="podium" id="podium"></div>
+      <div class="kvkk"><i data-lucide="shield-check"></i><div>Skor tablosunda yalnızca takma adın görünür. İzin verdiysen ilk 3'e girdiğinde takma adın ATÜ TechBuilders hesaplarında paylaşılır; gerçek ad, telefon ya da e-posta alınmaz.</div></div>
+      <div class="legend"><span><i data-lucide="megaphone"></i>paylaşım izni var</span><span><span class="tag">SEN</span>bu oyun</span></div>
+      <div class="tbl"><div class="th"><span>SIRA</span><span></span><span>TAKMA AD</span><span>SENARYO</span><span>UNVAN</span><span>SAAT</span><span class="r">PUAN</span></div><div class="tb" id="lb"></div></div>
+    </div>
+    <div class="pane" id="paneDuel">
+      <div class="fltrow"><span class="eyebrow"><i data-lucide="swords"></i>BUGÜN OYNANAN DÜELLOLAR</span><span class="chip" id="dCount"></span></div>
+      <div class="dlist"><div class="dh"><span>SAAT</span><span>GÖREV</span><span>OYUNCU 1</span><span></span><span style="text-align:right">OYUNCU 2</span></div><div id="dl"></div></div>
+    </div>
+    <div class="bfoot"><button class="lockb" data-act="pin"><i data-lucide="lock"></i>Görevli</button><span class="sp"></span><button class="btn" data-act="home"><i data-lucide="house"></i>Ana Menü</button><button class="btn pri" data-act="scenario"><i data-lucide="user-plus"></i>Yeni oyuncu</button></div>
+  </section>
+
+  <!-- ============ 11 · GÖREVLİ ============ -->
+  <section class="screen" id="s-admin">
+    <header class="bar">
+      <div class="brand"><img class="logo-sm" data-logo alt="">Görevli Menüsü</div><span class="chip"><i data-lucide="lock-open"></i>PIN ile açıldı</span>
+      <div class="bar-r"><div class="tabs" id="aTabs"><button data-tab="top" class="on"><i data-lucide="megaphone"></i>İlk 3</button><button data-tab="stats"><i data-lucide="chart-bar"></i>Gün sonu</button><button data-tab="set"><i data-lucide="settings"></i>Ayarlar</button></div>
+        <button class="ib" data-act="home" aria-label="Ana ekran"><i data-lucide="house"></i></button></div>
+    </header>
+    <div class="pane on" id="paneTop">
+      <div class="adm">
+        <h2>İlk 3'ü dışa aktar</h2>
+        <p class="lead">Paylaşım izni veren oyuncular arasından en yüksek puanlı 3 kişi. Görseller kulüp logosu ve renkleriyle hazırlanır.</p>
+        <div class="alist" id="alist"></div>
+        <div class="skip2" id="askip"></div>
+        <div class="abtns"><button class="btn pri" data-act="dl-post"><i data-lucide="image-down"></i>Gönderi PNG · 1080×1350</button><button class="btn" data-act="dl-story"><i data-lucide="smartphone"></i>Hikâye PNG · 1080×1920</button></div>
+        <div class="anote"><i data-lucide="info"></i>Otomatik paylaşım yapılmaz. Kulübün sosyal medya ekibi görseli kontrol edip paylaşır.</div>
+      </div>
+      <div class="prevs"><div class="prev"><canvas id="cvPost"></canvas><span>Instagram gönderisi · 1080×1350</span></div><div class="prev"><canvas id="cvStory"></canvas><span>Hikâye · 1080×1920</span></div></div>
+    </div>
+    <div class="pane" id="paneStats">
+      <div class="adm">
+        <h2>Gün sonu özeti</h2>
+        <p class="lead">Bugünün oyunlarından otomatik çıkarılır; hiçbir kişisel veri içermez. Kulübün hesabında paylaşılmaya hazır.</p>
+        <div class="stats" id="stTiles"></div>
+        <div class="facts2" id="stFacts"></div>
+        <div class="abtns"><button class="btn pri" data-act="dl-stats"><i data-lucide="image-down"></i>Özet PNG · 1080×1350</button><button class="btn" data-act="dl-stats-story"><i data-lucide="smartphone"></i>Hikâye PNG · 1080×1920</button></div>
+      </div>
+      <div class="prevs"><div class="prev"><canvas id="cvStats"></canvas><span>Gönderi · 1080×1350</span></div><div class="prev"><canvas id="cvStatsS"></canvas><span>Hikâye · 1080×1920</span></div></div>
+    </div>
+    <div class="pane" id="paneSet">
+      <div class="adm" style="width:760px;left:260px">
+        <h2>Ayarlar</h2>
+        <div class="setg" id="setg"></div>
+        <div class="abtns"><button class="btn" data-act="reset-tut"><i data-lucide="rotate-ccw"></i>Tutorial'ı sıfırla</button><button class="btn danger" data-act="reset-day"><i data-lucide="archive"></i>Günü arşivle ve sıfırla</button><button class="btn" data-act="load-demo"><i data-lucide="database"></i>Örnek verileri yükle</button></div>
+        <div class="anote"><i data-lucide="info"></i>Sıfırlanan gün silinmez, tarihli bir arşive taşınır. Prototip PIN'i: 1234.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cd" id="cd"></div>
+  <div class="pin" id="pin"><div class="pinbox"><h3><i data-lucide="lock"></i>Görevli PIN</h3><p>Prototipte PIN: 1234</p><div class="pdots" id="pdots"><i></i><i></i><i></i><i></i></div><div class="pkeys" id="pkeys"></div></div></div>
+  <div id="fx"></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="js/lucide.min.js"></script>
+<script src="js/veri.js"></script>
+<script src="js/logo-data.js"></script>
+<script src="js/ortak.js"></script>
+<script src="js/giris.js"></script>
+<script src="js/duello.js"></script>
+<script src="js/senaryo.js"></script>
+<script src="js/skor.js"></script>
+<script src="js/baslat.js"></script>
+</body>
+</html>

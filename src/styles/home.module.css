@@ -1,0 +1,1094 @@
+/*
+ * Tutorial, home screen and idle mode — ported from the full prototype
+ * (docs/tam_prototip/uygulama/css/uygulama.css, sections 0–1), drawn in the "Renk Paleti"
+ * language (paper, ink lines, hard shadows). 1280×800 stage pixels.
+ */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes floatY {
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes breathe {
+  50% {
+    transform: scale(1.04);
+  }
+}
+@keyframes segFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- logo ring (home + tutorial) ---------- */
+.hero {
+  position: absolute;
+  width: 384px;
+  height: 384px;
+}
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: spin 26s linear infinite;
+}
+.ring text {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.logo {
+  position: absolute;
+  left: 44px;
+  top: 44px;
+  width: 296px;
+  height: 296px;
+  touch-action: none;
+}
+.logo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ---------- 0 · tutorial ---------- */
+.tbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 28px;
+  z-index: 5;
+}
+.logoSm {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.club {
+  font-family: var(--font-digits);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.segs {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+.seg {
+  flex: 1;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  position: relative;
+  overflow: visible;
+  padding: 0;
+}
+.seg::after {
+  content: '';
+  position: absolute;
+  inset: -25px 0;
+}
+.seg i {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform-origin: left;
+  transform: scaleX(0);
+  border-radius: 99px;
+}
+.segDone i {
+  transform: scaleX(1);
+}
+.segCur i {
+  animation: segFill var(--dur) linear forwards;
+}
+.paused .segCur i {
+  animation-play-state: paused;
+}
+.skip {
+  height: 56px;
+  padding: 0 18px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.skip:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--shade);
+}
+.skip :global(.lucide) {
+  width: 17px;
+  height: 17px;
+}
+.tslides {
+  position: absolute;
+  top: 76px;
+  left: 0;
+  right: 0;
+  bottom: 100px;
+  touch-action: none;
+}
+.tslide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(60px);
+  transition:
+    opacity 0.32s,
+    transform 0.32s var(--ease);
+  pointer-events: none;
+}
+.tslideOn {
+  opacity: 1;
+  transform: none;
+}
+.tslideLeft {
+  transform: translateX(-60px);
+}
+.tvis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10px;
+  height: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+.ttxt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 450px;
+  text-align: center;
+}
+.ttxt h2 {
+  font-size: 44px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-top: 10px;
+}
+.ttxt h2 span {
+  color: var(--brand-ink);
+}
+.ttxt p {
+  margin: 10px auto 0;
+  max-width: 720px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.eyebrow {
+  font-family: var(--font-digits);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.tnav {
+  position: absolute;
+  left: 36px;
+  right: 36px;
+  bottom: 26px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tnavBtn {
+  height: 64px;
+  min-width: 150px;
+}
+.hide {
+  visibility: hidden;
+}
+.tdots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+  font-weight: 800;
+  font-size: 14px;
+}
+.tdots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  transition:
+    width 0.3s var(--ease),
+    background 0.3s;
+}
+.tdots .tdotOn {
+  width: 28px;
+  background: var(--ink);
+}
+.tdots span {
+  margin-left: 8px;
+  font-family: var(--font-digits);
+}
+/* tutorial visuals */
+.miniMode {
+  width: 220px;
+  height: 120px;
+  border-radius: var(--r-lg);
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  animation: floatY 3.2s ease-in-out infinite;
+}
+.miniModeS {
+  animation-delay: -1.6s;
+}
+.mi {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: var(--border);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.miniModeD .mi {
+  background: linear-gradient(135deg, var(--p1) 0 50%, var(--p2) 50% 100%);
+  color: var(--on);
+}
+.miniModeS .mi {
+  background: var(--scn);
+  color: var(--on);
+}
+.mi :global(.lucide) {
+  width: 32px;
+  height: 32px;
+}
+.miniMode b {
+  font-size: 22px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.miniMode small {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-2);
+  font-weight: 700;
+  margin-top: 4px;
+}
+.tHero {
+  position: relative;
+  width: 384px;
+  height: 384px;
+}
+.tHero .hero {
+  left: 0;
+  top: 0;
+  transform: scale(0.92);
+}
+.taskc {
+  width: 430px;
+  border-radius: 14px;
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: 24px;
+  text-align: center;
+}
+.taskIc {
+  width: 74px;
+  height: 74px;
+  border-radius: 12px;
+  margin: 0 auto;
+  background: var(--card);
+  border: var(--border);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+}
+.taskIc :global(.lucide) {
+  width: 38px;
+  height: 38px;
+}
+.taskc b {
+  display: block;
+  margin-top: 12px;
+  font-size: 22px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.taskAud {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  font-family: var(--font-digits);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.chip :global(.lucide) {
+  width: 14px;
+  height: 14px;
+}
+.verdicts {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.vd {
+  height: 64px;
+  width: 300px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 2px solid var(--c);
+  box-shadow: 3px 3px 0 var(--c);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  font-weight: 800;
+  font-size: 18px;
+  opacity: 0;
+}
+.vi {
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: var(--sunk);
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+}
+.vk {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--c);
+  color: var(--on);
+  display: grid;
+  place-items: center;
+}
+.vk :global(.lucide) {
+  width: 18px;
+  height: 18px;
+  stroke-width: 3;
+}
+.vdOk {
+  --c: var(--ok);
+}
+.vdNo {
+  --c: var(--bad);
+}
+.tslideOn .vd {
+  animation: pop 0.5s var(--spring) forwards;
+}
+.tslideOn .vd:nth-child(1) {
+  animation-delay: 0.8s;
+}
+.tslideOn .vd:nth-child(2) {
+  animation-delay: 1.9s;
+}
+.tslideOn .vd:nth-child(3) {
+  animation-delay: 3s;
+}
+.tduel {
+  position: relative;
+  display: flex;
+  gap: 50px;
+  align-items: center;
+}
+.tpool {
+  display: grid;
+  grid-template-columns: repeat(3, 88px);
+  gap: 10px;
+  position: relative;
+}
+.tt {
+  height: 88px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 2px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.tic {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--sunk);
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+}
+.tt :global(.lucide) {
+  width: 20px;
+  height: 20px;
+  color: var(--ink);
+}
+.ttSrc {
+  border: 2px dashed var(--p1-ink);
+  background: transparent;
+}
+.ttSrc > * {
+  opacity: 0.2;
+}
+.tphone {
+  width: 220px;
+  height: 330px;
+  border-radius: 34px;
+  background: var(--bezel);
+  padding: 8px;
+  border: var(--border);
+  box-shadow: 5px 5px 0 var(--p1-ink);
+}
+.tscr {
+  height: 100%;
+  border-radius: 27px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 34px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.tsl {
+  height: 40px;
+  border-radius: var(--r-sm);
+  background: var(--card);
+  border: var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.tslK {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--p1-tint);
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+}
+.tsl :global(.lucide) {
+  width: 15px;
+  height: 15px;
+}
+.tslE {
+  background: transparent;
+  border: 2px dashed var(--ink-2);
+  justify-content: center;
+  color: var(--ink-2);
+}
+.tslT {
+  border: 2px dashed var(--p1-ink);
+  background: var(--p1-tint);
+  color: var(--p1-ink);
+  justify-content: center;
+}
+.flyer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--r-lg);
+  background: var(--card);
+  border: 2px solid var(--p1-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 var(--p1-ink);
+  z-index: 3;
+}
+.flyer .tic {
+  background: var(--p1);
+  color: var(--on);
+}
+.fing {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+  border: 2px solid var(--ink-2);
+  left: 50px;
+  top: 56px;
+}
+.tslideOn .flyer {
+  animation: tflyer 3.4s var(--ease) infinite;
+}
+@keyframes tflyer {
+  0%,
+  12% {
+    transform: translate(0, 0) rotate(0);
+    opacity: 1;
+  }
+  55%,
+  78% {
+    transform: translate(286px, 118px) rotate(-5deg) scale(1.04);
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+    transform: translate(286px, 118px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.tchips {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.tscen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tchain {
+  display: flex;
+  align-items: center;
+  width: 640px;
+}
+.tn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: var(--border);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: var(--ink-2);
+  background: var(--card);
+  flex: none;
+}
+.tn :global(.lucide) {
+  width: 19px;
+  height: 19px;
+}
+.ts {
+  flex: 1;
+  height: 3px;
+  background: var(--sunk);
+  position: relative;
+  overflow: hidden;
+}
+.ts i {
+  position: absolute;
+  inset: 0;
+  background: var(--scn);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.tslideOn .tn {
+  animation: tfill 0.4s forwards;
+}
+.tslideOn .ts i {
+  animation: tseg 0.5s forwards;
+}
+@keyframes tfill {
+  to {
+    background: var(--scn);
+    color: var(--on);
+    border-color: var(--rule);
+  }
+}
+@keyframes tseg {
+  to {
+    transform: scaleX(1);
+  }
+}
+.topts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 640px;
+  margin-top: 34px;
+}
+.topts > div {
+  height: 74px;
+  border-radius: 12px;
+  background: var(--card);
+  border: var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  font-weight: 800;
+  font-size: 16px;
+}
+.topts .tic {
+  width: 42px;
+  height: 42px;
+}
+.tslideOn .pickme {
+  animation: tpick 3.6s infinite;
+}
+@keyframes tpick {
+  0%,
+  40% {
+    border-color: var(--rule);
+  }
+  50%,
+  100% {
+    border-color: var(--scn-ink);
+    background: var(--scn-tint);
+    box-shadow: 4px 4px 0 var(--scn-ink);
+  }
+}
+.tslideOn .dimme {
+  animation: tdim 3.6s infinite;
+}
+@keyframes tdim {
+  0%,
+  40% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.3;
+  }
+}
+.tscore {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.tring {
+  width: 220px;
+  height: 220px;
+  position: relative;
+}
+.tring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.tarc {
+  stroke-dasharray: 597;
+  stroke-dashoffset: 597;
+}
+.tslideOn .tarc {
+  animation: tarc 1.6s var(--ease) 0.3s forwards;
+}
+@keyframes tarc {
+  to {
+    stroke-dashoffset: 71.6;
+  }
+}
+.tring b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 74px;
+  font-family: var(--font-digits);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+.tring small {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 56px;
+  text-align: center;
+  color: var(--ink-2);
+  font-weight: 700;
+}
+.trows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 380px;
+}
+.trows > div {
+  height: 54px;
+  border-radius: 10px;
+  background: var(--card);
+  border: var(--border);
+  display: grid;
+  grid-template-columns: 30px 34px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 0 16px;
+  font-weight: 800;
+  opacity: 0;
+}
+.trowM {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--on-gold);
+  border: 1.5px solid var(--rule);
+  background: var(--m);
+}
+.trows > .trowMe {
+  background: var(--scn-tint);
+  box-shadow: inset 4px 0 0 var(--scn-ink);
+}
+.tslideOn .trows > div {
+  animation: slideIn 0.5s var(--ease) forwards;
+}
+.tslideOn .trows > div:nth-child(1) {
+  animation-delay: 0.9s;
+}
+.tslideOn .trows > div:nth-child(2) {
+  animation-delay: 1.1s;
+}
+.tslideOn .trows > div:nth-child(3) {
+  animation-delay: 1.3s;
+}
+
+/* ---------- 1 · home ---------- */
+.homeClub {
+  position: absolute;
+  top: 40px;
+  left: 34px;
+  font-family: var(--font-digits);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  z-index: 3;
+}
+.icons {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+.homeHero {
+  top: 12px;
+  left: 448px;
+  transition: transform 0.8s var(--ease);
+}
+.traces {
+  position: absolute;
+  bottom: 0;
+  width: 420px;
+  height: 260px;
+  opacity: 0.22;
+}
+.tracesL {
+  left: 0;
+}
+.tracesR {
+  right: 0;
+  transform: scaleX(-1);
+}
+.htitle {
+  position: absolute;
+  top: 398px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 62px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  transition:
+    opacity 0.5s,
+    top 0.8s var(--ease);
+}
+.htitle span {
+  color: var(--brand-ink);
+}
+.htag {
+  position: absolute;
+  top: 474px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 16px;
+  transition: opacity 0.5s;
+}
+.htag span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.htag :global(.lucide) {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-2);
+}
+.modes {
+  position: absolute;
+  top: 532px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  transition:
+    opacity 0.5s,
+    transform 0.5s var(--ease);
+}
+.mode {
+  width: 384px;
+  height: 140px;
+  border-radius: var(--r-xl);
+  position: relative;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  text-align: left;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.mode:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--shade);
+}
+.modeIc {
+  width: 90px;
+  height: 90px;
+  border-radius: 14px;
+  border: var(--border);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.modeDuel .modeIc {
+  background: linear-gradient(135deg, var(--p1) 0 50%, var(--p2) 50% 100%);
+  color: var(--on);
+}
+.modeScen .modeIc {
+  background: var(--scn);
+  color: var(--on);
+}
+.modeIc :global(.lucide) {
+  width: 44px;
+  height: 44px;
+  stroke-width: 2.3;
+}
+.mode h3 {
+  font-size: 31px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.modeMeta {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+.modeGo {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+.modeGo :global(.lucide) {
+  width: 20px;
+  height: 20px;
+}
+.homeSocial {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  translate: -50% 0;
+  height: 56px;
+  font-size: 16px;
+  transition: opacity 0.5s;
+}
+/* idle mode */
+.idlebox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+.idle .idlebox {
+  opacity: 1;
+}
+.idle .homeSocial {
+  opacity: 0;
+  pointer-events: none;
+}
+.idle .modes,
+.idle .htag {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+.idle .homeHero {
+  transform: translateY(40px) scale(1.12);
+}
+.idle .htitle {
+  top: 470px;
+}
+.tapme {
+  height: 64px;
+  padding: 0 30px;
+  border-radius: var(--r-lg);
+  background: var(--brand);
+  color: var(--on);
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: breathe 1.8s ease-in-out infinite;
+}
+.top3tick {
+  display: flex;
+  gap: 12px;
+}
+.top3tick span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: var(--border);
+  font-weight: 800;
+  font-size: 14px;
+}
+.top3tick i {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--on-gold);
+  border: 1.5px solid var(--rule);
+  background: var(--m);
+}
+.top3tick :global(.lucide) {
+  width: 16px;
+  height: 16px;
+  color: var(--ink);
+  fill: var(--gold);
+}

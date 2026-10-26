@@ -1,0 +1,116 @@
+import { describe, expect, it } from 'vitest'
+import { isClean, isValidNick } from '@/game/nickname'
+
+// Words the booth team saw slip through (2026-10-26) and their usual spelling games, plus the
+// clean words that start the same way and must keep passing.
+
+describe('stricter profanity filter: roots with suffixes, sexual words', () => {
+  it.each([
+    // "oç" with anything after it
+    'ocbirsey',
+    'Oçbirşey',
+    'OcKral',
+    'oçcuk',
+    'O.ç.u',
+    '0ç Kral',
+    'ocugu',
+    // bok… / göt… / seks… with suffixes
+    'bokunoglu',
+    'Bokunoğlu',
+    'boklu kedi',
+    'boktan',
+    'seksullah',
+    'Seks Ullah',
+    'seksi kedi',
+    'Seksüel',
+    'S3ks',
+    's.e.k.s',
+    'göttoş',
+    'götlek',
+    'Götveren',
+    // sexual words
+    'Porno Kral',
+    'pornocu',
+    'Sexy Panda',
+    'sexbomb',
+    'Erotik',
+    'Orgazm',
+    'mastürbasyon',
+    'sevişelim',
+    'Azgın Kedi',
+    'Çıplak',
+    'Vajina',
+    'Penis Kral',
+    'Sperm',
+    'Kondom',
+    'Striptiz',
+    'Genelev',
+    'Fetiş',
+    'Meme Kral',
+    'Pipi',
+    'Çük',
+    'çükü büyük',
+    'Sakso',
+    'Hentai',
+    'Nudes',
+    'Pussy Cat',
+    'Boobs',
+    'Horny',
+    'OnlyFans',
+    'xxx',
+    // 31
+    '31',
+    '31 Çeken',
+    'Kral31',
+    // phrases and glued forms
+    'Anneni Sikeyim',
+    'BacınıSikerim',
+    'KralAmk',
+    'kralamq',
+    'Sikko',
+    'Yarram',
+    'Daşşak',
+    'Kahbe',
+    'İpne',
+    'Oruspu',
+    'Allahsız',
+  ])('rejects "%s"', (name) => {
+    expect(isClean(name)).toBe(false)
+  })
+
+  it.each([
+    'Ocak',
+    'Ocak Kartalı',
+    'Octopus',
+    'Ocean Kedi',
+    'Boks Kedisi',
+    'Boksör Panda',
+    'Seksen',
+    'Seksenler',
+    'Gotik Kedi',
+    'Götürü Kodcu',
+    'Çukur',
+    'Saksofon',
+    'Orjinal Kod',
+    'Anuşka',
+    'Menekşe',
+    'Memeli',
+    'Pedal',
+    'Allegro',
+    'Abdullah',
+    'Sıkı Takipçi',
+    'Sikke',
+    'Oral',
+    'Kasık',
+    'Pezo',
+    'Epic Kartal',
+    'Samko',
+    'Iraq',
+    '2031 Kodcu',
+    'Kod 314',
+    'Yaramaz Kedi',
+    'Doksan Seksen',
+  ])('accepts the clean word "%s"', (name) => {
+    expect(isValidNick(name)).toBe(true)
+  })
+})

@@ -1,0 +1,1211 @@
+/*
+ * Duel: task card, two-player game, results — ported from the full prototype
+ * (docs/tam_prototip/uygulama/css/uygulama.css, sections 2–4). 1280×800 stage pixels.
+ * Player halves set --pc (fill colour), --pci (text/outline colour) and --pt (tint). Renk Paleti: paper, ink lines, hard shadows.
+ */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shake {
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+@keyframes pulse {
+  50% {
+    transform: scale(1.12);
+  }
+}
+@keyframes drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) rotate(-20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(4px) rotate(6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes stampFlat {
+  0% {
+    opacity: 0;
+    transform: scale(1.8) rotate(-8deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.95) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-1.5deg);
+  }
+}
+
+.p1 {
+  --pc: var(--p1);
+  --pci: var(--p1-ink);
+  --pt: var(--p1-tint);
+}
+.p2 {
+  --pc: var(--p2);
+  --pci: var(--p2-ink);
+  --pt: var(--p2-tint);
+}
+
+/* ---------- 2 · task card ---------- */
+.floor {
+  position: absolute;
+  bottom: 0;
+  width: 50%;
+  height: 230px;
+}
+.floorL {
+  left: 0;
+  background: var(--p1-tint);
+  border-top: var(--border);
+}
+.floorR {
+  right: 0;
+  background: var(--p2-tint);
+  border-top: var(--border);
+}
+.dcard {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 640px;
+  border-radius: 14px;
+  padding: 26px 34px 28px;
+  background: var(--card);
+  border: 2px solid var(--rule);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.bigIc {
+  width: 92px;
+  height: 92px;
+  border-radius: 14px;
+  margin: 18px auto 0;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: var(--border);
+  color: var(--ink);
+}
+.bigIc :global(.lucide) {
+  width: 46px;
+  height: 46px;
+}
+.dcard h1 {
+  margin-top: 16px;
+  font-size: 32px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.desc {
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.lbl2 {
+  margin-top: 18px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--ink-2);
+}
+.aud {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.audItem {
+  width: 160px;
+  height: 86px;
+  border-radius: 12px;
+  background: var(--sunk);
+  border: 2px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.audItem :global(.lucide) {
+  width: 28px;
+  height: 28px;
+}
+.rules2 {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.rules2 > span {
+  height: 36px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.who {
+  position: absolute;
+  bottom: 140px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 17px;
+}
+.whoP1 {
+  left: 40px;
+}
+.whoP2 {
+  right: 40px;
+  flex-direction: row-reverse;
+}
+.who small {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.rr {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.rr:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--shade);
+}
+.rr :global(.lucide) {
+  width: 20px;
+  height: 20px;
+}
+.rr:disabled {
+  opacity: 0.3;
+  box-shadow: none;
+}
+.rrRoll :global(.lucide) {
+  animation: spin 0.6s var(--ease);
+}
+.ready {
+  position: absolute;
+  bottom: 36px;
+  width: 250px;
+  height: 92px;
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--pci);
+  border: 2px solid var(--pci);
+  background: var(--card);
+  box-shadow: 4px 4px 0 var(--pci);
+  transition:
+    background 0.25s,
+    color 0.25s,
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.ready :global(.lucide) {
+  width: 30px;
+  height: 30px;
+  stroke-width: 2.6;
+}
+.ready:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--pci);
+}
+.readyP1 {
+  left: 36px;
+}
+.readyP2 {
+  right: 36px;
+}
+.readyOn {
+  background: var(--pc);
+  color: var(--on);
+  border-color: var(--rule);
+  box-shadow: 4px 4px 0 var(--shade);
+}
+.dstart {
+  position: absolute;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-2);
+}
+.dstart :global(.lucide) {
+  width: 20px;
+  height: 20px;
+}
+.dstart b {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: var(--border);
+  font-family: var(--font-digits);
+  font-size: 18px;
+  color: var(--ink);
+  background: var(--card);
+}
+
+/* ---------- 3 · game ---------- */
+.dtop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background: var(--card);
+  border-bottom: var(--border);
+  z-index: 4;
+}
+.dbrand {
+  width: 190px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 17px;
+}
+.dbrand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.dtask {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dtic {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: var(--card);
+  border: var(--border);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+}
+.dtic :global(.lucide) {
+  width: 30px;
+  height: 30px;
+}
+.dtl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--ink-2);
+}
+.dtl b {
+  color: var(--ink);
+}
+.dtl :global(.lucide) {
+  width: 13px;
+  height: 13px;
+}
+.dtt {
+  font-size: 21px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.aud2 {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+  padding-left: 18px;
+  border-left: 2px solid var(--sunk);
+}
+.aud2 > span {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12.5px;
+}
+.dmeta {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.half {
+  position: absolute;
+  top: 100px;
+  bottom: 0;
+  width: 628px;
+  display: flex;
+  flex-direction: column;
+  touch-action: none;
+}
+.halfP1 {
+  left: 0;
+  background: var(--p1-tint);
+}
+.halfP2 {
+  right: 0;
+  background: var(--p2-tint);
+}
+.timebar {
+  height: 5px;
+  background: var(--card);
+  border-bottom: var(--border);
+}
+.timebar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--pc);
+  transform-origin: left;
+}
+.halfP2 .timebar i {
+  transform-origin: right;
+}
+.hdr {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+}
+.halfP1 .hdr {
+  padding-right: 76px;
+}
+.halfP2 .hdr {
+  flex-direction: row-reverse;
+  padding-left: 76px;
+}
+.pname {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  white-space: nowrap;
+}
+.prog {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-2);
+  font-weight: 700;
+  font-size: 14px;
+}
+.halfP2 .prog {
+  margin-left: 0;
+  margin-right: auto;
+  flex-direction: row-reverse;
+}
+.bar3 {
+  width: 90px;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  overflow: hidden;
+}
+.bar3 i {
+  display: block;
+  height: 100%;
+  background: var(--pc);
+  border-radius: 99px;
+  transition: width 0.3s var(--ease);
+}
+.halfP2 .bar3 i {
+  margin-left: auto;
+}
+.prog :global(.lucide) {
+  width: 18px;
+  height: 18px;
+  color: var(--pci);
+}
+.dbody {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+  padding: 0 20px;
+  position: relative;
+}
+.halfP2 .dbody {
+  flex-direction: row-reverse;
+}
+.pool {
+  width: 300px;
+}
+.poolH {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.halfP2 .poolH {
+  flex-direction: row-reverse;
+}
+.poolH :global(.lucide) {
+  width: 16px;
+  height: 16px;
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.tile {
+  height: 92px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 2px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 6px;
+  text-align: center;
+  position: relative;
+  transition:
+    transform 0.12s,
+    opacity 0.2s;
+  touch-action: none;
+}
+.tile:active {
+  transform: scale(0.96);
+}
+.tic {
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: var(--sunk);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.tic :global(.lucide) {
+  width: 22px;
+  height: 22px;
+  color: var(--ink);
+}
+.tile > span {
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  pointer-events: none;
+}
+.nfr {
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  font-family: var(--font-digits);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  border-radius: 4px;
+  padding: 0 3px;
+  pointer-events: none;
+}
+.tileUsed {
+  background: transparent;
+  border: 2px dashed var(--ink-2);
+  pointer-events: none;
+}
+.tileUsed > * {
+  opacity: 0.28;
+}
+.tileUsed .ok {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--pc);
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  z-index: 2;
+}
+.tileUsed .ok :global(.lucide) {
+  width: 12px;
+  height: 12px;
+  color: var(--on);
+  stroke-width: 3.5;
+}
+.tileLifted {
+  background: transparent;
+  border: 2px dashed var(--pci);
+}
+.tileLifted > * {
+  opacity: 0.15;
+}
+.phone {
+  width: 264px;
+  height: 548px;
+  border-radius: 40px;
+  background: var(--bezel);
+  padding: 9px;
+  border: var(--border);
+  box-shadow: 5px 5px 0 var(--pci);
+  transition: box-shadow 0.2s;
+}
+.phoneHot {
+  box-shadow: 0 0 0 6px var(--pci);
+}
+.phoneFull {
+  animation: shake 0.35s;
+}
+.screen2 {
+  height: 100%;
+  border-radius: 32px;
+  background: var(--card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+}
+.sb {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.sb :global(.lucide) {
+  width: 13px;
+  height: 13px;
+}
+.sbR {
+  display: flex;
+  gap: 4px;
+}
+.appbar {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-weight: 800;
+  font-size: 15px;
+  border-bottom: 2px solid var(--sunk);
+}
+.appbar :global(.lucide) {
+  width: 18px;
+  height: 18px;
+  color: var(--pci);
+}
+.appbar small {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.slots {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 10px 12px;
+}
+.slot {
+  height: 46px;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  background: var(--card);
+  border: var(--border);
+  touch-action: none;
+}
+.sic {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+  background: var(--pt);
+  pointer-events: none;
+}
+.sic :global(.lucide) {
+  width: 17px;
+  height: 17px;
+  color: var(--ink);
+}
+.slot > span {
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+}
+.grip {
+  margin-left: auto;
+  width: 16px;
+  height: 16px;
+  color: var(--ink-2);
+  pointer-events: none;
+}
+.slotEmpty {
+  background: transparent;
+  border: 2px dashed var(--ink-2);
+  justify-content: center;
+}
+.slotEmpty :global(.lucide) {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-2);
+}
+.slotTarget {
+  background: var(--pt);
+  border: 2px dashed var(--pci);
+  justify-content: center;
+}
+.slotTarget :global(.lucide) {
+  width: 20px;
+  height: 20px;
+  color: var(--pci);
+}
+.slotLift {
+  opacity: 0.25;
+}
+.slotNew {
+  animation: pop 0.35s var(--spring);
+}
+.dfoot {
+  height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+}
+.halfP2 .dfoot {
+  flex-direction: row-reverse;
+}
+.hold {
+  position: relative;
+  height: 56px;
+  padding: 0 26px;
+  border-radius: var(--radius);
+  background: var(--pc);
+  color: var(--on);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  touch-action: none;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.hold:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--shade);
+}
+.hold :global(.lucide) {
+  width: 22px;
+  height: 22px;
+  stroke-width: 3;
+  position: relative;
+}
+.hold span {
+  position: relative;
+}
+.hold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bezel) 30%, transparent);
+  transform: scaleX(var(--hp, 0));
+  transform-origin: left;
+}
+.halfP2 .hold::before {
+  transform-origin: right;
+}
+.dib {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  touch-action: none;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.dib:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--shade);
+}
+.dib:disabled {
+  opacity: 0.35;
+  box-shadow: none;
+}
+.lockov {
+  position: absolute;
+  inset: 67px 0 0 0;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+  z-index: 5;
+}
+.fin .lockov {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lk {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--pc);
+  color: var(--on);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+}
+.fin .lk {
+  animation: pop 0.5s var(--spring);
+}
+.lk :global(.lucide) {
+  width: 42px;
+  height: 42px;
+  stroke-width: 3;
+}
+.lockov b {
+  font-size: 28px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.lockov span {
+  color: var(--ink-2);
+  font-weight: 700;
+}
+.ddiv {
+  position: absolute;
+  top: 100px;
+  bottom: 0;
+  left: 628px;
+  width: 24px;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink) 14%, transparent) 0 6px,
+    transparent 6px 12px
+  );
+  border-left: var(--border);
+  border-right: var(--border);
+  background-color: var(--paper);
+}
+.vs {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-digits);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--on);
+  background: var(--bezel);
+  border: var(--border);
+}
+.dtimer {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  z-index: 8;
+  pointer-events: none;
+}
+.dtimer svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.dtimer b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-digits);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--ink);
+}
+.dtimerWarn .arc {
+  stroke: var(--gold) !important;
+}
+.dtimerLow b {
+  color: var(--bad);
+  animation: pulse 1s ease-in-out infinite;
+}
+.dtimerLow .arc {
+  stroke: var(--bad) !important;
+}
+
+/* ---------- 4 · results ---------- */
+.rtop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--card);
+  border-bottom: var(--border);
+}
+.rtopT {
+  font-size: 24px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rtopT :global(.lucide) {
+  width: 26px;
+  height: 26px;
+  color: var(--ink);
+}
+.rhalf {
+  position: absolute;
+  top: 84px;
+  bottom: 88px;
+  width: 628px;
+  padding: 22px 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+.rhalfP1 {
+  left: 0;
+  background: var(--p1-tint);
+}
+.rhalfP2 {
+  right: 0;
+  background: var(--p2-tint);
+}
+.hdr2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+  position: relative;
+  z-index: 2;
+}
+.win {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--on-gold);
+  border: var(--border);
+  font-family: var(--font-digits);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0;
+}
+.winTie {
+  background: var(--card);
+  color: var(--ink);
+}
+.win :global(.lucide) {
+  width: 19px;
+  height: 19px;
+}
+.winOn {
+  animation: drop 0.65s var(--spring) forwards;
+}
+.nick2 small {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--ink-2);
+}
+.nick2 small :global(.lucide) {
+  width: 14px;
+  height: 14px;
+}
+.nick2 b {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 30px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pci);
+  opacity: 0;
+  transform-origin: left center;
+}
+.nick2 .stampOn {
+  animation: stampFlat 0.55s var(--spring) forwards;
+}
+.srow {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.ring2 {
+  position: relative;
+  width: 188px;
+  height: 188px;
+  flex: none;
+}
+.ring2 svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ringV {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ringV b {
+  font-size: 66px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.ringV small {
+  color: var(--ink-2);
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 4px;
+}
+.bd {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.brow {
+  display: grid;
+  grid-template-columns: 30px 1fr 54px;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 5px;
+}
+.ri {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  display: grid;
+  place-items: center;
+  grid-row: span 2;
+}
+.ri :global(.lucide) {
+  width: 16px;
+  height: 16px;
+  color: var(--pci);
+}
+.brow > span {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.brow em {
+  font-style: normal;
+  font-family: var(--font-digits);
+  font-weight: 700;
+  font-size: 14px;
+  text-align: right;
+}
+.tr3 {
+  grid-column: 2 / 4;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  overflow: hidden;
+}
+.tr3 i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--pc);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.6s ease-out;
+  transition-delay: var(--delay);
+}
+.browPenalty .ri :global(.lucide),
+.browPenalty em {
+  color: var(--bad);
+}
+.bubble {
+  position: relative;
+  z-index: 2;
+  border-radius: 12px;
+  padding: 18px 22px;
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+}
+.bubble::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 64px;
+  width: 16px;
+  height: 16px;
+  background: var(--card);
+  border-left: 2px solid var(--rule);
+  border-top: 2px solid var(--rule);
+  transform: rotate(45deg);
+}
+.bubble small {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+}
+.bubble small :global(.lucide) {
+  width: 15px;
+  height: 15px;
+  color: var(--pci);
+}
+.bubble p {
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-weight: 500;
+  min-height: 52px;
+}
+.rdiv {
+  position: absolute;
+  top: 84px;
+  bottom: 88px;
+  left: 628px;
+  width: 24px;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink) 14%, transparent) 0 6px,
+    transparent 6px 12px
+  );
+  border-left: var(--border);
+  border-right: var(--border);
+  background-color: var(--paper);
+}
+.rbottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border-top: 2px solid var(--rule);
+  background: var(--card);
+}

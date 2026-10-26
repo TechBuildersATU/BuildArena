@@ -1,0 +1,40 @@
+{
+  "aciklama": "İlk açılış tanıtımı (proje dokümanı §4.2): başlık en fazla 6, alt yazı en fazla 14 kelime. 'vurgu' başlığın pembe kısmıdır. Süreler saniye.",
+  "slaytlar": [
+    {
+      "etiket": "HOŞ GELDİN",
+      "baslik": "BuildArena'ya",
+      "vurgu": "hoş geldin!",
+      "metin": "Doğru kullanıcıya doğru özellik. 2 dakikada bir uygulama tasarla.",
+      "sure": 5
+    },
+    {
+      "etiket": "GEREKSİNİM NEDİR?",
+      "baslik": "Her özellik",
+      "vurgu": "iyi değildir",
+      "metin": "Hastane uygulamasında randevu gerekir, sepet gerekmez. İşte gereksinim analizi bu!",
+      "sure": 6
+    },
+    {
+      "etiket": "DÜELLO MODU",
+      "baslik": "Sürükle, bırak,",
+      "vurgu": "kapış!",
+      "metin": "Uygun kartları kendi kutuna sürükle. Tuzak kartlar puan kaybettirir!",
+      "sure": 7
+    },
+    {
+      "etiket": "SENARYO MODU",
+      "baslik": "Her karar",
+      "vurgu": "sonrakini etkiler",
+      "metin": "Tek başına oyna: her adımda en doğru seçeneğe dokun, 5 adımda zirveye çık.",
+      "sure": 7
+    },
+    {
+      "etiket": "PUAN VE SKOR TABLOSU",
+      "baslik": "Doğru karar kazandırır,",
+      "vurgu": "zirveye çık",
+      "metin": "Zor kararlar daha çok puan getirir, hızlı olan bonus alır. Günün ilk 3'ü paylaşılır!",
+      "sure": 6
+    }
+  ]
+}

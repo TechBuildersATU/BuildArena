@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>BuildArena — Senaryo Bileşenleri</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .hd { position: absolute; top: 26px; left: 36px; right: 36px; display: flex; align-items: center; gap: 12px; }
+  .hd h1 { font-size: 26px; font-weight: 800; }
+  .grid { position: absolute; top: 86px; left: 36px; right: 36px; bottom: 28px; display: grid; grid-template-columns: 1.15fr 1fr 1fr; grid-template-rows: auto auto; gap: 16px; }
+  .p { border-radius: 22px; background: var(--surface); border: 1px solid var(--line); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .ph { font-size: 11.5px; font-weight: 800; letter-spacing: .14em; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .ph .lucide { width: 15px; height: 15px; }
+  .note { font-size: 11.5px; color: var(--dim); font-weight: 600; line-height: 1.45; }
+  .lab { font-size: 10.5px; color: var(--muted); font-weight: 700; text-align: center; margin-top: 6px; }
+  /* seçenek kartı */
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .o { height: 74px; border-radius: 16px; background: var(--bg-2); border: 2px solid var(--line); display: flex; align-items: center; gap: 10px; padding: 0 12px; position: relative; }
+  .o .oi { width: 40px; height: 40px; border-radius: 12px; background: var(--surface-3); display: grid; place-items: center; flex: none; }
+  .o .oi .lucide { width: 20px; height: 20px; }
+  .o b { font-size: 13px; font-weight: 800; line-height: 1.25; }
+  .o .k { position: absolute; top: 6px; right: 9px; font-family: var(--mono); font-size: 10px; color: var(--dim); font-weight: 800; }
+  .o.pr { transform: scale(.97); background: var(--surface-2); }
+  .o.sel { border-color: var(--brand); background: var(--surface-2); box-shadow: 0 0 0 4px var(--brand-soft); }
+  .o.sel .oi { background: var(--paper); color: var(--ink); transform: rotate(-6deg); }
+  .o.sel::after { content: ""; position: absolute; right: 8px; bottom: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--brand-btn); }
+  .o.dim { opacity: .3; }
+  /* zincir */
+  .chain { display: flex; align-items: flex-start; justify-content: space-between; padding: 4px 6px 0; }
+  .cn { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 70px; }
+  .cn .d { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line-2); background: var(--bg); font-weight: 800; font-size: 14px; color: var(--dim); }
+  .cn .d .lucide { width: 18px; height: 18px; }
+  .cn.cur .d { border-color: var(--brand); color: var(--text); box-shadow: 0 0 0 6px var(--brand-soft); }
+  .cn.done .d { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .cn.late .d { background: var(--surface-3); border-color: var(--surface-3); color: var(--muted); }
+  .cn span { font-size: 10.5px; color: var(--muted); font-weight: 700; }
+  /* final düğümleri */
+  .fns { display: flex; justify-content: space-around; }
+  .fn { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .fd { width: 58px; height: 58px; border-radius: 50%; border: 4px solid var(--c); background: var(--bg-2); display: grid; place-items: center; position: relative; }
+  .fd .lucide { width: 24px; height: 24px; }
+  .fd .b { position: absolute; top: -5px; right: -5px; width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: var(--bg); display: grid; place-items: center; border: 2px solid var(--surface); }
+  .fd .b .lucide { width: 12px; height: 12px; stroke-width: 3.2; }
+  .st { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 99px; font-size: 11.5px; font-weight: 800; background: color-mix(in srgb, var(--c) 18%, transparent); }
+  .st .lucide { width: 12px; height: 12px; color: var(--c); stroke-width: 3; }
+  .s-ok { --c: var(--ok); } .s-mid { --c: var(--warn); } .s-bad { --c: var(--bad); }
+  /* kelebek kartı */
+  .sheet { border-radius: 18px; background: var(--paper); color: var(--ink); padding: 14px 16px 18px; position: relative; }
+  .sheet .sl { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; color: #8A1F55; display: flex; align-items: center; gap: 8px; }
+  .sheet .sl svg { width: 26px; height: 21px; }
+  .sheet p { margin-top: 6px; font-size: 16px; font-weight: 800; line-height: 1.3; }
+  .sheet .pb { position: absolute; left: 16px; right: 16px; bottom: 9px; height: 4px; border-radius: 2px; background: #E9E4DD; overflow: hidden; }
+  .sheet .pb i { display: block; height: 100%; width: 58%; background: var(--brand-btn); }
+  .sheet.late .sl { color: #B4232E; }
+  /* skor satırı + podyum */
+  .row { display: grid; grid-template-columns: 26px 30px 1fr auto auto; gap: 10px; align-items: center; height: 46px; padding: 0 12px; border-radius: 12px; background: var(--bg-2); font-size: 13px; font-weight: 700; color: var(--muted); }
+  .row .iv { width: 30px; height: 30px; border-radius: 50%; background: var(--surface-3); display: grid; place-items: center; color: var(--text); font-weight: 800; }
+  .row b { color: var(--text); font-weight: 800; display: flex; align-items: center; gap: 6px; }
+  .row b .lucide { width: 14px; height: 14px; color: var(--muted); }
+  .row .sc { color: var(--text); font-weight: 800; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .row.me { background: var(--brand-soft); box-shadow: inset 3px 0 0 var(--brand); }
+  .tag { font-size: 9.5px; font-weight: 800; letter-spacing: .1em; padding: 3px 6px; border-radius: 6px; background: var(--brand-btn); color: #fff; }
+  .pod { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 112px; }
+  .pod div { width: 74px; border-radius: 12px 12px 4px 4px; border-top: 4px solid var(--m); background: color-mix(in srgb, var(--m) 16%, var(--surface)); display: grid; place-items: start center; padding-top: 6px; font-size: 24px; font-weight: 800; color: var(--m); }
+  /* klavye, anahtar, PIN */
+  .keys { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .key { width: 40px; height: 52px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--line); display: grid; place-items: center; font-weight: 800; font-size: 17px; }
+  .key.pr { transform: translateY(2px) scale(.92); background: var(--surface-3); }
+  .key.on { background: var(--brand-btn); color: #fff; }
+  .key .lucide { width: 18px; height: 18px; }
+  .sw { width: 54px; height: 32px; border-radius: 99px; background: var(--surface-3); position: relative; }
+  .sw::after { content: ""; position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: #fff; }
+  .sw.on { background: var(--brand-btn); } .sw.on::after { left: 26px; }
+  .pins { display: flex; gap: 10px; } .pins i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line-2); } .pins i.f { background: var(--text); border-color: var(--text); }
+  .rules { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .rules div { display: flex; align-items: center; gap: 8px; }
+  .rules i { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-style: normal; }
+  .rules i .lucide { width: 11px; height: 11px; stroke-width: 3; color: var(--bg); }
+  .timer { width: 52px; height: 52px; position: relative; }
+  .timer svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .timer b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-weight: 800; font-size: 16px; }
+</style>
+</head>
+<body class="calm-bg">
+  <div class="hd"><img class="logo-sm" src="logo.png" alt=""><h1>Senaryo Modu · Bileşenler</h1><span class="chip">v0.2 token'ları · yeni bileşenler</span></div>
+  <div class="grid">
+    <div class="p">
+      <div class="ph"><i data-lucide="mouse-pointer-click"></i>SEÇENEK KARTI (2×2)</div>
+      <div class="opts">
+        <div><div class="o"><span class="k">A</span><div class="oi"><i data-lucide="nfc"></i></div><b>NFC kart / telefon</b></div><div class="lab">Varsayılan</div></div>
+        <div><div class="o pr"><span class="k">B</span><div class="oi"><i data-lucide="qr-code"></i></div><b>QR kod</b></div><div class="lab">Basılı</div></div>
+        <div><div class="o sel"><span class="k">C</span><div class="oi"><i data-lucide="shield-check"></i></div><b>Bakiye ve geçiş tek işlemde</b></div><div class="lab">Seçildi</div></div>
+        <div><div class="o dim"><span class="k">D</span><div class="oi"><i data-lucide="ban"></i></div><b>Bakiye kontrolü kaldırılsın</b></div><div class="lab">Sönük (seçim sonrası)</div></div>
+      </div>
+      <div class="ph" style="margin-top:4px"><i data-lucide="git-commit-horizontal"></i>KARAR ZİNCİRİ DÜĞÜMÜ</div>
+      <div class="chain">
+        <div class="cn done"><div class="d"><i data-lucide="nfc"></i></div><span>Tamamlandı</span></div>
+        <div class="cn cur"><div class="d">2</div><span>Şu anki</span></div>
+        <div class="cn"><div class="d">3</div><span>Sıradaki</span></div>
+        <div class="cn late"><div class="d"><i data-lucide="timer-off"></i></div><span>Süre doldu</span></div>
+        <div class="cn"><div class="timer"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="23" fill="none" stroke="#312E3A" stroke-width="5"/><circle cx="28" cy="28" r="23" fill="none" stroke="#F2616B" stroke-width="5" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="115"/></svg><b style="color:var(--bad)">4</b></div><span>Son 5 sn</span></div>
+      </div>
+      <div class="note">Oyun sırasında doğru/yanlış gösterilmez: tamamlanan düğüm renksizdir, yalnızca seçilen ikonu taşır.</div>
+    </div>
+
+    <div class="p">
+      <div class="ph"><i data-lucide="chart-no-axes-gantt"></i>FİNAL DÜĞÜMÜ · DURUM</div>
+      <div class="fns">
+        <div class="fn s-ok"><div class="fd"><i data-lucide="nfc"></i><span class="b"><i data-lucide="check"></i></span></div><span class="st"><i data-lucide="check"></i>İyi</span><span class="lab" style="margin:0">16–20 puan</span></div>
+        <div class="fn s-mid"><div class="fd"><i data-lucide="list"></i><span class="b"><i data-lucide="minus"></i></span></div><span class="st"><i data-lucide="minus"></i>Orta</span><span class="lab" style="margin:0">8–15 puan</span></div>
+        <div class="fn s-bad"><div class="fd"><i data-lucide="ban"></i><span class="b"><i data-lucide="x"></i></span></div><span class="st"><i data-lucide="x"></i>Zayıf</span><span class="lab" style="margin:0">0–7 puan</span></div>
+      </div>
+      <div class="note">Durum asla yalnızca renkle verilmez: renk + ikon (✓ – ✕) + etiket birlikte. Durum renkleri koyu yüzeyde kontrast (≥ 3:1) ve renk körlüğü ayrımı (ΔE ≥ 10) testinden geçti.</div>
+      <div class="ph" style="margin-top:2px"><i data-lucide="sparkle"></i>KELEBEK ETKİSİ KARTI</div>
+      <div class="sheet"><div class="sl"><svg viewBox="0 0 40 32"><g><path d="M20 15C13 3 2 2 3 11c1 6 10 8 17 5z" fill="#E2498F"/><path d="M20 17c-6 1-13 6-11 11 2 4 9 0 11-10z" fill="#B05BC9"/><circle cx="9" cy="10" r="2.2" fill="#4B9EFF"/></g><g><path d="M20 15c7-12 18-13 17-4-1 6-10 8-17 5z" fill="#E2498F"/><path d="M20 17c6 1 13 6 11 11-2 4-9 0-11-10z" fill="#B05BC9"/><circle cx="31" cy="10" r="2.2" fill="#4B9EFF"/></g><rect x="19" y="8" width="2" height="16" rx="1" fill="#1B1A21"/></svg>KELEBEK ETKİSİ</div><p>Gecikme 200 ms'nin altına indi.</p><div class="pb"><i></i></div></div>
+      <div class="sheet late"><div class="sl"><i data-lucide="timer-off" style="width:16px;height:16px"></i>SÜRE DOLDU · 0 PUAN</div><p>Karar verilmedi; kriz kendi kendine büyüdü.</p><div class="pb"><i style="width:30%"></i></div></div>
+    </div>
+
+    <div class="p">
+      <div class="ph"><i data-lucide="trophy"></i>SKOR TABLOSU</div>
+      <div class="pod"><div style="--m:#C9C6D3;height:78px">2</div><div style="--m:#F5C451;height:108px">1</div><div style="--m:#D9895A;height:58px">3</div></div>
+      <div class="note" style="text-align:center">Altın #F5C451 · Gümüş #C9C6D3 · Bronz #D9895A — sıra numarası her zaman yazılı.</div>
+      <div class="row"><span>4</span><span class="iv">R</span><b>Regex Rakunu<i data-lucide="megaphone"></i></b><span>Senior</span><span class="sc">84</span></div>
+      <div class="row me"><span>9</span><span class="iv">K</span><b>Korkut<span class="tag">SEN</span></b><span>Junior</span><span class="sc">44</span></div>
+      <div class="note"><i data-lucide="megaphone" style="width:13px;height:13px;vertical-align:-2px"></i> paylaşım izni · sıralama: puan ↓, eşitlikte süre ↑, sonra erken oynayan</div>
+    </div>
+
+    <div class="p" style="grid-column: 1 / 4; flex-direction: row; gap: 28px; align-items: flex-start;">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="ph"><i data-lucide="keyboard"></i>EKRAN KLAVYESİ (TR-Q)</div>
+        <div class="keys"><div class="key">Ğ</div><div class="key pr">Ü</div><div class="key">Ş</div><div class="key">İ</div><div class="key">Ö</div><div class="key">Ç</div><div class="key on" style="width:64px"><i data-lucide="arrow-big-up"></i></div><div class="key" style="width:64px"><i data-lucide="delete"></i></div></div>
+        <div class="note">Varsayılan · basılı · büyük harf açık. Tablet klavyesi ekranı kapatmasın diye uygulama içi klavye.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;width:250px">
+        <div class="ph"><i data-lucide="list-checks"></i>TAKMA AD KURALLARI</div>
+        <div class="rules"><div><i style="background:var(--ok)"><i data-lucide="check"></i></i>3–16 karakter</div><div><i style="background:var(--ok)"><i data-lucide="check"></i></i>Harf, rakam, boşluk, _ ve -</div><div><i style="background:var(--bad)"><i data-lucide="x"></i></i><span style="color:var(--text)">Bu ad kullanılamıyor</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="ph"><i data-lucide="toggle-right"></i>PAYLAŞIM İZNİ</div>
+        <div style="display:flex;gap:14px;align-items:center"><div class="sw on"></div><span class="note">açık</span><div class="sw"></div><span class="note">kapalı</span></div>
+        <div class="ph" style="margin-top:6px"><i data-lucide="lock"></i>GÖREVLİ PIN</div>
+        <div class="pins"><i class="f"></i><i class="f"></i><i></i><i></i></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;width:250px">
+        <div class="ph"><i data-lucide="award"></i>UNVAN DAMGASI</div>
+        <span style="display:inline-block;align-self:flex-start;font-size:24px;font-weight:800;color:var(--brand);border:3px solid var(--brand);border-radius:12px;padding:4px 12px;transform:rotate(-3deg)">Senior Analist</span>
+        <div class="note">90+ Baş · 75+ Senior · 55+ Mid · 35+ Junior · 0+ Stajyer (ama umut var!)</div>
+      </div>
+    </div>
+  </div>
+<script src="lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

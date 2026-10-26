@@ -1,0 +1,142 @@
+/*
+ * The APK's opening animation (src/components/BootIntro.tsx), on the palette's paper.
+ * 1280×800 stage pixels; prefers-reduced-motion shortens everything (index.css).
+ */
+
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.52s cubic-bezier(0.7, 0, 0.3, 1);
+}
+/* the curtain lifts onto the game; its ink edge shows only while it moves (a still line would
+   sit at the bottom of a wide screen's letterbox) */
+.leave {
+  transform: translateY(-101%);
+  border-bottom: var(--border);
+}
+
+.logo {
+  position: relative;
+  width: 384px;
+  height: 384px;
+  animation: logoIn 0.8s var(--spring) 0.05s both;
+}
+.hero {
+  left: 0;
+  top: 0;
+}
+/* sparkles over the logo square (same coordinates as the hero's own) */
+.sparks {
+  position: absolute;
+  left: 44px;
+  top: 44px;
+  width: 296px;
+  height: 296px;
+  pointer-events: none;
+}
+@keyframes logoIn {
+  from {
+    opacity: 0;
+    transform: scale(0.35) rotate(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.word {
+  margin-top: -6px;
+  display: flex;
+  font-family: var(--font-display);
+  font-size: 76px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink);
+}
+.word span {
+  display: inline-block;
+  animation: rise 0.6s var(--spring) both;
+}
+.word .arena {
+  color: var(--brand-ink);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(46px) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tag {
+  margin-top: 14px;
+  font-family: var(--font-digits);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--ink-2);
+  animation: fade 0.5s ease-out 1.05s both;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* four printed inks fill one after another, like a loading bar */
+.bars {
+  margin-top: 26px;
+  display: flex;
+  gap: 10px;
+}
+.bars i {
+  width: 72px;
+  height: 12px;
+  border-radius: 99px;
+  border: 1.5px solid var(--rule);
+  background: var(--sunk);
+  overflow: hidden;
+  position: relative;
+}
+.bars i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--c);
+  transform-origin: left;
+  animation: fill 0.34s var(--ease) both;
+  animation-delay: var(--d);
+}
+.bars i:nth-child(1) {
+  --c: var(--brand);
+  --d: 1.2s;
+}
+.bars i:nth-child(2) {
+  --c: var(--p1);
+  --d: 1.36s;
+}
+.bars i:nth-child(3) {
+  --c: var(--p2);
+  --d: 1.52s;
+}
+.bars i:nth-child(4) {
+  --c: var(--scn);
+  --d: 1.68s;
+}
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}

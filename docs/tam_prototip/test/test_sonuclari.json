@@ -1,0 +1,140 @@
+{
+  "results": [
+    [
+      "GEÇTİ",
+      "ilk açılışta tutorial gösterilir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "5. slaytta \"Hadi Başlayalım\" çıkar",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "tutorial kaydı tutulur",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "ikinci açılışta doğrudan ana ekran",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "zar ile takma ad değişir (bir kez)",
+      "Null Pointer Panda → Pixel Penguen"
+    ],
+    [
+      "GEÇTİ",
+      "iki \"Hazırım\" sonrası 3-2-1 ve oyun başlar",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "iki parmak aynı anda: iki kart da kendi kutusuna düştü",
+      "[[\"kargo\"],[\"sepet\"]]"
+    ],
+    [
+      "GEÇTİ",
+      "sınır kilidi: P1 kartı P2 kutusuna giremez",
+      "P2: 1 kart"
+    ],
+    [
+      "GEÇTİ",
+      "ölü bölge (628–652 px) dokunuşu yok sayılır",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "tek parmak kuralı: aynı tarafta ikinci parmak yok sayılır",
+      "2 → 3"
+    ],
+    [
+      "GEÇTİ",
+      "kutu içinde sıralama değişir",
+      "[\"envanter\",\"mutfak\",\"kargo\"]"
+    ],
+    [
+      "GEÇTİ",
+      "kutudan dışarı sürüklenen kart havuza döner",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "Geri al son hamleyi geri getirir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "fare ile de sürüklenir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "kısa dokunuş Bitir değildir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "düello puanları formülle birebir (Bölüm 11.1)",
+      "[{\"app\":18,\"beklenen\":18,\"ekran\":18,\"lakap\":\"Mutfak Ekranı Koleksiyoncusu\"},{\"app\":21,\"beklenen\":21,\"ekran\":21,\"lakap\":\"Gizli Sepet Hayranı\"}]"
+    ],
+    [
+      "GEÇTİ",
+      "ekran klavyesi Türkçe karakter yazar",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "senaryo puanı = seçimlerin toplamı, kayıt ve seçimler saklanır",
+      "{\"puan\":28,\"hesap\":28,\"unvan\":\"Stajyer (ama umut var!)\",\"kayit\":1,\"secim\":5}"
+    ],
+    [
+      "GEÇTİ",
+      "skor tablosunda oyuncu vurgulanır",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "Günün Düelloları sekmesinde düello listelenir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "gün sonu özeti hesaplanır",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "ayar kaydedilir (düello 60 sn)",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "tutorial sıfırlanır",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "örnek veriler yüklenir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "ana ekran düello süresini ayardan gösterir",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "60 sn dokunulmazsa bekleme modu",
+      ""
+    ],
+    [
+      "GEÇTİ",
+      "ilk dokunuş yalnızca uyandırır",
+      ""
+    ]
+  ],
+  "errors": []
+}

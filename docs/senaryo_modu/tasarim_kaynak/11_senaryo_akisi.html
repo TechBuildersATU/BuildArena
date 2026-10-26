@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>BuildArena — Senaryo Modu Akışı</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  html, body { height: 640px; }
+  h1 { position: absolute; top: 26px; left: 44px; font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+  h1 .lucide { width: 28px; height: 28px; color: var(--muted); }
+  h1 small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 8px; }
+  .node { position: absolute; width: 150px; text-align: center; }
+  .node .ic { width: 62px; height: 62px; margin: 0 auto; border-radius: 19px; display: grid; place-items: center; background: var(--surface-2); border: 1.5px solid var(--line-2); position: relative; }
+  .node .ic .lucide { width: 29px; height: 29px; }
+  .node .ic i.n { position: absolute; top: -9px; right: -9px; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: #131218; font-style: normal; font-weight: 800; font-size: 12px; display: grid; place-items: center; }
+  .node b { display: block; margin-top: 10px; font-size: 14.5px; font-weight: 800; }
+  .node small { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); font-weight: 600; line-height: 1.35; }
+  .node.br .ic { background: var(--brand-btn); border: none; color: #fff; }
+  .node.pp .ic { background: var(--paper); border: none; color: var(--ink); }
+  svg.ov { position: absolute; inset: 0; width: 1280px; height: 640px; }
+  .loop { position: absolute; left: 600px; top: 300px; width: 330px; border-radius: 20px; border: 1.5px dashed rgba(226,73,143,.5); background: rgba(226,73,143,.06); padding: 14px 16px; }
+  .loop h4 { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: var(--brand); display: flex; align-items: center; gap: 8px; }
+  .loop h4 .lucide { width: 16px; height: 16px; }
+  .loop .st { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .loop .st span { flex: 1; height: 54px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--muted); gap: 3px; }
+  .loop .st span .lucide { width: 18px; height: 18px; color: var(--text); }
+  .loop .st > .lucide { width: 16px; height: 16px; color: var(--dim); }
+  .box { position: absolute; width: 268px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px dashed var(--line-2); display: flex; gap: 10px; font-size: 12.5px; line-height: 1.45; color: var(--muted); font-weight: 600; }
+  .box b { color: var(--text); display: block; font-size: 13px; margin-bottom: 2px; }
+  .box .lucide { width: 19px; height: 19px; flex: none; margin-top: 1px; }
+  .lbl { position: absolute; font-size: 12px; font-weight: 800; color: var(--muted); background: var(--bg); padding: 0 8px; display: flex; align-items: center; gap: 6px; }
+  .lbl .lucide { width: 14px; height: 14px; }
+</style>
+</head>
+<body class="calm-bg">
+  <h1><i data-lucide="workflow"></i>Senaryo Modu — Kullanıcı Akışı <small>1 oyuncu · ≈ 2,5 dakika</small></h1>
+
+  <svg class="ov" viewBox="0 0 1280 640">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8A859C"/></marker>
+      <marker id="ab" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E2498F"/></marker>
+    </defs>
+    <g stroke="#8A859C" stroke-width="2" fill="none" marker-end="url(#a)">
+      <line x1="150" y1="146" x2="214" y2="146"/>
+      <line x1="320" y1="146" x2="384" y2="146"/>
+      <line x1="490" y1="146" x2="554" y2="146"/>
+      <line x1="1000" y1="146" x2="1064" y2="146"/>
+      <path d="M1118 236 L1118 470 L1010 470"/>
+      <line x1="830" y1="470" x2="742" y2="470"/>
+    </g>
+    <path d="M660 146 L724 146" stroke="#E2498F" stroke-width="2" fill="none" marker-end="url(#ab)"/>
+    <path d="M777 248 L777 292" stroke="#E2498F" stroke-width="2" fill="none" stroke-dasharray="5 5" marker-end="url(#ab)"/>
+    <path d="M932 350 L996 350 Q1004 350 1004 342 L1004 254" stroke="#E2498F" stroke-width="2" fill="none" stroke-dasharray="5 5" marker-end="url(#ab)"/>
+    <path d="M437 248 L437 296" stroke="#F5C451" stroke-width="2" fill="none" stroke-dasharray="5 5" marker-end="url(#a)"/>
+  </svg>
+
+  <div class="node br" style="left:0;top:114px;width:150px"><div class="ic"><i class="n">1</i><i data-lucide="route"></i></div><b>Senaryo modu</b><small>Ana ekrandan seçilir</small></div>
+  <div class="node" style="left:192px;top:114px"><div class="ic"><i class="n">2</i><i data-lucide="tag"></i></div><b>Takma ad + izin</b><small>3–16 karakter, filtre,<br>paylaşım izni</small></div>
+  <div class="node" style="left:362px;top:114px"><div class="ic"><i class="n">3</i><i data-lucide="dices"></i></div><b>Kriz çarkı</b><small>5 sistemden biri<br>(son oynanan hariç)</small></div>
+  <div class="node pp" style="left:532px;top:114px"><div class="ic"><i class="n">4</i><i data-lucide="siren"></i></div><b>Kriz girişi</b><small>Saat, yer, ölçek<br>→ 3·2·1</small></div>
+  <div class="node br" style="left:702px;top:114px"><div class="ic"><i class="n">5</i><i data-lucide="git-commit-horizontal"></i></div><b>5 karar</b><small>Adım 1–4 detay<br>Adım 5 genel</small></div>
+  <div class="node" style="left:872px;top:114px"><div class="ic"><i class="n">6</i><i data-lucide="chart-no-axes-gantt"></i></div><b>Final</b><small>Zincir + puan /100<br>+ unvan + analiz</small></div>
+  <div class="node" style="left:1042px;top:114px"><div class="ic"><i class="n">7</i><i data-lucide="trophy"></i></div><b>Skor tablosu</b><small>Takma ad, puan,<br>unvan, senaryo</small></div>
+
+  <div class="loop">
+    <h4><i data-lucide="repeat"></i>HER ADIMDA (×5)</h4>
+    <div class="st">
+      <span><i data-lucide="file-text"></i>Durum</span><i data-lucide="chevron-right"></i>
+      <span><i data-lucide="timer"></i>Seçim 20 sn</span><i data-lucide="chevron-right"></i>
+      <span><i data-lucide="sparkle"></i>Kelebek etkisi</span>
+    </div>
+  </div>
+
+  <div class="box" style="left:300px;top:304px"><i data-lucide="wifi-off" style="color:var(--warn)"></i><div><b>Yedek plan</b>Yapay zekâ 4 sn'de yanıt vermezse ya da JSON bozuksa senaryo bankadan gelir.</div></div>
+
+  <div class="node" style="left:860px;top:430px"><div class="ic"><i class="n">8</i><i data-lucide="lock"></i></div><b>Gün sonu · Görevli</b><small>PIN → İlk 3'ü dışa aktar<br>(yalnızca izin verenler)</small></div>
+  <div class="node pp" style="left:590px;top:430px"><div class="ic"><i class="n">9</i><i data-lucide="megaphone"></i></div><b>Sosyal medya</b><small>Gönderi + hikâye PNG;<br>ekip kontrol edip paylaşır</small></div>
+
+  <div class="box" style="left:44px;top:440px;width:470px"><i data-lucide="zap" style="color:var(--p1)"></i><div><b>Hibrit puanlama</b>Her seçeneğin 0–20 puanı yapay zekânın ürettiği puanlama anahtarındadır; toplam tablette anında hesaplanır. Analiz metnini yapay zekâ paralel yazar (prototipte yerel şablon).</div></div>
+
+<script src="lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

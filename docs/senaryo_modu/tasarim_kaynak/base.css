@@ -1,0 +1,79 @@
+/* BuildArena — tasarım token'ları v0.2 (ATÜ TechBuilders)
+   Renkler kulüp logosundan türetildi: pembe-magenta, mavi, bakır.
+   İlke: sakin, düz (flat) zemin; keskin renk yalnızca etkileşimli öğelerde. */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap');
+
+:root {
+  /* nötrler — hafif sıcak grafit */
+  --bg: #131218;
+  --bg-2: #19181F;
+  --surface: #1E1D25;
+  --surface-2: #26242E;
+  --surface-3: #312E3A;
+  --line: rgba(255, 255, 255, .08);
+  --line-2: rgba(255, 255, 255, .15);
+  --text: #F5F2ED;       /* zeminde 16.7:1 */
+  --muted: #A8A3B3;      /* 7.6:1 */
+  --dim: #8A859C;        /* 5.3:1 */
+  --paper: #FAF8F5;      /* telefon ekranı, açık kartlar */
+  --ink: #1B1A21;        /* açık zemin üstü metin */
+
+  /* logodan gelen vurgular */
+  --brand: #E2498F;      /* logo pembesi — metin/ikon (5.0:1) */
+  --brand-btn: #C93A7C;  /* beyaz yazılı buton zemini (4.8:1) */
+  --brand-soft: rgba(226, 73, 143, .14);
+  --p1: #4B9EFF;         /* logo mavisi — Oyuncu 1 (6.8:1) */
+  --p1-soft: rgba(75, 158, 255, .14);
+  --p1-line: rgba(75, 158, 255, .5);
+  --p1-tint: #DCEBFF;
+  --p2: #F28F4B;         /* logo bakırı — Oyuncu 2 (7.8:1) */
+  --p2-soft: rgba(242, 143, 75, .14);
+  --p2-line: rgba(242, 143, 75, .5);
+  --p2-tint: #FDE6D6;
+  --ok: #3FC79A;
+  --bad: #F2616B;
+  --warn: #F5C451;
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+
+  --font: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1280px; height: 800px; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+.lucide { width: 24px; height: 24px; stroke-width: 2; flex: none; }
+
+/* sakin zemin: yalnızca üstten çok hafif bir ışık */
+.calm-bg { background: radial-gradient(1100px 520px at 50% -12%, rgba(255, 255, 255, .055), transparent 62%), var(--bg); }
+
+.logo-sm { width: 40px; height: 40px; border-radius: 50%; display: block; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 12px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap;
+}
+.chip .lucide { width: 15px; height: 15px; }
+
+.avatar {
+  width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+  font-weight: 800; font-size: 17px; color: var(--bg);
+}
+.avatar.p1 { background: var(--p1); }
+.avatar.p2 { background: var(--p2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

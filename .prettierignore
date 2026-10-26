@@ -1,0 +1,10 @@
+dist
+dev-dist
+docs
+public
+playwright-report
+test-results
+package-lock.json
+store
+android
+dist-apk

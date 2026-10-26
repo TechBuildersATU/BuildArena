@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>BuildArena — Tutorial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@700&display=swap">
+<style>
+:root{
+  --bg:#131218; --surface:#1E1D25; --surface-2:#26242E; --surface-3:#312E3A;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+  --magenta:#E2498F; --brand:#E2498F; --brand-btn:#C93A7C; --brand-soft:rgba(226,73,143,.14);
+  --cyan:#4B9EFF; --copper:#F28F4B; --paper:#FAF8F5; --ink:#1B1A21;
+  --p1:#4B9EFF; --p2:#F28F4B; --ok:#3FC79A; --bad:#F2616B;
+  --text:#F5F2ED; --muted:#A8A3B3; --dim:#8A859C;
+  --grad:var(--brand);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1280px;height:800px;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;position:relative}
+body::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(1100px 520px at 50% -12%,rgba(255,255,255,.055),transparent 62%)}
+.lucide{width:24px;height:24px;stroke-width:2;flex:none}
+
+/* top: slide bar */
+.top{position:absolute;top:28px;left:40px;right:40px;display:flex;align-items:center;gap:22px;z-index:2}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:15px;letter-spacing:.14em;color:var(--text)}
+.brand img{width:42px;height:42px;border-radius:50%}
+.bar{flex:1;display:flex;gap:8px}
+.seg{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;position:relative}
+.seg i{position:absolute;inset:0;width:0;background:var(--grad);border-radius:99px}
+.seg.done i{width:100%}
+.seg.now i{width:58%}
+.skip{height:46px;padding:0 20px;border-radius:99px;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line-2);font-weight:700;font-size:15px;color:var(--muted)}
+.skip .lucide{width:18px;height:18px}
+
+/* slide */
+.stage{position:absolute;top:96px;left:0;right:0;bottom:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1}
+.ill{width:860px;height:360px;position:relative;display:flex;align-items:center;justify-content:center}
+.kicker{margin-top:26px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 14px;border-radius:99px;font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--muted);background:var(--surface-2);border:1px solid var(--line)}
+.kicker .lucide{width:14px;height:14px}
+h1{margin-top:14px;font-size:46px;font-weight:800;letter-spacing:-.025em;text-align:center}
+h1 em{font-style:normal;color:var(--brand)}
+p.sub{margin-top:10px;font-size:20px;font-weight:500;color:var(--muted);text-align:center;line-height:1.45}
+
+/* bottom nav */
+.nav{position:absolute;left:40px;right:40px;bottom:34px;display:flex;align-items:center;z-index:2}
+.back{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line-2);color:var(--text)}
+.dots{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:700;font-size:14px}
+.dots span{font-family:'JetBrains Mono',monospace;margin-left:10px;color:var(--text)}
+.dot{width:10px;height:10px;border-radius:99px;background:rgba(255,255,255,.18)}
+.dot.on{width:30px;background:var(--grad)}
+.next{margin-left:auto;height:64px;padding:0 30px 0 34px;border-radius:20px;display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;color:#fff;background:var(--brand-btn)}
+.next .lucide{width:24px;height:24px;stroke-width:2.6}
+.hint{position:absolute;bottom:108px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--dim);z-index:2}
+.hint .lucide{width:16px;height:16px}
+
+/* shared illustration bits */
+.tile{width:118px;height:112px;border-radius:22px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:15px;position:relative}
+.tile .ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--surface-3)}
+.tile .ic .lucide{width:28px;height:28px}
+.mark{position:absolute;top:-10px;right:-10px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#131218;border:3px solid var(--bg)}
+.mark .lucide{width:18px;height:18px;stroke-width:3}
+.mark.ok{background:var(--ok)} .mark.bad{background:var(--bad)}
+.phone{width:200px;height:330px;border-radius:34px;background:#0F0E13;border:3px solid #312E3A;padding:12px;position:relative}
+.phone .scr{width:100%;height:100%;border-radius:24px;background:var(--paper);padding:14px 10px;display:flex;flex-direction:column;gap:8px}
+.phone .ttl{font-size:13px;font-weight:800;color:var(--ink);display:flex;justify-content:space-between;padding:0 4px 4px}
+.row{height:40px;border-radius:12px;background:#fff;border:1px solid #ECE8E1;display:flex;align-items:center;gap:8px;padding:0 10px;font-size:12.5px;font-weight:700;color:var(--ink)}
+.row .lucide{width:17px;height:17px}
+.slot{height:40px;border-radius:12px;border:2px dashed #D9D3CA;display:grid;place-items:center;color:#B9B2A8;font-size:18px}
+.slot.hot{border-color:var(--p1);background:#DCEBFF}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand"><img src="../logo/atu_techbuilders_logo.png" alt="">ATÜ TECHBUILDERS</div>
+  <div class="bar" id="bar"></div>
+  <div class="skip"><i data-lucide="skip-forward"></i>Atla</div>
+</div>
+
+<div class="stage" id="stage"></div>
+
+<div class="hint"><i data-lucide="hand"></i>Kaydır ya da dokun</div>
+<div class="nav">
+  <div class="back" id="back"><i data-lucide="chevron-left"></i></div>
+  <div class="dots" id="dots"></div>
+  <div class="next" id="next"></div>
+</div>
+
+<script src="lucide.min.js"></script>
+<script>
+const N=5;
+const s=Math.max(1,Math.min(N,parseInt(new URLSearchParams(location.search).get('s')||'3')));
+document.getElementById('bar').innerHTML=Array.from({length:N},(_,i)=>`<div class="seg ${i+1<s?'done':i+1===s?'now':''}"><i></i></div>`).join('');
+document.getElementById('dots').innerHTML=Array.from({length:N},(_,i)=>`<i class="dot ${i+1===s?'on':''}"></i>`).join('')+`<span>${s} / ${N}</span>`;
+document.getElementById('next').innerHTML= s===N?'Hadi Başlayalım <i data-lucide="rocket"></i>':'İleri <i data-lucide="chevron-right"></i>';
+if(s===1) document.getElementById('back').style.visibility='hidden';
+
+const slides={
+1:`<div class="ill">
+     <img src="../logo/atu_techbuilders_logo.png" style="position:relative;width:310px;height:310px">
+     <div style="position:absolute;left:60px;top:70px" class="tile"><div class="ic"><i data-lucide="swords" style="color:var(--p1)"></i></div>Düello</div>
+     <div style="position:absolute;right:60px;top:170px" class="tile"><div class="ic"><i data-lucide="route" style="color:var(--brand)"></i></div>Senaryo</div>
+   </div>
+   <div class="kicker"><i data-lucide="sparkles"></i>HOŞ GELDİN</div>
+   <h1><em>BuildArena</em>'ya hoş geldin!</h1>
+   <p class="sub">Doğru kullanıcıya doğru özellik. 2 dakikada bir uygulama tasarla.</p>`,
+2:`<div class="ill" style="gap:28px">
+     <div class="tile" style="width:200px;height:200px;border-color:var(--line-2)">
+       <div class="ic" style="width:80px;height:80px;border-radius:24px;background:var(--paper)"><i data-lucide="hospital" style="width:44px;height:44px;color:var(--ink)"></i></div>
+       <div style="font-size:18px">Hastane</div><div style="font-size:13px;color:var(--muted);margin-top:-6px">Hasta · Doktor</div></div>
+     <i data-lucide="arrow-right" style="width:44px;height:44px;color:var(--dim)"></i>
+     <div class="tile"><div class="ic"><i data-lucide="calendar-plus" style="color:var(--cyan)"></i></div>Randevu Al<div class="mark ok"><i data-lucide="check"></i></div></div>
+     <div class="tile"><div class="ic"><i data-lucide="lock" style="color:var(--cyan)"></i></div>Şifreleme<div class="mark ok"><i data-lucide="check"></i></div></div>
+     <div class="tile" style="opacity:.92"><div class="ic"><i data-lucide="shopping-cart" style="color:var(--bad)"></i></div>Sepet<div class="mark bad"><i data-lucide="x"></i></div></div>
+   </div>
+   <div class="kicker"><i data-lucide="lightbulb"></i>GEREKSİNİM NEDİR?</div>
+   <h1>Her özellik <em>iyi</em> değildir</h1>
+   <p class="sub">Hastane uygulamasında randevu gerekir, sepet gerekmez. İşte gereksinim analizi bu!</p>`,
+3:`<div class="ill" style="gap:22px">
+     <div style="display:grid;grid-template-columns:repeat(2,118px);gap:14px">
+       <div class="tile" style="opacity:.35;border-style:dashed"><div class="ic"><i data-lucide="calendar-plus"></i></div>Randevu Al</div>
+       <div class="tile"><div class="ic"><i data-lucide="shopping-cart" style="color:var(--p1)"></i></div>Sepet</div>
+       <div class="tile"><div class="ic"><i data-lucide="pill" style="color:var(--p1)"></i></div>E-Reçete</div>
+       <div class="tile"><div class="ic"><i data-lucide="gift" style="color:var(--p1)"></i></div>Sadakat</div>
+     </div>
+     <div style="position:relative;width:120px;height:300px">
+       <div class="tile" style="position:absolute;left:-10px;top:96px;transform:rotate(-6deg) scale(1.08);border:2px solid var(--p1);box-shadow:0 18px 30px -14px rgba(0,0,0,.7);z-index:3">
+         <div class="ic" style="background:var(--p1)"><i data-lucide="flask-conical" style="color:#06101F"></i></div>Tahlil</div>
+       <div style="position:absolute;left:84px;top:196px;width:50px;height:50px;border-radius:50%;border:3px solid rgba(255,255,255,.7);background:rgba(255,255,255,.18);z-index:4"></div>
+       <svg style="position:absolute;left:-10px;top:40px" width="140" height="80"><path d="M10 70 C 60 0, 100 10, 130 40" stroke="rgba(75,158,255,.6)" stroke-width="3" fill="none" stroke-dasharray="6 7"/></svg>
+     </div>
+     <div class="phone"><div class="scr">
+       <div class="ttl"><span>Uygulamam</span><span style="color:#8A84B0">3/8</span></div>
+       <div class="row"><i data-lucide="calendar-plus" style="color:#2F6FC0"></i>Randevu Al</div>
+       <div class="row"><i data-lucide="clipboard-list" style="color:#2F6FC0"></i>Hasta Kaydı</div>
+       <div class="row"><i data-lucide="lock" style="color:#2F6FC0"></i>Veri Şifreleme</div>
+       <div class="slot hot"><i data-lucide="arrow-down" style="color:var(--p1);width:18px;height:18px"></i></div>
+       <div class="slot">+</div><div class="slot">+</div>
+     </div></div>
+     <div style="display:flex;flex-direction:column;gap:12px;margin-left:16px">
+       <div class="tile" style="width:150px;height:84px;flex-direction:row;gap:12px"><i data-lucide="users" style="color:var(--p1)"></i>2 oyuncu</div>
+       <div class="tile" style="width:150px;height:84px;flex-direction:row;gap:12px"><i data-lucide="timer" style="color:var(--p2)"></i>90 sn</div>
+       <div class="tile" style="width:150px;height:84px;flex-direction:row;gap:12px"><i data-lucide="smartphone" style="color:var(--brand)"></i>8 slot</div>
+     </div>
+   </div>
+   <div class="kicker"><i data-lucide="swords"></i>DÜELLO MODU</div>
+   <h1>Sürükle, bırak, <em>kapış!</em></h1>
+   <p class="sub">Uygun kartları kendi kutuna sürükle. Tuzak kartlar puan kaybettirir!</p>`,
+4:`<div class="ill" style="flex-direction:column;gap:26px">
+     <div style="display:flex;align-items:center;gap:0">
+       ${[1,2,3,4,5].map(i=>`<div style="width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-family:'JetBrains Mono';${i<3?'background:var(--brand);color:#fff':i===3?'border:3px solid var(--brand);color:#fff':'border:2px solid var(--line-2);color:var(--dim)'}">${i}</div>${i<5?`<div style="width:70px;height:4px;background:${i<3?'var(--brand)':'rgba(255,255,255,.14)'}"></div>`:''}`).join('')}
+     </div>
+     <div style="display:grid;grid-template-columns:repeat(2,330px);gap:14px">
+       <div class="tile" style="width:330px;height:76px;flex-direction:row;justify-content:flex-start;padding:0 18px;gap:14px"><div class="ic" style="width:44px;height:44px"><i data-lucide="nfc" style="color:var(--cyan)"></i></div>NFC kart / telefon</div>
+       <div class="tile" style="width:330px;height:76px;flex-direction:row;justify-content:flex-start;padding:0 18px;gap:14px;border:2px solid var(--brand);background:var(--brand-soft)"><div class="ic" style="width:44px;height:44px;background:var(--brand)"><i data-lucide="qr-code" style="color:#fff"></i></div>QR kod<i data-lucide="mouse-pointer-click" style="margin-left:auto;color:var(--brand)"></i></div>
+       <div class="tile" style="width:330px;height:76px;flex-direction:row;justify-content:flex-start;padding:0 18px;gap:14px"><div class="ic" style="width:44px;height:44px"><i data-lucide="id-card" style="color:var(--cyan)"></i></div>Kimlik no ile görevli</div>
+       <div class="tile" style="width:330px;height:76px;flex-direction:row;justify-content:flex-start;padding:0 18px;gap:14px"><div class="ic" style="width:44px;height:44px"><i data-lucide="scan-face" style="color:var(--cyan)"></i></div>Yüz tanıma</div>
+     </div>
+   </div>
+   <div class="kicker"><i data-lucide="route"></i>SENARYO MODU</div>
+   <h1>Her karar <em>sonrakini</em> etkiler</h1>
+   <p class="sub">Tek başına oyna: her adımda en doğru seçeneğe dokun, 5 adımda zirveye çık.</p>`,
+5:`<div class="ill" style="gap:46px">
+     <div style="position:relative;width:250px;height:250px">
+       <svg width="250" height="250" viewBox="0 0 250 250"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#E2498F"/><stop offset="1" stop-color="#E2498F"/></linearGradient></defs>
+         <circle cx="125" cy="125" r="104" stroke="rgba(255,255,255,.1)" stroke-width="20" fill="none"/>
+         <circle cx="125" cy="125" r="104" stroke="url(#g)" stroke-width="20" fill="none" stroke-linecap="round" stroke-dasharray="${2*Math.PI*104*0.88} 999" transform="rotate(-90 125 125)"/></svg>
+       <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-family:'JetBrains Mono';font-size:68px;font-weight:700">88</div><div style="color:var(--muted);font-weight:700;margin-top:-6px">/ 100</div></div>
+     </div>
+     <div style="width:400px;border-radius:26px;background:var(--surface);border:1px solid var(--line);padding:18px 18px 10px">
+       <div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;letter-spacing:.12em;color:var(--muted);padding:0 6px 10px"><i data-lucide="trophy" style="color:#F5C451"></i>GÜNÜN LİDERLERİ</div>
+       ${[['crown','#F5C451','Null Pointer Panda','96'],['medal','#CBD5E1','Bugsız Baykuş','88'],['medal','#F28F4B','Cache\'li Kirpi','85']].map((r,i)=>`<div style="display:flex;align-items:center;gap:12px;height:56px;border-radius:16px;padding:0 14px;margin-bottom:8px;background:${i===1?'var(--brand-soft)':'var(--surface-2)'};${i===1?'border:1px solid rgba(226,73,143,.45)':''}"><i data-lucide="${r[0]}" style="color:${r[1]}"></i><b style="font-size:17px">${r[2]}</b><span style="margin-left:auto;font-family:'JetBrains Mono';font-weight:700;font-size:19px">${r[3]}</span></div>`).join('')}
+       <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:600;padding:6px 6px 8px"><i data-lucide="share-2" style="width:16px;height:16px;color:var(--brand)"></i>İlk 3 kulübün sosyal medyasında!</div>
+     </div>
+   </div>
+   <div class="kicker"><i data-lucide="sparkles"></i>PUAN VE SKOR TABLOSU</div>
+   <h1>Yapay zekâ <em>puanlar</em>, sen zirveye çık</h1>
+   <p class="sub">100 üzerinden puanını ve kısa bir AI yorumunu gör. Günün ilk 3'ü paylaşılır!</p>`
+};
+document.getElementById('stage').innerHTML=slides[s];
+lucide.createIcons();
+</script>
+</body>
+</html>
