@@ -6,7 +6,7 @@ import { useLongPress } from '@/app/usePress'
 import { sparkBurst } from '@/game/heroSparks'
 import h from '@/styles/home.module.css'
 import { cn } from '@/utils/cn'
-import { LOGO_SRC } from './Bits'
+import { useLogoSrc } from '@/app/useLogoSrc'
 
 /** The logo's four colours, as text colours so the ring stays readable in the dark theme too. */
 const RING_INKS = ['var(--brand-ink)', 'var(--p1-ink)', 'var(--p2-ink)', 'var(--scn-ink)']
@@ -28,6 +28,7 @@ export function Hero({ className, intense = false, staffHold = false }: HeroProp
   const layer = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const hold = useLongPress(() => void navigate(ROUTES.admin), LOGO_HOLD_MS)
+  const logo = useLogoSrc()
 
   useEffect(() => {
     let i = 0
@@ -59,7 +60,7 @@ export function Hero({ className, intense = false, staffHold = false }: HeroProp
       </svg>
       <div className={h.logo} {...(staffHold ? hold : {})}>
         <img
-          src={LOGO_SRC}
+          src={logo}
           alt="ATÜ TechBuilders logosu"
           data-testid={staffHold ? 'hero-logo' : undefined}
         />

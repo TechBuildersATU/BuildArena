@@ -17,7 +17,8 @@ export default defineConfig(({ mode }) => ({
       disable: mode === 'android',
       registerType: 'autoUpdate',
       includeAssets: [
-        'logo/atu_techbuilders_logo.png',
+        'logo/techbuilders_logo_light.png',
+        'logo/techbuilders_logo_dark.png',
         'icons/favicon-48.png',
         'icons/icon-180.png',
       ],
@@ -32,7 +33,7 @@ export default defineConfig(({ mode }) => ({
         orientation: 'landscape',
         background_color: '#FFF4E6',
         theme_color: '#FFF4E6',
-        // the club's icon pack (TechBuilders_App_Icons); store icons are in store/
+        // made from the club's logo package (store/logo/); store icons are in store/
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },

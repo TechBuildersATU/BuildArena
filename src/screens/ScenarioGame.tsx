@@ -232,7 +232,7 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
         })}
       </div>
 
-      <div className={s.durum}>
+      <div className={s.durum} data-testid="situation-card">
         <div className={s.eyebrow}>
           <Icon name={general ? 'globe' : 'search'} />
           DURUM · ADIM {current.no} · {general ? 'GENEL KARAR' : 'DETAY'}

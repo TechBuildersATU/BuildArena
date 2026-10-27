@@ -1,10 +1,17 @@
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import {
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent,
+} from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { sfx } from '@/audio/sfx'
 import { markTutorialSeen } from '@/app/firstLaunch'
 import { ROUTES } from '@/app/routes'
 import { prefersReducedMotion } from '@/app/timing'
-import { LOGO_SRC } from '@/components/Bits'
+import { useLogoSrc } from '@/app/useLogoSrc'
 import { Hero } from '@/components/Hero'
 import { Icon } from '@/components/Icon'
 import tutorial from '@/data/tutorial.json'
@@ -15,14 +22,19 @@ import { cn } from '@/utils/cn'
 
 const SLIDES = tutorial.slaytlar
 const SWIPE_PX = 60
+/** how long the slide that was just left stays on screen while it slides out (ms) */
+const LEAVE_MS = 460
 
 // First-launch tutorial: 5 slides, segmented slide bar, Skip / Back / Next, swipe, hold to pause,
 // auto-advance (document §4). With `state.loop` it cycles silently on the idle screen and the
 // first touch goes home.
 export function Onboarding() {
   const navigate = useNavigate()
+  const logo = useLogoSrc()
   const loop = (useLocation().state as { loop?: boolean } | null)?.loop === true
   const [index, setIndex] = useState(0)
+  /** the slide sliding out, and to which side (-1 left for Next, 1 right for Back) */
+  const [leaving, setLeaving] = useState<{ i: number; to: -1 | 1 } | null>(null)
   const [held, setHeld] = useState(false)
   const swipeX = useRef<number | null>(null)
   /** ms left on the current slide; kept while the slide is held */
@@ -33,24 +45,38 @@ export function Onboarding() {
     markTutorialSeen()
     void navigate(ROUTES.home, { replace: true })
   }
-  const go = (i: number) => setIndex(Math.max(0, Math.min(SLIDES.length - 1, i)))
+  const go = (to: number, forward = to > index) => {
+    const i = Math.max(0, Math.min(SLIDES.length - 1, to))
+    if (i === index) return
+    setLeaving({ i: index, to: forward ? -1 : 1 })
+    setIndex(i)
+  }
   const next = () => {
     if (index === SLIDES.length - 1) {
-      if (loop) go(0)
+      if (loop) go(0, true)
       else finish()
     } else go(index + 1)
   }
 
+  // the slide that was left keeps its picture while it slides out, then rests out of sight
+  useEffect(() => {
+    if (!leaving) return
+    const id = window.setTimeout(() => setLeaving(null), LEAVE_MS)
+    return () => window.clearTimeout(id)
+  }, [leaving])
+
   // auto-advance: each slide stays for its own duration; holding pauses it
+  const advance = useEffectEvent(() => {
+    if (index < SLIDES.length - 1) go(index + 1)
+    else if (loop) go(0, true)
+  })
   useEffect(() => {
     remaining.current = SLIDES[index].sure * 1000
   }, [index])
   useEffect(() => {
     if (!autoAdvance || held) return
     const started = performance.now()
-    const id = window.setTimeout(() => {
-      setIndex((i) => (i < SLIDES.length - 1 ? i + 1 : loop ? 0 : i))
-    }, remaining.current)
+    const id = window.setTimeout(advance, remaining.current)
     return () => {
       window.clearTimeout(id)
       remaining.current = Math.max(0, remaining.current - (performance.now() - started))
@@ -86,7 +112,7 @@ export function Onboarding() {
       onPointerDownCapture={loop ? finish : undefined}
     >
       <div className={h.tbar}>
-        <img className={h.logoSm} src={LOGO_SRC} alt="" />
+        <img className={h.logoSm} src={logo} alt="" />
         <span className={h.club}>ATÜ TECHBUILDERS</span>
         <div className={h.segs}>
           {SLIDES.map((sl, i) => (
@@ -113,24 +139,34 @@ export function Onboarding() {
       </div>
 
       <div className={h.tslides} onPointerDown={onDown} onPointerUp={onUp} onPointerCancel={onUp}>
-        {SLIDES.map((sl, i) => (
-          <div
-            key={sl.etiket}
-            className={cn(h.tslide, i === index && h.tslideOn, i < index && h.tslideLeft)}
-            aria-hidden={i !== index}
-          >
-            <div className={h.tvis}>{i === index && <SlideVisual index={i} />}</div>
-            <div className={h.ttxt}>
-              <div className={h.eyebrow}>
-                {i + 1} / 5 · {sl.etiket}
+        {SLIDES.map((sl, i) => {
+          const out = leaving?.i === i
+          return (
+            <div
+              key={sl.etiket}
+              className={cn(
+                h.tslide,
+                (i === index || out) && h.tslideOn,
+                out && (leaving.to < 0 ? h.tslideOutL : h.tslideOutR),
+                i < index && !out && h.tslideLeft,
+              )}
+              aria-hidden={i !== index}
+              data-testid={`tutorial-slide-${i + 1}`}
+              data-state={i === index ? 'on' : out ? 'out' : 'rest'}
+            >
+              <div className={h.tvis}>{(i === index || out) && <SlideVisual index={i} />}</div>
+              <div className={h.ttxt}>
+                <div className={h.eyebrow}>
+                  {i + 1} / 5 · {sl.etiket}
+                </div>
+                <h2>
+                  {sl.baslik} <span>{sl.vurgu}</span>
+                </h2>
+                <p>{sl.metin}</p>
               </div>
-              <h2>
-                {sl.baslik} <span>{sl.vurgu}</span>
-              </h2>
-              <p>{sl.metin}</p>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <div className={h.tnav}>

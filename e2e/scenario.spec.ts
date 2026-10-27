@@ -287,6 +287,9 @@ test('the effect card moves on by itself after about 3 s', async ({ page }) => {
 })
 
 test('timer: red in the last 5 s; running out scores 0 and moves on', async ({ page }) => {
+  // ~16 s alone (a whole step on the fake clock, which also flows in real time); the default
+  // 30 s is too tight when every spec runs in parallel
+  test.setTimeout(60_000)
   await page.clock.install()
   await page.goto(SCENARIO_URL)
   await typeNickname(page, 'Korkut')

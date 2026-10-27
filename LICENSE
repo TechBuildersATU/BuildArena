@@ -24,7 +24,7 @@ SOFTWARE.
 
 Not covered by the MIT License above (all rights reserved by ATÜ TechBuilders):
 
-- the ATÜ TechBuilders name and logo (public/logo/, docs/assets/logo/,
+- the ATÜ TechBuilders name and logo (store/logo/, public/logo/, docs/assets/logo/,
   docs/senaryo_modu/tasarim_kaynak/logo.png and every copy of the logo);
 - the app icons made from it (public/icons/, store/ and the launcher icons
   in android/app/src/main/res/mipmap-*);

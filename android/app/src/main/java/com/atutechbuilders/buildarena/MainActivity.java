@@ -1,10 +1,15 @@
 package com.atutechbuilders.buildarena;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,18 +19,55 @@ import com.getcapacitor.BridgeActivity;
 /**
  * BuildArena on the booth tablet: full screen (the system bars are hidden; a swipe from the edge
  * shows them for a moment), the screen never goes to sleep while the app is open, and the
- * on-screen keyboard opens over the game instead of shrinking it.
+ * on-screen keyboard opens over the game instead of shrinking it. The launch screen (paper with
+ * the turning four-colour ring) stays until the game's opening animation is ready.
  */
 public class MainActivity extends BridgeActivity {
 
+    /** Longest the launch screen waits for the web app, so a slow start never hangs on it. */
+    private static final long LAUNCH_MAX_MS = 8000;
+
     private int keyboardPx = 0;
+    private volatile boolean webReady = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        SplashScreen splash = SplashScreen.installSplashScreen(this);
+        long started = SystemClock.uptimeMillis();
+        long until = started + LAUNCH_MAX_MS;
+        splash.setKeepOnScreenCondition(() -> !webReady && SystemClock.uptimeMillis() < until);
+        // fade into the opening animation instead of cutting to it
+        splash.setOnExitAnimationListener(view -> {
+            Log.i("BuildArena", "launch screen off after " + (SystemClock.uptimeMillis() - started)
+                + " ms (" + (webReady ? "web app ready" : "time limit") + ")");
+            view.getView().animate().alpha(0f).setDuration(260).withEndAction(view::remove).start();
+        });
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         hideSystemBars();
         watchKeyboard();
+        waitForWebApp(until);
+    }
+
+    /**
+     * The web app sets <html data-boot="ready"> once its opening animation is in the page
+     * (src/components/BootIntro.tsx); until then the launch screen stays.
+     */
+    private void waitForWebApp(long until) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (webReady || SystemClock.uptimeMillis() > until) return;
+                WebView webView = getBridge() == null ? null : getBridge().getWebView();
+                if (webView != null) {
+                    webView.evaluateJavascript("document.documentElement.dataset.boot", value -> {
+                        if ("\"ready\"".equals(value)) webReady = true;
+                    });
+                }
+                handler.postDelayed(this, 60);
+            }
+        });
     }
 
     @Override

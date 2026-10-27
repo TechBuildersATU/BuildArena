@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- adaptive launcher icon background: white, as in the club's icon pack -->
-    <color name="ic_launcher_background">#FFFFFF</color>
+    <!-- adaptive launcher icon background: the palette's paper, as on the new logo -->
+    <color name="ic_launcher_background">#FFF4E6</color>
     <!-- launch screen background: the palette's paper -->
     <color name="splash_background">#FFF4E6</color>
 </resources>

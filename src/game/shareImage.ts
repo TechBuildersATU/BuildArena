@@ -1,4 +1,5 @@
 import { isNativeApp, sharePng, type SaveResult } from '@/app/native'
+import { LOGO_LIGHT } from '@/app/useLogoSrc'
 import type { ScoreEntry } from '@/db/database'
 import { initialOf } from '@/utils/text'
 import type { DayFact, DayStats } from './dayStats'
@@ -16,7 +17,8 @@ export const SHARE_SIZE: Record<ShareKind, { width: number; height: number }> = 
   story: { width: 1080, height: 1920 },
 }
 
-const LOGO_SRC = '/logo/atu_techbuilders_logo.png'
+// the share images are always on the paper, so they take the light logo
+const LOGO_SRC = LOGO_LIGHT
 const font = (weight: number, size: number) =>
   `${weight} ${size}px "Plus Jakarta Sans", "Segoe UI", sans-serif`
 const display = (weight: number, size: number) =>
