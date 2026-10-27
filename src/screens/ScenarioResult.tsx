@@ -177,6 +177,8 @@ function Final({ nick, scenario, picks }: FinalProps) {
           <b>{scenario.baslik}</b>
         </div>
         <div className={s.barR}>
+          {/* up here, not in the bottom row: four buttons there would cover the step scores */}
+          <SocialButton className={s.barBtn} />
           <NickChip nick={nick} />
           <AudioToggles />
         </div>
@@ -335,7 +337,6 @@ function Final({ nick, scenario, picks }: FinalProps) {
       </div>
 
       <div className={s.fbtns}>
-        <SocialButton />
         <button
           type="button"
           className={cn(s.btn, s.btnPri)}

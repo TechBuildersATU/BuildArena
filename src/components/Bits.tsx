@@ -6,6 +6,7 @@ import { sfx } from '@/audio/sfx'
 import { ROUTES } from '@/app/routes'
 import '@/app/theme'
 import { LOGO_HOLD_MS } from '@/app/timing'
+import { useLogoSrc } from '@/app/useLogoSrc'
 import { useLongPress } from '@/app/usePress'
 import { useSettingsStore } from '@/stores/settingsStore'
 import s from '@/styles/app.module.css'
@@ -14,7 +15,6 @@ import { initialOf } from '@/utils/text'
 import { ConfirmDialog } from './ConfirmDialog'
 import { Icon } from './Icon'
 
-export const LOGO_SRC = '/logo/atu_techbuilders_logo.png'
 /** The club's Linktree QR (every social media account behind one link). */
 export const SOCIAL_QR_SRC = '/social/linktree-qr.png'
 export const SOCIAL_URL = 'linktr.ee/atutechbuilders'
@@ -167,9 +167,8 @@ export function LeaveGameButton({
 export function Logo({ className = s.logoSm }: { className?: string }) {
   const navigate = useNavigate()
   const hold = useLongPress(() => void navigate(ROUTES.admin), LOGO_HOLD_MS)
-  return (
-    <img className={className} src={LOGO_SRC} alt="ATÜ TechBuilders" data-testid="logo" {...hold} />
-  )
+  const src = useLogoSrc()
+  return <img className={className} src={src} alt="ATÜ TechBuilders" data-testid="logo" {...hold} />
 }
 
 /**

@@ -182,22 +182,37 @@
   bottom: 100px;
   touch-action: none;
 }
+/* Back / Next: the slide that is left slides out with its picture, the new one slides in from
+   the other side a moment later, so the two never sit on top of each other */
 .tslide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transform: translateX(60px);
+  transform: translateX(150px);
   transition:
-    opacity 0.32s,
-    transform 0.32s var(--ease);
+    opacity 0.32s ease-out,
+    transform 0.44s var(--ease);
   pointer-events: none;
 }
 .tslideOn {
   opacity: 1;
   transform: none;
+  transition-delay: 0.12s;
 }
 .tslideLeft {
-  transform: translateX(-60px);
+  transform: translateX(-150px);
+}
+.tslideOn.tslideOutL,
+.tslideOn.tslideOutR {
+  opacity: 0;
+  transition-delay: 0s;
+  transition-duration: 0.22s, 0.44s;
+}
+.tslideOn.tslideOutL {
+  transform: translateX(-150px);
+}
+.tslideOn.tslideOutR {
+  transform: translateX(150px);
 }
 .tvis {
   position: absolute;

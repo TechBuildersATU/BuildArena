@@ -9,7 +9,8 @@ import { Navigate, useNavigate } from 'react-router'
 import type { Task } from '@/ai/schemas'
 import { sfx } from '@/audio/sfx'
 import { ROUTES } from '@/app/routes'
-import { LeaveGameButton, LOGO_SRC } from '@/components/Bits'
+import { useLogoSrc } from '@/app/useLogoSrc'
+import { LeaveGameButton } from '@/components/Bits'
 import { Icon } from '@/components/Icon'
 import { cardOf, findTask } from '@/data/duelBank'
 import {
@@ -67,6 +68,7 @@ export function DuelGame() {
 
 function DuelBoard({ task }: { task: Task }) {
   const navigate = useNavigate()
+  const logo = useLogoSrc()
   const names = useDuelStore((st) => st.names)
   const players = useDuelStore((st) => st.players)
   const duration = useDuelStore((st) => st.duration)
@@ -367,7 +369,7 @@ function DuelBoard({ task }: { task: Task }) {
     <main className={app.screen} ref={root} data-testid="duel-game" onPointerDown={onPointerDown}>
       <header className={d.dtop}>
         <div className={d.dbrand}>
-          <img src={LOGO_SRC} alt="" />
+          <img src={logo} alt="" />
           BuildArena
         </div>
         <div className={d.dtask}>

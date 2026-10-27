@@ -9,7 +9,8 @@ Kaynaklar: `docs/tam_prototip/` (kulübün Tam Prototip v0.3'ü, tüm ekranlar b
 - API / yapay zekâ yok; her şey yerel (eski `proxy/` taslağı silindi).
 - Görünüm: Renk Paleti — krem kâğıt, mürekkep çizgi, sert gölgeli ve basınca gömülen butonlar;
   mavi/turuncu düello, deniz yeşili senaryo, ahududu tek "oyna" çağrısı. Animasyonlar aynı kaldı.
-- Logo: kulübün yeni "Community" logosu (`public/logo/`), PWA ikonları ondan üretildi.
+- Logo: kulübün palete göre düzenlediği yeni logo paketi (`store/logo/`); açık temada kâğıt,
+  koyu temada açık sürüm (`public/logo/`). Bütün ikonlar ondan, kâğıt zeminde üretildi.
 - Puanlama yeniden tasarlandı (zorluk ağırlığı, doğruluk eğrisi, %10 hız payı; düelloda F1 ve
   tuzak cezası). Boş oyun / boş kutu 0 puan. Ayrıntı: `README.md` → Puanlama, `src/game/scoring.ts`.
 - Takma ad ekranında ekran klavyesi ve hazır ad paneli yok; yazı alanı + slot makinesi gibi
@@ -20,7 +21,7 @@ Kaynaklar: `docs/tam_prototip/` (kulübün Tam Prototip v0.3'ü, tüm ekranlar b
   değişmedi. Ayrı müzik ve efekt düğmeleri; ses seviyesi müzik düğmesinin panelinde (varsayılan %80).
 - Koyu tema: aynı paletin gece hâli, her başlıkta ay düğmesi.
 - Düello süreleri 45 / 60 / 90 sn (120 sn kaldırıldı).
-- Uygulama simgeleri kulübün ikon paketinden (`public/icons/`, mağazalar için `store/`).
+- Uygulama simgeleri yeni logodan (`public/icons/`, APK başlatıcı simgeleri, mağazalar için `store/`).
 - Sosyal medya: ana ekranda ve oyun sonlarında "Bizi takip et" → kulübün Linktree QR kodu.
 - Oyun içinde ev düğmesi (sorup ana sayfaya döner, tur kaydedilmez).
 - İçerik: 16 senaryo (kampüs: ring, otostop, sınav, Wi-Fi, şenlik, deprem tatbikatı …), 15 düello
@@ -28,6 +29,11 @@ Kaynaklar: `docs/tam_prototip/` (kulübün Tam Prototip v0.3'ü, tüm ekranlar b
 - Küfür filtresi güçlendirildi (oç…, bok…, seks…, cinsel kelimeler, "31").
 - Skor tablosundan "SEN · bu oyun" açıklaması kaldırıldı; düello zarı sınırsız döner.
 - APK açılış animasyonu (`BootIntro`): logo, kıvılcımlar, harf harf ad, renk çubukları, perde.
+  Öncesinde Android açılış ekranında dört renkli halka döner ve oyun hazır olunca solarak geçer;
+  telefonda görülen boş krem/siyah bekleme kalktı.
+- Senaryo adımlarında durum yazısı soruyla aynı boyutta (soru kalın kalır).
+- Senaryo sonucunda "Bizi takip et" başlık çubuğunda; adım puanlarıyla çakışmıyor.
+- Tanıtım ekranında İleri/Geri yönlü kayarak geçiş.
 - Android APK (`npm run apk`): ekran klavyesi oyunu küçültmez, üstüne açılır; yazılan alan klavyenin
   altında kalacaksa ekran yalnızca o kadar yukarı kayar (`src/app/keyboard.ts`, `MainActivity.java`).
 

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launch screen icon (Android 12+): the palette's four printed colours draw a ring one after
+  another, then it keeps turning while the game loads. MainActivity keeps the launch screen up
+  until the web app's opening animation is ready, so the wait is never an empty page.
+  240dp canvas; everything stays inside the 160dp circle the system shows.
+-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="240dp"
+            android:height="240dp"
+            android:viewportWidth="240"
+            android:viewportHeight="240">
+            <group
+                android:name="spin"
+                android:pivotX="120"
+                android:pivotY="120">
+                <path
+                    android:name="arcBrand"
+                    android:pathData="M130.35,75.18 A46,46 0 0,1 164.82,109.65"
+                    android:strokeColor="#A61E4D"
+                    android:strokeWidth="10"
+                    android:strokeLineCap="round"
+                    android:trimPathEnd="0" />
+                <path
+                    android:name="arcP1"
+                    android:pathData="M164.82,130.35 A46,46 0 0,1 130.35,164.82"
+                    android:strokeColor="#1864AB"
+                    android:strokeWidth="10"
+                    android:strokeLineCap="round"
+                    android:trimPathEnd="0" />
+                <path
+                    android:name="arcP2"
+                    android:pathData="M109.65,164.82 A46,46 0 0,1 75.18,130.35"
+                    android:strokeColor="#D9480F"
+                    android:strokeWidth="10"
+                    android:strokeLineCap="round"
+                    android:trimPathEnd="0" />
+                <path
+                    android:name="arcScn"
+                    android:pathData="M75.18,109.65 A46,46 0 0,1 109.65,75.18"
+                    android:strokeColor="#087F5B"
+                    android:strokeWidth="10"
+                    android:strokeLineCap="round"
+                    android:trimPathEnd="0" />
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="spin">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="360"
+                android:duration="1200"
+                android:repeatCount="infinite"
+                android:interpolator="@android:anim/linear_interpolator" />
+        </aapt:attr>
+    </target>
+    <target android:name="arcBrand">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="trimPathEnd"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:duration="280"
+                android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+    <target android:name="arcP1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="trimPathEnd"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:startOffset="110"
+                android:duration="280"
+                android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+    <target android:name="arcP2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="trimPathEnd"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:startOffset="220"
+                android:duration="280"
+                android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+    <target android:name="arcScn">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="trimPathEnd"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:startOffset="330"
+                android:duration="280"
+                android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+</animated-vector>

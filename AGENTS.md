@@ -161,9 +161,16 @@ The user's standing requirement: **every button and every page is tested while d
   shadows, `--on` text on a coloured fill, `--on-gold` text on gold/medals, `--bezel` always-dark
   surfaces; `--brand` / `--p1` / `--p2` / `--scn` (`--pc` in a duel half) are fills, their
   `-ink` twins (`--pci`) are for text and outlines. Both themes are scanned with axe.
-- App icons come from the club's icon pack: `public/icons/` (PWA) and `store/` (App Store, Play).
-- The logo `public/logo/atu_techbuilders_logo.png` (the club's "Community" logo) is never
-  recolored, cropped, rotated or edited; it sits on the paper without a shadow.
+- The logo comes from the club's logo package (masters in `store/logo/`, recoloured by the club
+  for the palette): `public/logo/techbuilders_logo_light.png` on the paper and `_dark.png` at
+  night, picked by `useLogoSrc()` (the share PNGs always take the light one). The app copies are
+  the masters with only their empty transparent margin trimmed, scaled to 1024 px. The artwork
+  is never recolored, redrawn, rotated or edited; it sits on the paper without a shadow.
+- App icons are made from the same masters, on the paper: `public/icons/` (PWA), the APK's
+  launcher icons (`android/app/src/main/res/mipmap-*`) and `store/` (App Store, Play, iOS).
+- APK start: the launch screen (paper + the four-colour ring, `res/drawable/splash_ring.xml`)
+  stays until `BootIntro` sets `<html data-boot="ready">` (fonts and logo loaded; at most 8 s),
+  then fades onto the opening animation (`MainActivity.java`).
 - Landscape tablet 1280×800, kiosk: no scrolling, zoom or text selection. Respect
   `prefers-reduced-motion`. Sounds stay soft; nothing loud or sudden.
 

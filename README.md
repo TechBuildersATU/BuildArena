@@ -62,9 +62,12 @@ Uygulama Capacitor ile bir Android uygulamasına sarılır (`android/`, `capacit
 imzalı bir APK üretir. Android Studio'nun SDK'sı ve JDK 17–21 kendiliğinden bulunur (ya da
 `ANDROID_HOME` / `JAVA_HOME`). APK içinde: yatay ve tam ekran (kenardan kaydırınca sistem
 çubukları kısa süre görünür), ekran kararmaz, titreşim izni var, geri tuşu uygulamayı kapatmaz,
-kulübün ikonları ve bir açılış animasyonu (logo halkasıyla yaylanarak gelir, kıvılcımlar saçılır,
+yeni logodan üretilmiş ikonlar ve iki aşamalı bir açılış: önce Android'in açılış ekranında kâğıt
+zeminde paletin dört renginden bir halka kendini çizip döner (`res/drawable/splash_ring.xml`) ve
+oyun hazır olana kadar ekranda kalır (`MainActivity.java`, en fazla 8 sn); sonra yumuşakça
+solarak açılış animasyonuna geçer (logo halkasıyla yaylanarak gelir, kıvılcımlar saçılır,
 "BuildArena" harf harf yükselir, dört renk çubuğu dolar, sonra perde gibi kalkar; dokununca
-atlanır — `src/components/BootIntro.tsx`); ekran klavyesi oyunu küçültmez, üstüne açılır (yazılan
+atlanır — `src/components/BootIntro.tsx`). Böylece açılışta boş bir ekran beklenmez. Ekran klavyesi oyunu küçültmez, üstüne açılır (yazılan
 alan klavyenin altında kalacaksa ekran yalnızca o kadar yukarı kayar); görevli menüsündeki PNG'ler Android'in paylaş menüsüyle
 kaydedilir. İnternet gerekmez.
 
@@ -106,9 +109,13 @@ var. Destekleyen tabletlerde kısa titreşimler eşlik eder. Hepsi cihazda hatı
 
 ## Uygulama simgesi
 
-Kulübün ikon paketinden: tablet/telefona kurulunca `public/icons/` (Android 192/512, maskelenebilir
-512, iPhone/iPad 180, sekme 48); App Store ve Google Play simgeleri ile iOS/Android proje setleri
-`store/` klasöründe (bkz. `store/README.md`).
+Kulübün yeni logo paketinden (`store/logo/`, paletin renklerine göre düzenlenmiş: kâğıt zeminde
+mürekkep, koyu temada açık sürüm). Uygulama logoyu temaya göre seçer
+(`public/logo/techbuilders_logo_light.png` / `_dark.png`). Tablet/telefona kurulunca
+`public/icons/` (Android 192/512, maskelenebilir 512, iPhone/iPad 180, sekme 48) ve APK'nın
+başlatıcı simgeleri; App Store ve Google Play simgeleri ile iOS/Android proje setleri `store/`
+klasöründe (bkz. `store/README.md`). Hepsi kâğıt zeminde; logonun çizimi ve renkleri
+değiştirilmez.
 
 ## Takma ad
 
