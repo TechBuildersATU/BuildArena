@@ -72,7 +72,7 @@ export async function playSteps(page: Page, letters: string[]) {
 /** Booth settings stored before the app starts (same key as the staff menu). */
 export async function presetSettings(page: Page, settings: Record<string, unknown>) {
   await page.addInitScript((s) => {
-    localStorage.setItem('buildarena.ayarlar.v1', JSON.stringify(s))
+    localStorage.setItem('buildarena.settings.v1', JSON.stringify(s))
   }, settings)
 }
 

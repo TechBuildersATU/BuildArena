@@ -1,5 +1,5 @@
 /*
- * Scenario mode screens — ported from docs/senaryo_modu/prototip/index.html, drawn in the
+ * Scenario mode screens — ported from docs/scenario-mode/prototype/index.html, drawn in the
  * "Renk Paleti" language: paper background, 2 px ink lines, 3 px hard shadows; a pressed button
  * loses its shadow and sinks in. Teal is the scenario color. Coordinates are 1280×800 stage
  * pixels; touch targets are at least 56 px.

@@ -43,7 +43,7 @@ test('home: "Bizi takip et" opens the Linktree QR; X, Escape and a tap outside c
 
 test('the QR is on the scenario final, in the dark theme too', async ({ page }) => {
   await page.addInitScript(() =>
-    localStorage.setItem('buildarena.ayarlar.v1', JSON.stringify({ theme: 'dark' })),
+    localStorage.setItem('buildarena.settings.v1', JSON.stringify({ theme: 'dark' })),
   )
   await startScenario(page)
   await playSteps(page, ['a', 'b', 'c', 'a', 'a'])

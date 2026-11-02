@@ -25,11 +25,11 @@ SOFTWARE.
 Not covered by the MIT License above (all rights reserved by ATÜ TechBuilders):
 
 - the ATÜ TechBuilders name and logo (store/logo/, public/logo/, docs/assets/logo/,
-  docs/senaryo_modu/tasarim_kaynak/logo.png and every copy of the logo);
+  docs/scenario-mode/design-source/logo.png and every copy of the logo);
 - the app icons made from it (public/icons/, store/ and the launcher icons
   in android/app/src/main/res/mipmap-*);
 - the club's documents in docs/ (project document, prototype, colour palette,
-  scenario-mode document and their images).
+  scenario-mode document, their images and the app screenshots in docs/screenshots/).
 
 Third-party files keep their own licenses (for example lucide.min.js in docs/,
 ISC License).

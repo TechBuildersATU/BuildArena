@@ -10,7 +10,7 @@
     "**/node_modules": true,
     "dist": true,
     "dev-dist": true,
-    "docs/assets/tasarim_kaynak/lucide.min.js": true
+    "docs/assets/design-source/lucide.min.js": true
   },
   "files.exclude": { "test-results": true, "playwright-report": true }
 }
