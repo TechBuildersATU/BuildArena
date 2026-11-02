@@ -10,9 +10,9 @@ export function juryAnalysis(
   picks: readonly ScenarioPick[],
   total: number,
 ): string {
-  const step = (p: ScenarioPick) => scenario.adimlar[p.stepIndex]
-  const strong = picks.filter((p) => p.puan === 20).map((p) => step(p).konu)
-  const weak = picks.filter((p) => p.puan < 20).sort((a, b) => a.puan - b.puan)[0]
+  const step = (p: ScenarioPick) => scenario.steps[p.stepIndex]
+  const strong = picks.filter((p) => p.points === 20).map((p) => step(p).topic)
+  const weak = picks.filter((p) => p.points < 20).sort((a, b) => a.points - b.points)[0]
 
   let text =
     strong.length >= 2
@@ -23,12 +23,12 @@ export function juryAnalysis(
 
   if (weak) {
     const s = step(weak)
-    const best = s.secenekler.find((o) => o.puan === 20)
+    const best = s.options.find((o) => o.points === 20)
     if (best) {
       text +=
         weak.optionIndex === null
-          ? `${capTr(s.konu)} adımında süre doldu; doğru hamle "${best.metin}" olurdu. `
-          : `${capTr(s.konu)} tarafında küçük bir eksik var: "${best.metin}" daha iyi işlerdi. `
+          ? `${capTr(s.topic)} adımında süre doldu; doğru hamle "${best.text}" olurdu. `
+          : `${capTr(s.topic)} tarafında küçük bir eksik var: "${best.text}" daha iyi işlerdi. `
     }
   }
 

@@ -58,14 +58,14 @@ const NICKS = [
   'Lojik Lemur',
 ]
 const WEIGHT: Record<string, number> = {
-  yemekhane: 7,
-  kutuphane: 5,
-  kafe: 5,
-  hastane: 4,
-  magaza: 4,
-  obs: 6,
-  servis: 3,
-  yurt: 2,
+  cafeteria: 7,
+  library: 5,
+  cafe: 5,
+  hospital: 4,
+  store: 4,
+  'student-portal': 6,
+  shuttle: 3,
+  dorm: 2,
 }
 
 export function demoDay(now = new Date()): { scores: ScoreEntry[]; duels: DuelRecord[] } {
@@ -75,9 +75,11 @@ export function demoDay(now = new Date()): { scores: ScoreEntry[]; duels: DuelRe
   const scenarioPool = SCENARIOS.flatMap((s) => Array<string>(WEIGHT[s.id] ?? 2).fill(s.id))
 
   const scores = NICKS.map<ScoreEntry>((nick, i) => {
-    const sc = findScenario(i === 0 ? 'hastane' : i === 1 ? 'magaza' : pick(scenarioPool))!
-    const picks = sc.adimlar.map<ScenarioPick>((a, k) => {
-      const byScore = a.secenekler.map((o, idx) => ({ o, idx })).sort((x, y) => y.o.puan - x.o.puan)
+    const sc = findScenario(i === 0 ? 'hospital' : i === 1 ? 'store' : pick(scenarioPool))!
+    const picks = sc.steps.map<ScenarioPick>((a, k) => {
+      const byScore = a.options
+        .map((o, idx) => ({ o, idx }))
+        .sort((x, y) => y.o.points - x.o.points)
       const r = R()
       const chosen =
         i < 2 || r < 0.58
@@ -87,12 +89,12 @@ export function demoDay(now = new Date()): { scores: ScoreEntry[]; duels: DuelRe
             : R() < 0.1
               ? null
               : pick(byScore.slice(2))
-      const sure = 4 + R() * 14
+      const seconds = 4 + R() * 14
       return {
         stepIndex: k,
         optionIndex: chosen ? chosen.idx : null,
-        puan: chosen ? chosen.o.puan : 0,
-        sure: chosen ? sure : 20,
+        points: chosen ? chosen.o.points : 0,
+        seconds: chosen ? seconds : 20,
         limit: 20,
       }
     })
@@ -101,13 +103,13 @@ export function demoDay(now = new Date()): { scores: ScoreEntry[]; duels: DuelRe
       id: `ornek${i}`,
       nick,
       score: total,
-      unvan: titleFor(total),
-      senaryo: sc.id,
-      sure: Math.round(picks.reduce((s, p) => s + p.sure, 0)),
-      zaman: at(9 + Math.floor(R() * 8), Math.floor(R() * 60)),
-      izin: i === 1 ? false : R() < 0.75,
-      secimler: picks.map((p) =>
-        p.optionIndex === null ? null : sc.adimlar[p.stepIndex].secenekler[p.optionIndex].id,
+      title: titleFor(total),
+      scenarioId: sc.id,
+      seconds: Math.round(picks.reduce((s, p) => s + p.seconds, 0)),
+      playedAt: at(9 + Math.floor(R() * 8), Math.floor(R() * 60)),
+      consent: i === 1 ? false : R() < 0.75,
+      choices: picks.map((p) =>
+        p.optionIndex === null ? null : sc.steps[p.stepIndex].options[p.optionIndex].id,
       ),
     }
   })
@@ -119,33 +121,33 @@ export function demoDay(now = new Date()): { scores: ScoreEntry[]; duels: DuelRe
     const names = [pick(duelNames), pick(duelNames)]
     if (names[0] === names[1])
       names[1] = duelNames[(duelNames.indexOf(names[0]) + 1) % duelNames.length]
-    const required = taskCards(task).filter((c) => !task.tuzak.includes(c))
+    const required = taskCards(task).filter((c) => !task.traps.includes(c))
     const results = names.map((nick) => {
       const box = required
         .filter(() => R() < 0.78)
-        .concat(task.tuzak.filter(() => R() < 0.14))
+        .concat(task.traps.filter(() => R() < 0.14))
         .slice(0, 8)
-      const kalan = R() < 0.5 ? 0 : Math.floor(R() * 40)
-      return { nick, box, s: scoreDuel(task, box, kalan, 90) }
+      const secondsLeft = R() < 0.5 ? 0 : Math.floor(R() * 40)
+      return { nick, box, s: scoreDuel(task, box, secondsLeft, 90) }
     })
     const winner = duelWinner([results[0].s, results[1].s])
     duels.push({
       id: `ornekd${i}`,
-      zaman: at(9 + Math.floor(R() * 8), Math.floor(R() * 60)),
-      gorev: task.id,
-      kazanan: winner,
+      playedAt: at(9 + Math.floor(R() * 8), Math.floor(R() * 60)),
+      taskId: task.id,
+      winner: winner,
       p: results.map(({ nick, box, s }) => ({
         nick,
         total: s.total,
-        uyum: s.uyum,
-        isabet: s.isabet,
-        birlesim: s.birlesim,
-        hiz: s.hiz,
-        ceza: s.ceza,
-        kalan: s.kalan,
+        coverage: s.coverage,
+        accuracy: s.accuracy,
+        combo: s.combo,
+        speed: s.speed,
+        penalty: s.penalty,
+        secondsLeft: s.secondsLeft,
         box,
-        tuzak: s.traps.length,
-        lakap: duelJury(task, s, R).lakap,
+        trapCount: s.traps.length,
+        epithet: duelJury(task, s, R).epithet,
       })) as DuelRecord['p'],
     })
   }

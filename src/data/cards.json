@@ -1,508 +1,508 @@
 {
-  "aciklama": "Gereksinim kartı kataloğu (proje dokümanı Bölüm 9): 84 kart, her biri 1 Lucide ikonu + en fazla 2 kelime. nfr: fonksiyonel olmayan gereksinim.",
-  "kartlar": [
+  "description": "Requirement card catalogue (project document §9): 84 cards, each one Lucide icon + at most 2 words. nfr: non-functional requirement.",
+  "cards": [
     {
-      "id": "katalog",
-      "ad": "Katalog Arama",
-      "ikon": "search",
+      "id": "catalog-search",
+      "name": "Katalog Arama",
+      "icon": "search",
       "nfr": false
     },
     {
-      "id": "envanter",
-      "ad": "Kitap Envanteri",
-      "ikon": "library",
+      "id": "book-inventory",
+      "name": "Kitap Envanteri",
+      "icon": "library",
       "nfr": false
     },
     {
-      "id": "odunc",
-      "ad": "Ödünç / İade",
-      "ikon": "book-open-check",
+      "id": "borrow-return",
+      "name": "Ödünç / İade",
+      "icon": "book-open-check",
       "nfr": false
     },
     {
-      "id": "rezervasyon",
-      "ad": "Rezervasyon",
-      "ikon": "bookmark",
+      "id": "reservation",
+      "name": "Rezervasyon",
+      "icon": "bookmark",
       "nfr": false
     },
     {
-      "id": "gecikme",
-      "ad": "Gecikme Cezası",
-      "ikon": "coins",
+      "id": "late-fee",
+      "name": "Gecikme Cezası",
+      "icon": "coins",
       "nfr": false
     },
     {
-      "id": "hatirlatma",
-      "ad": "İade Hatırlatma",
-      "ikon": "bell-ring",
+      "id": "return-reminder",
+      "name": "İade Hatırlatma",
+      "icon": "bell-ring",
       "nfr": false
     },
     {
-      "id": "kilit",
-      "ad": "Eşzamanlı Kilit",
-      "ikon": "lock-keyhole",
+      "id": "concurrency-lock",
+      "name": "Eşzamanlı Kilit",
+      "icon": "lock-keyhole",
       "nfr": true
     },
     {
-      "id": "isbn",
-      "ad": "ISBN Tarama",
-      "ikon": "scan-barcode",
+      "id": "isbn-scan",
+      "name": "ISBN Tarama",
+      "icon": "scan-barcode",
       "nfr": false
     },
     {
-      "id": "bakiye",
-      "ad": "Bakiye Yükleme",
-      "ikon": "wallet",
+      "id": "top-up",
+      "name": "Bakiye Yükleme",
+      "icon": "wallet",
       "nfr": false
     },
     {
-      "id": "turnike",
-      "ad": "Turnike Geçişi",
-      "ikon": "nfc",
+      "id": "turnstile",
+      "name": "Turnike Geçişi",
+      "icon": "nfc",
       "nfr": false
     },
     {
-      "id": "atomik",
-      "ad": "Atomik İşlem",
-      "ikon": "shield-check",
+      "id": "atomic-transaction",
+      "name": "Atomik İşlem",
+      "icon": "shield-check",
       "nfr": true
     },
     {
-      "id": "menu",
-      "ad": "Günlük Menü",
-      "ikon": "utensils",
+      "id": "daily-menu",
+      "name": "Günlük Menü",
+      "icon": "utensils",
       "nfr": false
     },
     {
-      "id": "gecmis",
-      "ad": "İşlem Geçmişi",
-      "ikon": "history",
+      "id": "history",
+      "name": "İşlem Geçmişi",
+      "icon": "history",
       "nfr": false
     },
     {
-      "id": "gecikmesiz",
-      "ad": "Düşük Gecikme",
-      "ikon": "zap",
+      "id": "low-latency",
+      "name": "Düşük Gecikme",
+      "icon": "zap",
       "nfr": true
     },
     {
-      "id": "rapor",
-      "ad": "Gün Sonu Rapor",
-      "ikon": "chart-column",
+      "id": "daily-report",
+      "name": "Gün Sonu Rapor",
+      "icon": "chart-column",
       "nfr": false
     },
     {
-      "id": "kalori",
-      "ad": "Kalori Bilgisi",
-      "ikon": "flame",
+      "id": "calories",
+      "name": "Kalori Bilgisi",
+      "icon": "flame",
       "nfr": false
     },
     {
-      "id": "qrmenu",
-      "ad": "QR Menü",
-      "ikon": "qr-code",
+      "id": "qr-menu",
+      "name": "QR Menü",
+      "icon": "qr-code",
       "nfr": false
     },
     {
-      "id": "sepet",
-      "ad": "Sepet",
-      "ikon": "shopping-cart",
+      "id": "cart",
+      "name": "Sepet",
+      "icon": "shopping-cart",
       "nfr": false
     },
     {
-      "id": "mutfak",
-      "ad": "Mutfak Ekranı",
-      "ikon": "chef-hat",
+      "id": "kitchen-display",
+      "name": "Mutfak Ekranı",
+      "icon": "chef-hat",
       "nfr": false
     },
     {
-      "id": "adisyon",
-      "ad": "Masa Adisyonu",
-      "ikon": "receipt",
+      "id": "table-bill",
+      "name": "Masa Adisyonu",
+      "icon": "receipt",
       "nfr": false
     },
     {
-      "id": "stok",
-      "ad": "Stok Düşümü",
-      "ikon": "package-minus",
+      "id": "stock",
+      "name": "Stok Düşümü",
+      "icon": "package-minus",
       "nfr": false
     },
     {
-      "id": "sadakat",
-      "ad": "Sadakat Puanı",
-      "ikon": "gift",
+      "id": "loyalty",
+      "name": "Sadakat Puanı",
+      "icon": "gift",
       "nfr": false
     },
     {
-      "id": "cevrimdisi",
-      "ad": "Çevrimdışı Mod",
-      "ikon": "wifi-off",
+      "id": "offline-mode",
+      "name": "Çevrimdışı Mod",
+      "icon": "wifi-off",
       "nfr": true
     },
     {
-      "id": "paket",
-      "ad": "Paket Sipariş",
-      "ikon": "shopping-bag",
+      "id": "takeaway",
+      "name": "Paket Sipariş",
+      "icon": "shopping-bag",
       "nfr": false
     },
     {
-      "id": "randevu",
-      "ad": "Randevu Al",
-      "ikon": "calendar-plus",
+      "id": "appointment",
+      "name": "Randevu Al",
+      "icon": "calendar-plus",
       "nfr": false
     },
     {
-      "id": "hastakaydi",
-      "ad": "Hasta Kaydı",
-      "ikon": "clipboard-list",
+      "id": "patient-record",
+      "name": "Hasta Kaydı",
+      "icon": "clipboard-list",
       "nfr": false
     },
     {
-      "id": "sifreleme",
-      "ad": "Veri Şifreleme",
-      "ikon": "lock",
+      "id": "encryption",
+      "name": "Veri Şifreleme",
+      "icon": "lock",
       "nfr": true
     },
     {
       "id": "rbac",
-      "ad": "Rol Bazlı Erişim",
-      "ikon": "key-round",
+      "name": "Rol Bazlı Erişim",
+      "icon": "key-round",
       "nfr": true
     },
     {
-      "id": "recete",
-      "ad": "E-Reçete",
-      "ikon": "pill",
+      "id": "e-prescription",
+      "name": "E-Reçete",
+      "icon": "pill",
       "nfr": false
     },
     {
-      "id": "tahlil",
-      "ad": "Tahlil Sonucu",
-      "ikon": "flask-conical",
+      "id": "lab-results",
+      "name": "Tahlil Sonucu",
+      "icon": "flask-conical",
       "nfr": false
     },
     {
-      "id": "denetim",
-      "ad": "Denetim İzi",
-      "ikon": "scroll-text",
+      "id": "audit-trail",
+      "name": "Denetim İzi",
+      "icon": "scroll-text",
       "nfr": true
     },
     {
-      "id": "vital",
-      "ad": "Vital Takibi",
-      "ikon": "heart-pulse",
+      "id": "vitals",
+      "name": "Vital Takibi",
+      "icon": "heart-pulse",
       "nfr": false
     },
     {
-      "id": "urunler",
-      "ad": "Ürün Kataloğu",
-      "ikon": "store",
+      "id": "product-catalog",
+      "name": "Ürün Kataloğu",
+      "icon": "store",
       "nfr": false
     },
     {
-      "id": "odeme",
-      "ad": "Güvenli Ödeme",
-      "ikon": "credit-card",
+      "id": "secure-payment",
+      "name": "Güvenli Ödeme",
+      "icon": "credit-card",
       "nfr": false
     },
     {
-      "id": "filtre",
-      "ad": "Filtreleme",
-      "ikon": "sliders-horizontal",
+      "id": "filters",
+      "name": "Filtreleme",
+      "icon": "sliders-horizontal",
       "nfr": false
     },
     {
-      "id": "kargo",
-      "ad": "Kargo Takibi",
-      "ikon": "truck",
+      "id": "shipment-tracking",
+      "name": "Kargo Takibi",
+      "icon": "truck",
       "nfr": false
     },
     {
-      "id": "iade",
-      "ad": "İade Talebi",
-      "ikon": "undo-2",
+      "id": "returns",
+      "name": "İade Talebi",
+      "icon": "undo-2",
       "nfr": false
     },
     {
-      "id": "olcek",
-      "ad": "Yatay Ölçek",
-      "ikon": "server",
+      "id": "horizontal-scaling",
+      "name": "Yatay Ölçek",
+      "icon": "server",
       "nfr": true
     },
     {
-      "id": "kampanya",
-      "ad": "Kampanya Kodu",
-      "ikon": "badge-percent",
+      "id": "promo-code",
+      "name": "Kampanya Kodu",
+      "icon": "badge-percent",
       "nfr": false
     },
     {
-      "id": "beden",
-      "ad": "Beden Seçimi",
-      "ikon": "ruler",
+      "id": "size-picker",
+      "name": "Beden Seçimi",
+      "icon": "ruler",
       "nfr": false
     },
     {
-      "id": "onbellek",
-      "ad": "Önbellek",
-      "ikon": "database-zap",
+      "id": "cache",
+      "name": "Önbellek",
+      "icon": "database-zap",
       "nfr": true
     },
     {
-      "id": "paylas",
-      "ad": "Sosyal Paylaşım",
-      "ikon": "share-2",
+      "id": "social-share",
+      "name": "Sosyal Paylaşım",
+      "icon": "share-2",
       "nfr": false
     },
     {
-      "id": "rozet",
-      "ad": "Rozet Kazan",
-      "ikon": "award",
+      "id": "badges",
+      "name": "Rozet Kazan",
+      "icon": "award",
       "nfr": false
     },
     {
-      "id": "canliskor",
-      "ad": "Canlı Skor",
-      "ikon": "trophy",
+      "id": "live-score",
+      "name": "Canlı Skor",
+      "icon": "trophy",
       "nfr": false
     },
     {
-      "id": "bildirim",
-      "ad": "Anlık Bildirim",
-      "ikon": "bell-ring",
+      "id": "push-notifications",
+      "name": "Anlık Bildirim",
+      "icon": "bell-ring",
       "nfr": false
     },
     {
-      "id": "canlikonum",
-      "ad": "Canlı Konum",
-      "ikon": "navigation",
+      "id": "live-location",
+      "name": "Canlı Konum",
+      "icon": "navigation",
       "nfr": false
     },
     {
-      "id": "varis",
-      "ad": "Varış Tahmini",
-      "ikon": "clock",
+      "id": "arrival-estimate",
+      "name": "Varış Tahmini",
+      "icon": "clock",
       "nfr": false
     },
     {
-      "id": "harita",
-      "ad": "Kampüs Haritası",
-      "ikon": "map",
+      "id": "campus-map",
+      "name": "Kampüs Haritası",
+      "icon": "map",
       "nfr": false
     },
     {
-      "id": "doluluk",
-      "ad": "Doluluk Bilgisi",
-      "ikon": "users-round",
+      "id": "occupancy",
+      "name": "Doluluk Bilgisi",
+      "icon": "users-round",
       "nfr": false
     },
     {
-      "id": "sefer",
-      "ad": "Sefer Planı",
-      "ikon": "calendar-clock",
+      "id": "trip-schedule",
+      "name": "Sefer Planı",
+      "icon": "calendar-clock",
       "nfr": false
     },
     {
-      "id": "erisilebilirlik",
-      "ad": "Erişilebilirlik",
-      "ikon": "accessibility",
+      "id": "accessibility",
+      "name": "Erişilebilirlik",
+      "icon": "accessibility",
       "nfr": true
     },
     {
-      "id": "etkinlik",
-      "ad": "Etkinlik Takvimi",
-      "ikon": "calendar-days",
+      "id": "event-calendar",
+      "name": "Etkinlik Takvimi",
+      "icon": "calendar-days",
       "nfr": false
     },
     {
-      "id": "katilim",
-      "ad": "Katılım Kaydı",
-      "ikon": "user-check",
+      "id": "attendance",
+      "name": "Katılım Kaydı",
+      "icon": "user-check",
       "nfr": false
     },
     {
-      "id": "kontenjan",
-      "ad": "Kontenjan Takibi",
-      "ikon": "ticket",
+      "id": "quota",
+      "name": "Kontenjan Takibi",
+      "icon": "ticket",
       "nfr": false
     },
     {
-      "id": "qrgiris",
-      "ad": "QR Giriş",
-      "ikon": "scan-line",
+      "id": "qr-check-in",
+      "name": "QR Giriş",
+      "icon": "scan-line",
       "nfr": false
     },
     {
-      "id": "duyuru",
-      "ad": "Duyuru Paneli",
-      "ikon": "megaphone",
+      "id": "announcements",
+      "name": "Duyuru Paneli",
+      "icon": "megaphone",
       "nfr": false
     },
     {
-      "id": "plaka",
-      "ad": "Plaka Tanıma",
-      "ikon": "car-front",
+      "id": "plate-recognition",
+      "name": "Plaka Tanıma",
+      "icon": "car-front",
       "nfr": false
     },
     {
-      "id": "bosyer",
-      "ad": "Boş Yer Sayacı",
-      "ikon": "square-parking",
+      "id": "free-spaces",
+      "name": "Boş Yer Sayacı",
+      "icon": "square-parking",
       "nfr": false
     },
     {
-      "id": "sarj",
-      "ad": "Şarj İstasyonu",
-      "ikon": "plug-zap",
+      "id": "ev-charging",
+      "name": "Şarj İstasyonu",
+      "icon": "plug-zap",
       "nfr": false
     },
     {
-      "id": "ihlal",
-      "ad": "İhlal Kaydı",
-      "ikon": "badge-alert",
+      "id": "violations",
+      "name": "İhlal Kaydı",
+      "icon": "badge-alert",
       "nfr": false
     },
     {
-      "id": "kimlik",
-      "ad": "Kimlik Doğrulama",
-      "ikon": "fingerprint-pattern",
+      "id": "authentication",
+      "name": "Kimlik Doğrulama",
+      "icon": "fingerprint-pattern",
       "nfr": true
     },
     {
-      "id": "sayac",
-      "ad": "Süre Sayacı",
-      "ikon": "timer",
+      "id": "timer",
+      "name": "Süre Sayacı",
+      "icon": "timer",
       "nfr": false
     },
     {
-      "id": "otokayit",
-      "ad": "Otomatik Kayıt",
-      "ikon": "save",
+      "id": "auto-save",
+      "name": "Otomatik Kayıt",
+      "icon": "save",
       "nfr": true
     },
     {
-      "id": "soruhavuzu",
-      "ad": "Soru Havuzu",
-      "ikon": "layers",
+      "id": "question-pool",
+      "name": "Soru Havuzu",
+      "icon": "layers",
       "nfr": false
     },
     {
-      "id": "sonuc",
-      "ad": "Sonuç Duyurusu",
-      "ikon": "badge-check",
+      "id": "results",
+      "name": "Sonuç Duyurusu",
+      "icon": "badge-check",
       "nfr": false
     },
     {
-      "id": "ilan",
-      "ad": "Kayıp İlanı",
-      "ikon": "flag",
+      "id": "lost-notice",
+      "name": "Kayıp İlanı",
+      "icon": "flag",
       "nfr": false
     },
     {
-      "id": "fotograf",
-      "ad": "Fotoğraf Ekle",
-      "ikon": "camera",
+      "id": "photo-upload",
+      "name": "Fotoğraf Ekle",
+      "icon": "camera",
       "nfr": false
     },
     {
-      "id": "teslim",
-      "ad": "Teslim Tutanağı",
-      "ikon": "file-check",
+      "id": "handover-record",
+      "name": "Teslim Tutanağı",
+      "icon": "file-check",
       "nfr": false
     },
     {
-      "id": "konum",
-      "ad": "Bulunduğu Yer",
-      "ikon": "map-pin",
+      "id": "found-location",
+      "name": "Bulunduğu Yer",
+      "icon": "map-pin",
       "nfr": false
     },
     {
-      "id": "seans",
-      "ad": "Seans Hatırlatma",
-      "ikon": "alarm-clock",
+      "id": "session-reminder",
+      "name": "Seans Hatırlatma",
+      "icon": "alarm-clock",
       "nfr": false
     },
     {
-      "id": "bekleme",
-      "ad": "Bekleme Listesi",
-      "ikon": "list-ordered",
+      "id": "waitlist",
+      "name": "Bekleme Listesi",
+      "icon": "list-ordered",
       "nfr": false
     },
     {
-      "id": "antrenman",
-      "ad": "Antrenman Planı",
-      "ikon": "dumbbell",
+      "id": "workout-plan",
+      "name": "Antrenman Planı",
+      "icon": "dumbbell",
       "nfr": false
     },
     {
-      "id": "makine",
-      "ad": "Makine Durumu",
-      "ikon": "washing-machine",
+      "id": "machine-status",
+      "name": "Makine Durumu",
+      "icon": "washing-machine",
       "nfr": false
     },
     {
-      "id": "sira",
-      "ad": "Sıra Al",
-      "ikon": "hourglass",
+      "id": "queue",
+      "name": "Sıra Al",
+      "icon": "hourglass",
       "nfr": false
     },
     {
-      "id": "ariza",
-      "ad": "Arıza Bildirimi",
-      "ikon": "wrench",
+      "id": "fault-report",
+      "name": "Arıza Bildirimi",
+      "icon": "wrench",
       "nfr": false
     },
     {
-      "id": "bosderslik",
-      "ad": "Boş Derslik",
-      "ikon": "door-open",
+      "id": "free-classrooms",
+      "name": "Boş Derslik",
+      "icon": "door-open",
       "nfr": false
     },
     {
-      "id": "dersprogrami",
-      "ad": "Ders Programı",
-      "ikon": "school",
+      "id": "timetable",
+      "name": "Ders Programı",
+      "icon": "school",
       "nfr": false
     },
     {
-      "id": "sensor",
-      "ad": "Doluluk Sensörü",
-      "ikon": "radio",
+      "id": "occupancy-sensor",
+      "name": "Doluluk Sensörü",
+      "icon": "radio",
       "nfr": false
     },
     {
-      "id": "uygunluk",
-      "ad": "Uygunluk Testi",
-      "ikon": "clipboard-check",
+      "id": "eligibility",
+      "name": "Uygunluk Testi",
+      "icon": "clipboard-check",
       "nfr": false
     },
     {
-      "id": "kangrubu",
-      "ad": "Kan Grubu",
-      "ikon": "droplet",
+      "id": "blood-type",
+      "name": "Kan Grubu",
+      "icon": "droplet",
       "nfr": false
     },
     {
-      "id": "cv",
-      "ad": "CV Profili",
-      "ikon": "file-user",
+      "id": "cv-profile",
+      "name": "CV Profili",
+      "icon": "file-user",
       "nfr": false
     },
     {
-      "id": "isilani",
-      "ad": "İş İlanları",
-      "ikon": "briefcase",
+      "id": "job-listings",
+      "name": "İş İlanları",
+      "icon": "briefcase",
       "nfr": false
     },
     {
-      "id": "basvuru",
-      "ad": "Başvuru Takibi",
-      "ikon": "list-checks",
+      "id": "application-tracking",
+      "name": "Başvuru Takibi",
+      "icon": "list-checks",
       "nfr": false
     },
     {
-      "id": "mesaj",
-      "ad": "Mesajlaşma",
-      "ikon": "message-circle",
+      "id": "messaging",
+      "name": "Mesajlaşma",
+      "icon": "message-circle",
       "nfr": false
     }
   ]

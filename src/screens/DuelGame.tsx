@@ -374,20 +374,20 @@ function DuelBoard({ task }: { task: Task }) {
         </div>
         <div className={d.dtask}>
           <div className={d.dtic}>
-            <Icon name={task.ikon} />
+            <Icon name={task.icon} />
           </div>
           <div>
             <div className={d.dtl}>
               <Icon name="clipboard-list" />
               GÖREV <b>#{task.no}</b>
             </div>
-            <div className={d.dtt}>{task.baslik}</div>
+            <div className={d.dtt}>{task.title}</div>
           </div>
           <div className={d.aud2}>
-            {task.hedefKitle.map((a) => (
-              <span key={a.ad} className={app.chip}>
-                <Icon name={a.ikon} />
-                {a.ad}
+            {task.audience.map((a) => (
+              <span key={a.name} className={app.chip}>
+                <Icon name={a.icon} />
+                {a.name}
               </span>
             ))}
           </div>
@@ -462,9 +462,9 @@ function DuelBoard({ task }: { task: Task }) {
                         )}
                         {card.nfr && <span className={d.nfr}>NFR</span>}
                         <div className={d.tic}>
-                          <Icon name={card.ikon} />
+                          <Icon name={card.icon} />
                         </div>
-                        <span>{card.ad}</span>
+                        <span>{card.name}</span>
                       </div>
                     )
                   })}
@@ -486,7 +486,7 @@ function DuelBoard({ task }: { task: Task }) {
                     </span>
                   </div>
                   <div className={d.appbar}>
-                    <Icon name={task.ikon} />
+                    <Icon name={task.icon} />
                     Uygulamam<small>{n}/8</small>
                   </div>
                   <div className={d.slots} data-slots>
@@ -522,9 +522,9 @@ function DuelBoard({ task }: { task: Task }) {
                           data-testid={`${tag}-slot-${k}`}
                         >
                           <div className={d.sic}>
-                            <Icon name={card.ikon} />
+                            <Icon name={card.icon} />
                           </div>
-                          <span>{card.ad}</span>
+                          <span>{card.name}</span>
                           <Icon name="grip-vertical" className={d.grip} />
                         </div>
                       )
@@ -570,7 +570,7 @@ function DuelBoard({ task }: { task: Task }) {
               </div>
               <b>Bitti!</b>
               <span>
-                {board.kalan ?? 0} sn kala · {n}/8 kart
+                {board.secondsLeft ?? 0} sn kala · {n}/8 kart
               </span>
             </div>
           </section>
@@ -619,9 +619,9 @@ function DuelBoard({ task }: { task: Task }) {
             data-testid={`p${side + 1}-ghost`}
           >
             <div className="duel-ghost-ic">
-              <Icon name={card.ikon} />
+              <Icon name={card.icon} />
             </div>
-            <span>{card.ad}</span>
+            <span>{card.name}</span>
           </div>
         )
       })}

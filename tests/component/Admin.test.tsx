@@ -9,15 +9,15 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { useUiStore } from '@/stores/uiStore'
 import { renderApp } from './renderApp'
 
-const entry = (id: string, score: number, izin = true): ScoreEntry => ({
+const entry = (id: string, score: number, consent = true): ScoreEntry => ({
   id,
   nick: `Oyuncu ${id}`,
   score,
-  unvan: 'Senior Analist',
-  senaryo: 'kafe',
-  sure: 60,
-  zaman: 1,
-  izin,
+  title: 'Senior Analist',
+  scenarioId: 'cafe',
+  seconds: 60,
+  playedAt: 1,
+  consent,
 })
 
 async function openAdmin() {

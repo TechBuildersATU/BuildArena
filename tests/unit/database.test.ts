@@ -18,28 +18,28 @@ const entry = (id: string, score: number): ScoreEntry => ({
   id,
   nick: `Oyuncu ${id}`,
   score,
-  unvan: 'Mid Analist',
-  senaryo: 'kafe',
-  sure: 60,
-  zaman: 1,
-  izin: true,
+  title: 'Mid Analist',
+  scenarioId: 'cafe',
+  seconds: 60,
+  playedAt: 1,
+  consent: true,
 })
 
 const duel = (id: string): DuelRecord => {
   const player = (nick: string, total: number) => ({
     nick,
     total,
-    uyum: total,
-    isabet: 0,
-    birlesim: 0,
-    hiz: 0,
-    ceza: 0,
-    kalan: 0,
+    coverage: total,
+    accuracy: 0,
+    combo: 0,
+    speed: 0,
+    penalty: 0,
+    secondsLeft: 0,
     box: [],
-    tuzak: 0,
-    lakap: 'Kod Kartalı',
+    trapCount: 0,
+    epithet: 'Kod Kartalı',
   })
-  return { id, zaman: 2, gorev: 'hbys', kazanan: 0, p: [player('A', 60), player('B', 40)] }
+  return { id, playedAt: 2, taskId: 'hospital', winner: 0, p: [player('A', 60), player('B', 40)] }
 }
 
 afterEach(async () => {
@@ -68,31 +68,41 @@ describe('leaderboard storage (IndexedDB)', () => {
     expect(await db.duels.count()).toBe(0)
     const archived = await db.archive.toArray()
     expect(archived.map((e) => e.id).sort()).toEqual(['a', 'b'])
-    expect(archived.every((e) => e.arsivGunu === '2026-11-04')).toBe(true)
+    expect(archived.every((e) => e.archiveDay === '2026-11-04')).toBe(true)
     const duels = await db.duelArchive.toArray()
-    expect(duels.map((d) => [d.id, d.arsivGunu])).toEqual([['d1', '2026-11-04']])
+    expect(duels.map((d) => [d.id, d.archiveDay])).toEqual([['d1', '2026-11-04']])
   })
 
   it('stores only the fields the privacy rules allow', async () => {
-    await saveScore({ ...entry('a', 70), secimler: ['x', null, 'y', 'z', 'w'] })
+    await saveScore({ ...entry('a', 70), choices: ['x', null, 'y', 'z', 'w'] })
     const [stored] = await listScores()
     expect(Object.keys(stored).sort()).toEqual(
-      ['id', 'izin', 'nick', 'score', 'secimler', 'senaryo', 'sure', 'unvan', 'zaman'].sort(),
+      [
+        'choices',
+        'consent',
+        'id',
+        'nick',
+        'playedAt',
+        'scenarioId',
+        'score',
+        'seconds',
+        'title',
+      ].sort(),
     )
   })
 })
 
 describe('scenario session store', () => {
   it('finish() builds the entry once, saves it with the choices and remembers the scenario', async () => {
-    const sc = findScenario('yemekhane')!
+    const sc = findScenario('cafeteria')!
     const store = useScenarioStore.getState()
     store.begin('Korkut', false)
-    store.chooseScenario('yemekhane')
+    store.chooseScenario('cafeteria')
     for (const [i, k] of [0, 1, 2, 0, 0].entries()) {
-      const puan = sc.adimlar[i].secenekler[k].puan
+      const points = sc.steps[i].options[k].points
       useScenarioStore
         .getState()
-        .addPick({ stepIndex: i, optionIndex: k, puan, sure: 12.4, limit: 20 })
+        .addPick({ stepIndex: i, optionIndex: k, points, seconds: 12.4, limit: 20 })
     }
     const first = useScenarioStore.getState().finish()
     const second = useScenarioStore.getState().finish()
@@ -100,37 +110,37 @@ describe('scenario session store', () => {
     expect(first).toMatchObject({
       nick: 'Korkut',
       score: 81,
-      unvan: 'Senior Analist',
-      senaryo: 'yemekhane',
-      sure: 62,
-      izin: false,
+      title: 'Senior Analist',
+      scenarioId: 'cafeteria',
+      seconds: 62,
+      consent: false,
     })
-    expect(first.secimler).toEqual([0, 1, 2, 0, 0].map((k, i) => sc.adimlar[i].secenekler[k].id))
-    expect(window.localStorage.getItem(STORAGE_KEYS.lastScenario)).toBe('yemekhane')
+    expect(first.choices).toEqual([0, 1, 2, 0, 0].map((k, i) => sc.steps[i].options[k].id))
+    expect(window.localStorage.getItem(STORAGE_KEYS.lastScenario)).toBe('cafeteria')
     await expect.poll(async () => (await listScores()).map((e) => e.id)).toEqual([first.id])
   })
 
   it('a game where every step timed out is saved with 0 points', () => {
     const store = useScenarioStore.getState()
     store.begin('Boş Oyuncu', true)
-    store.chooseScenario('kafe')
+    store.chooseScenario('cafe')
     for (let i = 0; i < 5; i++)
       useScenarioStore
         .getState()
-        .addPick({ stepIndex: i, optionIndex: null, puan: 0, sure: 20, limit: 20 })
+        .addPick({ stepIndex: i, optionIndex: null, points: 0, seconds: 20, limit: 20 })
     const e = useScenarioStore.getState().finish()
     expect(e.score).toBe(0)
-    expect(e.secimler).toEqual([null, null, null, null, null])
+    expect(e.choices).toEqual([null, null, null, null, null])
   })
 
   it('choosing a scenario starts a fresh game', () => {
     const store = useScenarioStore.getState()
     store.begin('Korkut', true)
-    store.chooseScenario('kafe')
+    store.chooseScenario('cafe')
     useScenarioStore
       .getState()
-      .addPick({ stepIndex: 0, optionIndex: 0, puan: 6, sure: 3, limit: 20 })
-    useScenarioStore.getState().chooseScenario('kafe')
+      .addPick({ stepIndex: 0, optionIndex: 0, points: 6, seconds: 3, limit: 20 })
+    useScenarioStore.getState().chooseScenario('cafe')
     expect(useScenarioStore.getState().picks).toEqual([])
     expect(useScenarioStore.getState().nick).toBe('Korkut')
   })
@@ -176,7 +186,7 @@ describe('duel store', () => {
     expect(useDuelStore.getState().end()).toBe(first)
     expect(first.r.map((x) => x.total)).toEqual([0, 0])
     expect(first.win).toBe(-1)
-    expect(first.r[0].lakap).toBeTruthy()
+    expect(first.r[0].epithet).toBeTruthy()
     await expect.poll(() => db.duels.count()).toBe(1)
   })
 
@@ -204,9 +214,9 @@ describe('sample day (staff menu)', () => {
     for (const e of a.scores) {
       expect(e.score).toBeGreaterThanOrEqual(0)
       expect(e.score).toBeLessThanOrEqual(100)
-      expect(findScenario(e.senaryo)).toBeTruthy()
+      expect(findScenario(e.scenarioId)).toBeTruthy()
     }
-    for (const d of a.duels) expect([-1, 0, 1]).toContain(d.kazanan)
+    for (const d of a.duels) expect([-1, 0, 1]).toContain(d.winner)
   })
 
   it('loading replaces the tables; ?demo=1 only seeds an empty database', async () => {

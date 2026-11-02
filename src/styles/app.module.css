@@ -1238,7 +1238,7 @@
 .segFull i {
   transform: scaleX(1);
 }
-.durum {
+.situation {
   position: absolute;
   top: 180px;
   left: 56px;
@@ -1651,7 +1651,7 @@
   color: var(--c);
   stroke-width: 3;
 }
-.fnOzet {
+.fnSummary {
   font-size: 13px;
   color: var(--ink-2);
   font-weight: 600;
@@ -1797,7 +1797,7 @@
   top: 352px;
   right: 56px;
 }
-.ana {
+.analysis {
   border-radius: 14px;
   background: var(--card);
   border: var(--border);
@@ -1805,7 +1805,7 @@
   padding: 20px 26px;
   height: 200px;
 }
-.anaText {
+.analysisText {
   margin-top: 10px;
   font-size: 17.5px;
   line-height: 1.55;

@@ -5,7 +5,7 @@ export const STORAGE_KEYS = {
   tutorialSeen: 'buildarena.tutorialSeen',
   soundOff: 'buildarena.soundOff',
   /** Last scenario played on this device; the crisis wheel skips it. */
-  lastScenario: 'buildarena.senaryo.son',
+  lastScenario: 'buildarena.lastScenario',
   /** Staff PIN lockout: { failures, lockedUntil }. */
   pinLock: 'buildarena.pinLock',
   /** This device's own staff PIN: { salt, hash } (never in the source code). */

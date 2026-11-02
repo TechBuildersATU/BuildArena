@@ -107,7 +107,7 @@ function CrisisWheel({ nick, onPicked }: { nick: string; onPicked: (s: Scenario)
             }
           >
             <div className={s.wtIcon}>
-              <Icon name={sc.ikon} />
+              <Icon name={sc.icon} />
             </div>
             <b>{shortName(sc)}</b>
             <small>{crisisName(sc)}</small>
@@ -145,7 +145,7 @@ function CrisisIntro({ scenario }: { scenario: Scenario }) {
     sfx.alarm()
     void (async () => {
       await sleep(dur(350), run.signal)
-      if (textRef.current) await typewrite(textRef.current, scenario.giris, dur(16), run.signal)
+      if (textRef.current) await typewrite(textRef.current, scenario.intro, dur(16), run.signal)
     })().catch(ignoreAbort)
     return () => run.abort()
   }, [scenario])
@@ -165,7 +165,7 @@ function CrisisIntro({ scenario }: { scenario: Scenario }) {
     })().catch(ignoreAbort)
   }
 
-  const [h, m] = scenario.saat.split(':')
+  const [h, m] = scenario.time.split(':')
   const alarm = (
     <>
       <span>
@@ -174,7 +174,7 @@ function CrisisIntro({ scenario }: { scenario: Scenario }) {
       </span>
       <span>
         <Icon name="triangle-alert" />
-        {upperTr(lowerTr(scenario.sistem))}
+        {upperTr(lowerTr(scenario.system))}
       </span>
     </>
   )
@@ -208,28 +208,28 @@ function CrisisIntro({ scenario }: { scenario: Scenario }) {
         <div className={s.clockChips}>
           <span className={s.chip}>
             <Icon name="map-pin" />
-            {scenario.yer}
+            {scenario.place}
           </span>
           <span className={s.chip}>
             <Icon name="users" />
-            {scenario.olcek}
+            {scenario.scale}
           </span>
         </div>
       </div>
       <div className={s.imain}>
         <div className={s.ibig}>
-          <Icon name={scenario.ikon} />
+          <Icon name={scenario.icon} />
         </div>
         <h1 className={s.introTitle} data-testid="crisis-title">
-          {scenario.baslik}
+          {scenario.title}
         </h1>
         <p className={s.tw} ref={textRef} data-testid="crisis-text" />
         <div className={s.eyebrow}>ETKİLENENLER</div>
         <div className={s.aud}>
-          {scenario.hedefKitle.map((a) => (
-            <span key={a.ad} className={s.chip}>
-              <Icon name={a.ikon} />
-              {a.ad}
+          {scenario.audience.map((a) => (
+            <span key={a.name} className={s.chip}>
+              <Icon name={a.icon} />
+              {a.name}
             </span>
           ))}
         </div>

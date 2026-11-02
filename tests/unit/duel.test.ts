@@ -23,31 +23,31 @@ const board = (box: string[] = []): PlayerBoard => ({
   box,
   hist: [],
   done: false,
-  kalan: null,
+  secondsLeft: null,
 })
 
 describe('duel data (document §12.4)', () => {
   it('every card and task passes its schema', () => {
-    for (const c of cardsRaw.kartlar) expect(CardSchema.safeParse(c).success).toBe(true)
-    for (const t of tasksRaw.gorevler) expect(TaskSchema.safeParse(t).success).toBe(true)
+    for (const c of cardsRaw.cards) expect(CardSchema.safeParse(c).success).toBe(true)
+    for (const t of tasksRaw.tasks) expect(TaskSchema.safeParse(t).success).toBe(true)
     expect(CARDS.length).toBeGreaterThanOrEqual(80)
     // the club's five tasks first (seeds and tests rely on their order), then ten campus tasks
     expect(TASKS.map((t) => t.id)).toEqual([
-      'hbys',
-      'magaza',
-      'kutuphane',
-      'yemekhane',
-      'kafe',
-      'ring',
-      'etkinlik',
-      'otopark',
-      'sinav',
-      'kayip',
-      'spor',
-      'camasir',
-      'derslik',
-      'kan',
-      'kariyer',
+      'hospital',
+      'store',
+      'library',
+      'cafeteria',
+      'cafe',
+      'campus-transit',
+      'events',
+      'parking',
+      'exam',
+      'lost-found',
+      'gym',
+      'laundry',
+      'classrooms',
+      'blood-drive',
+      'career',
     ])
     expect(new Set(TASKS.map((t) => t.no)).size).toBe(TASKS.length)
   })
@@ -57,10 +57,10 @@ describe('duel data (document §12.4)', () => {
       const cards = taskCards(t)
       expect(cards).toHaveLength(14)
       expect(new Set(cards).size).toBe(14)
-      expect(t.kritik.length + t.onemli.length + t.destek.length).toBe(8)
-      expect(t.tuzak).toHaveLength(6)
-      const required = new Set([...t.kritik, ...t.onemli, ...t.destek])
-      for (const b of t.birlesimler) for (const c of b.kartlar) expect(required.has(c)).toBe(true)
+      expect(t.critical.length + t.important.length + t.support.length).toBe(8)
+      expect(t.traps).toHaveLength(6)
+      const required = new Set([...t.critical, ...t.important, ...t.support])
+      for (const b of t.combos) for (const c of b.cards) expect(required.has(c)).toBe(true)
       // the best possible design is worth 100 with time left
       expect(scoreDuel(t, [...required], 90, 90).total).toBe(100)
     }
@@ -139,19 +139,19 @@ describe('screen isolation (document §13.5)', () => {
 })
 
 describe('duel jury (local, no AI)', () => {
-  const task = findTask('hbys')!
-  const required = [...task.kritik, ...task.onemli, ...task.destek]
+  const task = findTask('hospital')!
+  const required = [...task.critical, ...task.important, ...task.support]
 
   it('an empty box gets its own title and comment', () => {
     const s = scoreDuel(task, [], 90, 90)
     const j = duelJury(task, s, seeded(1))
-    expect(['Boş Ekran Sanatçısı', 'Sessiz Mimar']).toContain(j.lakap)
-    expect(j.yorum).toContain('boş bir hastane uygulamasıyla')
+    expect(['Boş Ekran Sanatçısı', 'Sessiz Mimar']).toContain(j.epithet)
+    expect(j.comment).toContain('boş bir hastane uygulamasıyla')
   })
 
   it('a trap collector is named after the trap', () => {
-    const s = scoreDuel(task, ['randevu', 'sepet', 'kampanya'], 10, 90)
-    expect(duelJury(task, s, seeded(1)).lakap).toBe('Sepet Koleksiyoncusu')
+    const s = scoreDuel(task, ['appointment', 'cart', 'promo-code'], 10, 90)
+    expect(duelJury(task, s, seeded(1)).epithet).toBe('Sepet Koleksiyoncusu')
   })
 
   it('a near-perfect design gets a top title; the same seed gives the same text', () => {
@@ -162,7 +162,7 @@ describe('duel jury (local, no AI)', () => {
       'Analiz Makinesi',
       'Product Owner Adayı',
       'Kusursuz Mimar',
-    ]).toContain(a.lakap)
+    ]).toContain(a.epithet)
     expect(duelJury(task, s, seeded(3))).toEqual(a)
   })
 })

@@ -32,27 +32,27 @@ export interface ScenarioPick {
   /** null when the step's time ran out */
   optionIndex: number | null
   /** the chosen option's quality, 0–20 (0 on timeout) */
-  puan: number
+  points: number
   /** seconds used for this decision */
-  sure: number
+  seconds: number
   /** the step's time limit in seconds */
   limit: number
 }
 
 export function stepWeight(step: ScenarioStep): number {
-  const runnerUp = step.secenekler.map((o) => o.puan).sort((a, b) => b - a)[1] ?? 0
+  const runnerUp = step.options.map((o) => o.points).sort((a, b) => b - a)[1] ?? 0
   return (
     1 +
     SCENARIO_RULES.distractor * (runnerUp / 20) +
-    (step.seviye === 'genel' ? SCENARIO_RULES.general : 0)
+    (step.level === 'general' ? SCENARIO_RULES.general : 0)
   )
 }
 
-export type Difficulty = 'kolay' | 'orta' | 'zor'
+export type Difficulty = 'easy' | 'medium' | 'hard'
 
 export function difficultyOf(step: ScenarioStep): Difficulty {
   const w = stepWeight(step)
-  return w >= 1.4 ? 'zor' : w >= 1.25 ? 'orta' : 'kolay'
+  return w >= 1.4 ? 'hard' : w >= 1.25 ? 'medium' : 'easy'
 }
 
 /** Splits `total` by weight into integers that add up exactly (largest remainder method). */
@@ -68,17 +68,17 @@ export function apportion(weights: readonly number[], total = 100): number[] {
 
 /** Maximum points of each step; they add up to 100. */
 export function stepMaxPoints(scenario: Scenario): number[] {
-  return apportion(scenario.adimlar.map(stepWeight))
+  return apportion(scenario.steps.map(stepWeight))
 }
 
-export function accuracyCredit(puan: number): number {
-  return Math.pow(clamp01(puan / 20), SCENARIO_RULES.accuracyCurve)
+export function accuracyCredit(points: number): number {
+  return Math.pow(clamp01(points / 20), SCENARIO_RULES.accuracyCurve)
 }
 
-export function speedCredit(sure: number, limit: number): number {
+export function speedCredit(seconds: number, limit: number): number {
   const grace = SCENARIO_RULES.readingGraceSec
   if (limit <= grace) return 1
-  return clamp01(1 - Math.max(0, sure - grace) / (limit - grace))
+  return clamp01(1 - Math.max(0, seconds - grace) / (limit - grace))
 }
 
 export interface StepScore {
@@ -100,34 +100,34 @@ export function scoreScenario(scenario: Scenario, picks: readonly ScenarioPick[]
   const maxes = stepMaxPoints(scenario)
   const steps = picks.map<StepScore>((p) => {
     const max = maxes[p.stepIndex]
-    const accuracy = p.optionIndex === null ? 0 : accuracyCredit(p.puan)
-    const speed = p.optionIndex === null ? 0 : speedCredit(p.sure, p.limit)
+    const accuracy = p.optionIndex === null ? 0 : accuracyCredit(p.points)
+    const speed = p.optionIndex === null ? 0 : speedCredit(p.seconds, p.limit)
     const share = SCENARIO_RULES.speedShare
     return {
       max,
       points: Math.round(max * accuracy * (1 - share + share * speed)),
       accuracy,
       speed,
-      difficulty: difficultyOf(scenario.adimlar[p.stepIndex]),
+      difficulty: difficultyOf(scenario.steps[p.stepIndex]),
     }
   })
   return {
     total: steps.reduce((sum, s) => sum + s.points, 0),
     steps,
-    bestCount: picks.filter((p) => p.puan === 20).length,
+    bestCount: picks.filter((p) => p.points === 20).length,
   }
 }
 
-export function totalTime(picks: readonly { sure: number }[]): number {
-  return Math.round(picks.reduce((sum, p) => sum + p.sure, 0))
+export function totalTime(picks: readonly { seconds: number }[]): number {
+  return Math.round(picks.reduce((sum, p) => sum + p.seconds, 0))
 }
 
 export function titleFor(
   score: number,
-  bands: readonly TitleBand[] = SCENARIO_BANK.unvanlar,
+  bands: readonly TitleBand[] = SCENARIO_BANK.titles,
 ): string {
   const band = bands.find((b) => score >= b.min && score <= b.max)
-  return band ? band.ad : bands[bands.length - 1].ad
+  return band ? band.name : bands[bands.length - 1].name
 }
 
 /** "Stajyer (ama umut var!)" → "Stajyer" for tight spaces (podium, table). */
@@ -135,13 +135,13 @@ export function shortTitle(title: string): string {
   return title.replace(' (ama umut var!)', '')
 }
 
-export type StepStatus = 'iyi' | 'orta' | 'zayif'
+export type StepStatus = 'good' | 'average' | 'weak'
 
 /** Final-screen status of a decision's quality (scenario doc §6.3): 16–20 good, 8–15 average, 0–7 weak. */
-export function stepStatus(puan: number): StepStatus {
-  if (puan >= 16) return 'iyi'
-  if (puan >= 8) return 'orta'
-  return 'zayif'
+export function stepStatus(points: number): StepStatus {
+  if (points >= 16) return 'good'
+  if (points >= 8) return 'average'
+  return 'weak'
 }
 
 // ================================================================ leaderboard
@@ -150,14 +150,16 @@ export interface RankedEntry {
   id: string
   score: number
   /** total decision time in seconds */
-  sure: number
+  seconds: number
   /** when the game was played (ms timestamp) */
-  zaman: number
+  playedAt: number
 }
 
 /** Score high→low, then shorter total time, then earlier game (document §8.1). */
 export function rankEntries<T extends RankedEntry>(list: readonly T[]): T[] {
-  return [...list].sort((a, b) => b.score - a.score || a.sure - b.sure || a.zaman - b.zaman)
+  return [...list].sort(
+    (a, b) => b.score - a.score || a.seconds - b.seconds || a.playedAt - b.playedAt,
+  )
 }
 
 /** 1-based rank of `id`, or 0 when it isn't in the list. */
@@ -169,14 +171,14 @@ export function rankOf(list: readonly RankedEntry[], id: string): number {
  * Day's top 3 for social media (scenario doc §8.1): the three best players who gave consent,
  * plus the players ranked above the third of them who were skipped for lack of consent.
  */
-export function shareTop<T extends RankedEntry & { izin: boolean }>(
+export function shareTop<T extends RankedEntry & { consent: boolean }>(
   list: readonly T[],
 ): { top: T[]; skipped: T[] } {
   const ranked = rankEntries(list)
-  const top = ranked.filter((e) => e.izin).slice(0, 3)
+  const top = ranked.filter((e) => e.consent).slice(0, 3)
   if (top.length === 0) return { top, skipped: [] }
   const lastIndex = ranked.indexOf(top[top.length - 1])
-  return { top, skipped: ranked.slice(0, lastIndex + 1).filter((e) => !e.izin) }
+  return { top, skipped: ranked.slice(0, lastIndex + 1).filter((e) => !e.consent) }
 }
 
 // ================================================================ duel mode (8 slots, 14 cards)
@@ -195,80 +197,80 @@ export const DUEL_RULES = {
   combos: 15,
   speed: 10,
   trapPenalty: 5,
-  weights: { kritik: 3, onemli: 2, destek: 1 },
+  weights: { critical: 3, important: 2, support: 1 },
 } as const
 
 export interface DuelTaskLike {
-  kritik: readonly string[]
-  onemli: readonly string[]
-  destek: readonly string[]
-  tuzak: readonly string[]
-  birlesimler: readonly { ad: string; kartlar: readonly string[] }[]
+  critical: readonly string[]
+  important: readonly string[]
+  support: readonly string[]
+  traps: readonly string[]
+  combos: readonly { name: string; cards: readonly string[] }[]
 }
 
 export interface DuelScore {
   /** weighted coverage, 0–55 */
-  uyum: number
+  coverage: number
   /** precision/recall F1, 0–20 */
-  isabet: number
+  accuracy: number
   /** combos, 0–15 */
-  birlesim: number
+  combo: number
   /** speed bonus, 0–10 */
-  hiz: number
+  speed: number
   /** trap penalty, ≤ 0 */
-  ceza: number
+  penalty: number
   total: number
   traps: string[]
-  done: { ad: string; kartlar: readonly string[] }[]
+  done: { name: string; cards: readonly string[] }[]
   missing: string[]
-  agirlik: number
-  kalan: number
+  earnedWeight: number
+  secondsLeft: number
   n: number
 }
 
 export function scoreDuel(
   task: DuelTaskLike,
   box: readonly string[],
-  kalan: number,
+  secondsLeft: number,
   dur: number,
 ): DuelScore {
   const W = DUEL_RULES.weights
   const weight = new Map<string, number>([
-    ...task.kritik.map((c) => [c, W.kritik] as const),
-    ...task.onemli.map((c) => [c, W.onemli] as const),
-    ...task.destek.map((c) => [c, W.destek] as const),
+    ...task.critical.map((c) => [c, W.critical] as const),
+    ...task.important.map((c) => [c, W.important] as const),
+    ...task.support.map((c) => [c, W.support] as const),
   ])
   const required = weight.size
   const maxWeight = [...weight.values()].reduce((a, b) => a + b, 0)
   const set = new Set(box)
   const correct = box.filter((c) => weight.has(c))
-  const traps = box.filter((c) => task.tuzak.includes(c))
-  const agirlik = correct.reduce((a, c) => a + (weight.get(c) ?? 0), 0)
+  const traps = box.filter((c) => task.traps.includes(c))
+  const earnedWeight = correct.reduce((a, c) => a + (weight.get(c) ?? 0), 0)
 
-  const uyum = Math.round((DUEL_RULES.coverage * agirlik) / maxWeight)
+  const coverage = Math.round((DUEL_RULES.coverage * earnedWeight) / maxWeight)
   const precision = box.length ? correct.length / box.length : 0
   const recall = correct.length / required
   const f1 = precision + recall ? (2 * precision * recall) / (precision + recall) : 0
-  const isabet = Math.round(DUEL_RULES.precision * f1)
-  const done = task.birlesimler.filter((b) => b.kartlar.every((c) => set.has(c)))
-  const birlesim = Math.round((DUEL_RULES.combos * done.length) / task.birlesimler.length)
-  const quality = (uyum + isabet) / (DUEL_RULES.coverage + DUEL_RULES.precision)
-  const hiz = Math.round(DUEL_RULES.speed * clamp01(kalan / dur) * quality)
-  const ceza = 0 - DUEL_RULES.trapPenalty * traps.length // 0, not -0, for an empty box
-  const missing = [...task.kritik, ...task.onemli].filter((c) => !set.has(c))
+  const accuracy = Math.round(DUEL_RULES.precision * f1)
+  const done = task.combos.filter((b) => b.cards.every((c) => set.has(c)))
+  const combo = Math.round((DUEL_RULES.combos * done.length) / task.combos.length)
+  const quality = (coverage + accuracy) / (DUEL_RULES.coverage + DUEL_RULES.precision)
+  const speed = Math.round(DUEL_RULES.speed * clamp01(secondsLeft / dur) * quality)
+  const penalty = 0 - DUEL_RULES.trapPenalty * traps.length // 0, not -0, for an empty box
+  const missing = [...task.critical, ...task.important].filter((c) => !set.has(c))
 
   return {
-    uyum,
-    isabet,
-    birlesim,
-    hiz,
-    ceza,
-    total: Math.max(0, uyum + isabet + birlesim + hiz + ceza),
+    coverage,
+    accuracy,
+    combo,
+    speed,
+    penalty,
+    total: Math.max(0, coverage + accuracy + combo + speed + penalty),
     traps,
     done,
     missing,
-    agirlik,
-    kalan,
+    earnedWeight,
+    secondsLeft,
     n: box.length,
   }
 }
@@ -281,6 +283,6 @@ export function duelWinner(r: readonly [DuelScore, DuelScore]): 0 | 1 | -1 {
   const [a, b] = r
   if (a.total !== b.total) return a.total > b.total ? 0 : 1
   if (a.traps.length !== b.traps.length) return a.traps.length < b.traps.length ? 0 : 1
-  if (a.total > 0 && a.kalan !== b.kalan) return a.kalan > b.kalan ? 0 : 1
+  if (a.total > 0 && a.secondsLeft !== b.secondsLeft) return a.secondsLeft > b.secondsLeft ? 0 : 1
   return -1
 }

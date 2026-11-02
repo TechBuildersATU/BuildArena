@@ -20,8 +20,8 @@ const SHOWN_MAX = 40
 
 export interface PlayerResult extends DuelScore {
   box: string[]
-  lakap: string
-  yorum: string
+  epithet: string
+  comment: string
 }
 
 export interface DuelResult {
@@ -49,12 +49,18 @@ interface DuelState {
   toggleReady: (p: 0 | 1) => void
   start: (duration: number) => void
   setBoard: (p: 0 | 1, board: PlayerBoard) => void
-  finishSide: (p: 0 | 1, kalan: number) => void
+  finishSide: (p: 0 | 1, secondsLeft: number) => void
   /** Scores both players and saves the duel; idempotent. */
   end: () => DuelResult
 }
 
-const emptyBoard = (): PlayerBoard => ({ pool: [], box: [], hist: [], done: false, kalan: null })
+const emptyBoard = (): PlayerBoard => ({
+  pool: [],
+  box: [],
+  hist: [],
+  done: false,
+  secondsLeft: null,
+})
 
 let namePool: readonly string[] | undefined
 
@@ -176,10 +182,10 @@ export const useDuelStore = create<DuelState>((set, get) => ({
       return { players }
     }),
 
-  finishSide: (p, kalan) => {
+  finishSide: (p, secondsLeft) => {
     const board = get().players[p]
     if (board.done || get().phase !== 'play') return
-    get().setBoard(p, { ...board, done: true, kalan })
+    get().setBoard(p, { ...board, done: true, secondsLeft })
   },
 
   end: () => {
@@ -189,27 +195,27 @@ export const useDuelStore = create<DuelState>((set, get) => ({
     const task = findTask(taskId)
     if (!task) throw new Error('end() without a task')
     const r = players.map((pl) => {
-      const s = scoreDuel(task, pl.box, pl.kalan ?? 0, duration)
+      const s = scoreDuel(task, pl.box, pl.secondsLeft ?? 0, duration)
       return { ...s, box: [...pl.box], ...duelJury(task, s) }
     }) as [PlayerResult, PlayerResult]
     const win = duelWinner(r)
     const record: DuelRecord = {
       id: newId('d'),
-      zaman: Date.now(),
-      gorev: task.id,
-      kazanan: win,
+      playedAt: Date.now(),
+      taskId: task.id,
+      winner: win,
       p: r.map((x, i) => ({
         nick: names[i],
         total: x.total,
-        uyum: x.uyum,
-        isabet: x.isabet,
-        birlesim: x.birlesim,
-        hiz: x.hiz,
-        ceza: x.ceza,
-        kalan: x.kalan,
+        coverage: x.coverage,
+        accuracy: x.accuracy,
+        combo: x.combo,
+        speed: x.speed,
+        penalty: x.penalty,
+        secondsLeft: x.secondsLeft,
         box: x.box,
-        tuzak: x.traps.length,
-        lakap: x.lakap,
+        trapCount: x.traps.length,
+        epithet: x.epithet,
       })) as DuelRecord['p'],
     }
     const result: DuelResult = { r, win, record }

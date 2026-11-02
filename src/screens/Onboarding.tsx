@@ -20,7 +20,7 @@ import app from '@/styles/app.module.css'
 import h from '@/styles/home.module.css'
 import { cn } from '@/utils/cn'
 
-const SLIDES = tutorial.slaytlar
+const SLIDES = tutorial.slides
 const SWIPE_PX = 60
 /** how long the slide that was just left stays on screen while it slides out (ms) */
 const LEAVE_MS = 460
@@ -38,7 +38,7 @@ export function Onboarding() {
   const [held, setHeld] = useState(false)
   const swipeX = useRef<number | null>(null)
   /** ms left on the current slide; kept while the slide is held */
-  const remaining = useRef(SLIDES[0].sure * 1000)
+  const remaining = useRef(SLIDES[0].seconds * 1000)
   const autoAdvance = loop || !prefersReducedMotion()
 
   const finish = () => {
@@ -71,7 +71,7 @@ export function Onboarding() {
     else if (loop) go(0, true)
   })
   useEffect(() => {
-    remaining.current = SLIDES[index].sure * 1000
+    remaining.current = SLIDES[index].seconds * 1000
   }, [index])
   useEffect(() => {
     if (!autoAdvance || held) return
@@ -117,10 +117,10 @@ export function Onboarding() {
         <div className={h.segs}>
           {SLIDES.map((sl, i) => (
             <button
-              key={sl.etiket}
+              key={sl.tag}
               type="button"
               className={cn(h.seg, i < index && h.segDone, i === index && autoAdvance && h.segCur)}
-              style={{ '--dur': `${sl.sure}s` } as CSSProperties}
+              style={{ '--dur': `${sl.seconds}s` } as CSSProperties}
               aria-label={`Slayt ${i + 1}`}
               aria-current={i === index}
               data-testid={`tutorial-seg-${i + 1}`}
@@ -143,7 +143,7 @@ export function Onboarding() {
           const out = leaving?.i === i
           return (
             <div
-              key={sl.etiket}
+              key={sl.tag}
               className={cn(
                 h.tslide,
                 (i === index || out) && h.tslideOn,
@@ -157,12 +157,12 @@ export function Onboarding() {
               <div className={h.tvis}>{(i === index || out) && <SlideVisual index={i} />}</div>
               <div className={h.ttxt}>
                 <div className={h.eyebrow}>
-                  {i + 1} / 5 · {sl.etiket}
+                  {i + 1} / 5 · {sl.tag}
                 </div>
                 <h2>
-                  {sl.baslik} <span>{sl.vurgu}</span>
+                  {sl.title} <span>{sl.highlight}</span>
                 </h2>
-                <p>{sl.metin}</p>
+                <p>{sl.text}</p>
               </div>
             </div>
           )
@@ -185,7 +185,7 @@ export function Onboarding() {
         </button>
         <div className={h.tdots} data-testid="tutorial-counter">
           {SLIDES.map((sl, i) => (
-            <i key={sl.etiket} className={cn(i === index && h.tdotOn)} />
+            <i key={sl.tag} className={cn(i === index && h.tdotOn)} />
           ))}
           <span>
             {index + 1} / {SLIDES.length}

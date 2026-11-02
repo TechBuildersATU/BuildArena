@@ -78,7 +78,7 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
     void (async () => {
       locked.current = true
       if (situationRef.current) {
-        await typewrite(situationRef.current, scenario.adimlar[step].durum, dur(14), run.signal)
+        await typewrite(situationRef.current, scenario.steps[step].situation, dur(14), run.signal)
       }
       if (run.signal.aborted) return
       setQuestionIn(true)
@@ -107,7 +107,7 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
     sheetNext.current = null
     setSheet((sh) => sh && { ...sh, on: false })
     await sleep(dur(300), signal)
-    if (step < scenario.adimlar.length - 1) {
+    if (step < scenario.steps.length - 1) {
       setQuestionIn(false)
       setOptionsIn(false)
       setSelected(null)
@@ -121,7 +121,7 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
   }
 
   const record = (pick: ScenarioPick) => {
-    setFrozenLeft(Math.max(0, stepSec - pick.sure))
+    setFrozenLeft(Math.max(0, stepSec - pick.seconds))
     setStartedAt(null)
     addPick(pick)
   }
@@ -130,8 +130,14 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
     if (locked.current) return
     locked.current = true
     const used = startedAt === null ? 0 : Math.min(stepSec, (performance.now() - startedAt) / 1000)
-    const option = scenario.adimlar[step].secenekler[k]
-    record({ stepIndex: step, optionIndex: k, puan: option.puan, sure: used, limit: stepSec })
+    const option = scenario.steps[step].options[k]
+    record({
+      stepIndex: step,
+      optionIndex: k,
+      points: option.points,
+      seconds: used,
+      limit: stepSec,
+    })
     setSelected(k)
     sfx.pick()
     void (async () => {
@@ -141,14 +147,14 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
       if (from && to) await flyButterfly(from, to)
       setRevealed(step + 1)
       setJustIndex(step)
-      await showEffect(option.etki, false)
+      await showEffect(option.effect, false)
     })().catch(ignoreAbort)
   }
 
   const onTimeout = () => {
     if (locked.current) return
     locked.current = true
-    record({ stepIndex: step, optionIndex: null, puan: 0, sure: stepSec, limit: stepSec })
+    record({ stepIndex: step, optionIndex: null, points: 0, seconds: stepSec, limit: stepSec })
     setTimedOut(true)
     sfx.timeout()
     setRevealed(step + 1)
@@ -172,8 +178,8 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  const current = scenario.adimlar[step]
-  const general = current.seviye === 'genel'
+  const current = scenario.steps[step]
+  const general = current.level === 'general'
   const difficulty = difficultyOf(current)
   const worth = stepMaxPoints(scenario)[step]
 
@@ -189,7 +195,7 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
         <Logo />
         <div className={s.gttl}>
           <small>SENARYO</small>
-          <b>{scenario.baslik}</b>
+          <b>{scenario.title}</b>
         </div>
         <div className={s.barR}>
           <span className={s.chip} data-testid="step-indicator">
@@ -209,51 +215,51 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
       </header>
 
       <div className={s.chain} data-testid="chain">
-        {scenario.adimlar.map((a, i) => {
+        {scenario.steps.map((a, i) => {
           const done = i < revealed
           const cur = !done && i === step
           const p = picks[i]
           const icon = p
             ? p.optionIndex === null
               ? 'timer-off'
-              : a.secenekler[p.optionIndex].ikon
+              : a.options[p.optionIndex].icon
             : null
           return (
             <ChainNode
               key={a.no}
               index={i}
-              label={done || cur ? capTr(a.konu) : `Adım ${i + 1}`}
+              label={done || cur ? capTr(a.topic) : `Adım ${i + 1}`}
               state={done ? 'done' : cur ? 'cur' : 'todo'}
               just={i === justIndex}
               icon={done ? icon : null}
-              last={i === scenario.adimlar.length - 1}
+              last={i === scenario.steps.length - 1}
             />
           )
         })}
       </div>
 
-      <div className={s.durum} data-testid="situation-card">
+      <div className={s.situation} data-testid="situation-card">
         <div className={s.eyebrow}>
           <Icon name={general ? 'globe' : 'search'} />
           DURUM · ADIM {current.no} · {general ? 'GENEL KARAR' : 'DETAY'}
         </div>
         <span
-          className={cn(s.diff, difficulty === 'zor' && s.diffHard)}
+          className={cn(s.diff, difficulty === 'hard' && s.diffHard)}
           data-testid="step-worth"
           data-difficulty={difficulty}
         >
-          <Icon name={difficulty === 'zor' ? 'flame' : 'gauge'} />
-          {difficulty === 'zor' ? 'Zor karar' : difficulty === 'orta' ? 'Orta' : 'Kolay'} · {worth}{' '}
-          puan
+          <Icon name={difficulty === 'hard' ? 'flame' : 'gauge'} />
+          {difficulty === 'hard' ? 'Zor karar' : difficulty === 'medium' ? 'Orta' : 'Kolay'} ·{' '}
+          {worth} puan
         </span>
         <p className={s.dt} ref={situationRef} data-testid="situation" />
         <p className={cn(s.dq, questionIn && s.dqIn)} data-testid="question">
-          {current.soru}
+          {current.question}
         </p>
       </div>
 
       <div className={cn(s.opts, optionsIn && s.optsIn)}>
-        {current.secenekler.map((o, k) => (
+        {current.options.map((o, k) => (
           <button
             key={`${step}-${o.id}`}
             type="button"
@@ -271,9 +277,9 @@ function DecisionSteps({ nick, scenario }: { nick: string; scenario: Scenario })
           >
             <span className={s.key}>{LETTERS[k]}</span>
             <span className={s.oic} data-icon>
-              <Icon name={o.ikon} />
+              <Icon name={o.icon} />
             </span>
-            <span className={s.otx}>{o.metin}</span>
+            <span className={s.otx}>{o.text}</span>
             <span className={s.ock}>
               <Icon name="check" />
             </span>

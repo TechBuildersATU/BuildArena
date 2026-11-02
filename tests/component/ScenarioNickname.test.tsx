@@ -82,11 +82,11 @@ describe('scenario nickname screen', () => {
       id: 'x',
       nick: 'Korkut',
       score: 50,
-      unvan: 'Junior Analist',
-      senaryo: 'kafe',
-      sure: 60,
-      zaman: 1,
-      izin: true,
+      title: 'Junior Analist',
+      scenarioId: 'cafe',
+      seconds: 60,
+      playedAt: 1,
+      consent: true,
     })
     const router = await openNickname()
     type('Korkut')
@@ -105,7 +105,7 @@ describe('scenario nickname screen', () => {
     expect(consent).toHaveAttribute('aria-checked', 'false')
     type('Ali')
     await userEvent.click(screen.getByTestId('scenario-start'))
-    expect(useScenarioStore.getState()).toMatchObject({ nick: 'Ali', izin: false })
+    expect(useScenarioStore.getState()).toMatchObject({ nick: 'Ali', consent: false })
   })
 
   const field = () => screen.getByTestId('nick-field')
@@ -138,11 +138,11 @@ describe('scenario nickname screen', () => {
       id: 'y',
       nick: 'Turbo Tilki',
       score: 40,
-      unvan: 'Stajyer',
-      senaryo: 'kafe',
-      sure: 60,
-      zaman: 1,
-      izin: true,
+      title: 'Stajyer',
+      scenarioId: 'cafe',
+      seconds: 60,
+      playedAt: 1,
+      consent: true,
     })
     await openNickname()
     for (let i = 0; i < 5; i++) {

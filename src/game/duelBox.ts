@@ -11,7 +11,7 @@ export interface PlayerBoard {
   hist: string[][]
   done: boolean
   /** whole seconds left when the player finished (0 if the time ran out) */
-  kalan: number | null
+  secondsLeft: number | null
 }
 
 function remember(p: PlayerBoard): string[][] {

@@ -37,7 +37,20 @@ export const DEFAULT_SETTINGS: Settings = {
 export const DUEL_SECONDS = [45, 60, 90] as const
 export const STEP_SECONDS = [15, 20, 25] as const
 
-const KEY = 'buildarena.ayarlar.v1'
+const KEY = 'buildarena.settings.v1'
+/** where the first booth builds kept the settings (Turkish key); moved to KEY on first load */
+const LEGACY_KEY = 'buildarena.ayarlar.v1'
+
+function readSaved(): string | null {
+  const saved = readString(KEY)
+  if (saved !== null) return saved
+  const legacy = readString(LEGACY_KEY)
+  if (legacy !== null) {
+    writeString(KEY, legacy)
+    writeString(LEGACY_KEY, null)
+  }
+  return legacy
+}
 
 /** A whole percentage 0–100; anything else falls back to the default. */
 export function clampVolume(v: unknown): number {
@@ -48,7 +61,7 @@ export function clampVolume(v: unknown): number {
 
 function load(): Settings {
   try {
-    const saved = JSON.parse(readString(KEY) ?? '{}') as Partial<Settings>
+    const saved = JSON.parse(readSaved() ?? '{}') as Partial<Settings>
     const merged = { ...DEFAULT_SETTINGS, ...saved }
     if (!DUEL_SECONDS.includes(merged.duelSec as 60)) merged.duelSec = DEFAULT_SETTINGS.duelSec
     if (!STEP_SECONDS.includes(merged.stepSec as 20)) merged.stepSec = DEFAULT_SETTINGS.stepSec

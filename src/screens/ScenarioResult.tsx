@@ -28,9 +28,9 @@ import { capTr, formatDuration } from '@/utils/text'
 
 const RING_C = 540.35 // 2π × 86
 const STATUS: Record<StepStatus, { cls: string; label: string; icon: string }> = {
-  iyi: { cls: s.sOk, label: 'İyi', icon: 'check' },
-  orta: { cls: s.sMid, label: 'Orta', icon: 'minus' },
-  zayif: { cls: s.sBad, label: 'Zayıf', icon: 'x' },
+  good: { cls: s.sOk, label: 'İyi', icon: 'check' },
+  average: { cls: s.sMid, label: 'Orta', icon: 'minus' },
+  weak: { cls: s.sBad, label: 'Zayıf', icon: 'x' },
 }
 
 // Scenario 5 · final: decision chain, score, title, jury analysis, leaderboard rank (§3.6, §6).
@@ -39,7 +39,7 @@ export function ScenarioResult() {
   const picks = useScenarioStore((st) => st.picks)
   const scenario = findScenario(useScenarioStore((st) => st.scenarioId))
 
-  if (!nick || !scenario || picks.length < scenario.adimlar.length) {
+  if (!nick || !scenario || picks.length < scenario.steps.length) {
     return <Navigate to={ROUTES.scenarioNickname} replace />
   }
   return <Final nick={nick} scenario={scenario} picks={picks} />
@@ -55,7 +55,7 @@ function Final({ nick, scenario, picks }: FinalProps) {
   const navigate = useNavigate()
   const finish = useScenarioStore((st) => st.finish)
   const reset = useScenarioStore((st) => st.reset)
-  const izin = useScenarioStore((st) => st.izin)
+  const consent = useScenarioStore((st) => st.consent)
 
   const { total, steps, bestCount } = scoreScenario(scenario, picks)
   const title = titleFor(total)
@@ -68,7 +68,7 @@ function Final({ nick, scenario, picks }: FinalProps) {
 
   const arcRef = useRef<SVGCircleElement>(null)
   const numRef = useRef<HTMLElement>(null)
-  const anaRef = useRef<HTMLParagraphElement>(null)
+  const analysisRef = useRef<HTMLParagraphElement>(null)
   const rankRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -118,8 +118,8 @@ function Final({ nick, scenario, picks }: FinalProps) {
         sfx.fanfare()
       }
       await sleep(dur(450), signal)
-      if (anaRef.current)
-        void typewrite(anaRef.current, juryAnalysis(scenario, picks, total), dur(16), signal)
+      if (analysisRef.current)
+        void typewrite(analysisRef.current, juryAnalysis(scenario, picks, total), dur(16), signal)
 
       // the rank ticks up from the bottom of today's table to the real place
       const from = Math.max(myRank, list.length)
@@ -174,7 +174,7 @@ function Final({ nick, scenario, picks }: FinalProps) {
         <Logo />
         <div className={s.gttl}>
           <small>KARAR ZİNCİRİ</small>
-          <b>{scenario.baslik}</b>
+          <b>{scenario.title}</b>
         </div>
         <div className={s.barR}>
           {/* up here, not in the bottom row: four buttons there would cover the step scores */}
@@ -194,32 +194,32 @@ function Final({ nick, scenario, picks }: FinalProps) {
           <line x1={X(0)} y1="10" x2={X(4)} y2="10" />
         </svg>
         {picks.map((p, i) => {
-          const step = scenario.adimlar[p.stepIndex]
-          const option = p.optionIndex === null ? null : step.secenekler[p.optionIndex]
-          const st = STATUS[stepStatus(p.puan)]
+          const step = scenario.steps[p.stepIndex]
+          const option = p.optionIndex === null ? null : step.options[p.optionIndex]
+          const st = STATUS[stepStatus(p.points)]
           return (
             <div
               key={step.no}
               className={cn(s.fn, st.cls)}
               style={{ left: X(i), '--i': i } as CSSProperties}
               data-testid={`final-node-${i + 1}`}
-              data-status={stepStatus(p.puan)}
+              data-status={stepStatus(p.points)}
             >
               <div className={s.fdot}>
-                <Icon name={option ? option.ikon : 'timer-off'} />
+                <Icon name={option ? option.icon : 'timer-off'} />
                 <span className={s.fb}>
                   <Icon name={st.icon} />
                 </span>
               </div>
               <small className={s.fnLevel}>
-                ADIM {i + 1} · {step.seviye === 'genel' ? 'GENEL' : 'DETAY'}
+                ADIM {i + 1} · {step.level === 'general' ? 'GENEL' : 'DETAY'}
               </small>
-              <b className={s.fnText}>{option ? option.metin : 'Süre doldu'}</b>
+              <b className={s.fnText}>{option ? option.text : 'Süre doldu'}</b>
               <em className={s.pill}>
                 <Icon name={st.icon} />
                 {st.label}
               </em>
-              <p className={s.fnOzet}>{option ? option.ozet : 'Karar yok'}</p>
+              <p className={s.fnSummary}>{option ? option.summary : 'Karar yok'}</p>
             </div>
           )
         })}
@@ -282,13 +282,13 @@ function Final({ nick, scenario, picks }: FinalProps) {
         {picks.map((p, i) => (
           <div
             key={p.stepIndex}
-            className={cn(s.fbar, STATUS[stepStatus(p.puan)].cls)}
+            className={cn(s.fbar, STATUS[stepStatus(p.points)].cls)}
             data-testid={`step-bar-${i + 1}`}
             data-points={steps[i].points}
             data-max={steps[i].max}
           >
             <span>
-              {i + 1} · {capTr(scenario.adimlar[p.stepIndex].konu)}
+              {i + 1} · {capTr(scenario.steps[p.stepIndex].topic)}
             </span>
             <div className={s.fbarTrack}>
               <i
@@ -309,12 +309,12 @@ function Final({ nick, scenario, picks }: FinalProps) {
       </div>
 
       <div className={s.fside}>
-        <div className={s.ana}>
+        <div className={s.analysis}>
           <div className={s.eyebrow}>
             <Icon name="message-circle" />
             JÜRİ ANALİZİ
           </div>
-          <p className={s.anaText} ref={anaRef} data-testid="result-analysis" />
+          <p className={s.analysisText} ref={analysisRef} data-testid="result-analysis" />
         </div>
         <div className={s.rank}>
           <div className={s.rankNum} ref={rankRef} data-testid="result-rank" data-rank={rank?.rank}>
@@ -330,8 +330,8 @@ function Final({ nick, scenario, picks }: FinalProps) {
             </span>
           </div>
           <span className={s.chip} data-testid="result-consent">
-            <Icon name={izin ? 'megaphone' : 'eye-off'} />
-            {izin ? 'Paylaşım izni var' : 'Paylaşım izni yok'}
+            <Icon name={consent ? 'megaphone' : 'eye-off'} />
+            {consent ? 'Paylaşım izni var' : 'Paylaşım izni yok'}
           </span>
         </div>
       </div>

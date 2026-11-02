@@ -114,16 +114,16 @@ export function DuelIntro() {
           GÖREV #{task.no} · ORTA
         </span>
         <div className={d.bigIc}>
-          <Icon name={task.ikon} />
+          <Icon name={task.icon} />
         </div>
-        <h1 data-testid="task-title">{task.baslik}</h1>
-        <p className={d.desc}>{task.aciklama}</p>
+        <h1 data-testid="task-title">{task.title}</h1>
+        <p className={d.desc}>{task.description}</p>
         <div className={d.lbl2}>HEDEF KİTLE</div>
         <div className={d.aud}>
-          {task.hedefKitle.map((a) => (
-            <div key={a.ad} className={d.audItem}>
-              <Icon name={a.ikon} />
-              {a.ad}
+          {task.audience.map((a) => (
+            <div key={a.name} className={d.audItem}>
+              <Icon name={a.icon} />
+              {a.name}
             </div>
           ))}
         </div>
