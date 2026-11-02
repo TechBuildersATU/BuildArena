@@ -6,14 +6,14 @@ import { findTask, taskCards, TASKS } from '@/data/duelBank'
 import nicknames from '@/data/nicknames.json'
 import { newId, saveDuel, type DuelRecord } from '@/db/database'
 import type { PlayerBoard } from '@/game/duelBox'
-import { GENERATED_NICKNAMES } from '@/game/nickname'
+import { generatedNicknames } from '@/game/nickname'
 import { gameRandom, pickOne, shuffle } from '@/game/random'
 import { duelWinner, scoreDuel, type DuelScore } from '@/game/scoring'
 import { lowerTr } from '@/utils/text'
 
 // One duel: task card → both "Ready" → 3-2-1 → play → result (document §6, full prototype §4).
 
-const RECENT_KEY = 'buildarena.duello.sonAdlar'
+const RECENT_KEY = 'buildarena.duel.recentNames'
 const RECENT_MAX = 50
 /** how many names shown on one task card the dice avoids repeating */
 const SHOWN_MAX = 40
@@ -56,10 +56,13 @@ interface DuelState {
 
 const emptyBoard = (): PlayerBoard => ({ pool: [], box: [], hist: [], done: false, kalan: null })
 
+let namePool: readonly string[] | undefined
+
 /** Funny duel names: the curated lists first, plus the generated "Tech Animal" pool. */
-const NAME_POOL = [
-  ...new Set([...nicknames.duello, ...nicknames.senaryoZar, ...GENERATED_NICKNAMES]),
-]
+function duelNamePool(): readonly string[] {
+  namePool ??= [...new Set([...nicknames.duel, ...nicknames.scenarioDice, ...generatedNicknames()])]
+  return namePool
+}
 
 function recentNames(): string[] {
   try {
@@ -79,11 +82,11 @@ export function pickDuelNames(
   // half the time from the hand-written funny names, otherwise from the whole pool
   const draw = () => {
     for (let i = 0; i < 50; i++) {
-      const source = random() < 0.5 ? nicknames.duello : NAME_POOL
+      const source = random() < 0.5 ? nicknames.duel : duelNamePool()
       const name = pickOne(source, random)
       if (!blocked.has(lowerTr(name))) return name
     }
-    return pickOne(NAME_POOL, random)
+    return pickOne(duelNamePool(), random)
   }
   const a = draw()
   blocked.add(lowerTr(a))

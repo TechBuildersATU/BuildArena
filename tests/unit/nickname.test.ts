@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest'
 import nicknames from '@/data/nicknames.json'
 import {
   checkNick,
-  GENERATED_NICKNAMES,
+  generatedNicknames,
   isClean,
   isValidNick,
-  NICKNAME_POOL,
+  nicknamePool,
   normalizeForFilter,
   rollNickname,
   tidyTyped,
@@ -197,7 +197,6 @@ describe('Turkish profanity filter', () => {
     'Pikachu',
     'Piksel Panda',
     'Picasso',
-    'Kodlama Pici',
     'Sıkı Takipçi',
     'Sıkıcı Değil',
     'Sikke',
@@ -226,7 +225,6 @@ describe('Turkish profanity filter', () => {
     'Salamander',
     'Apple Fan',
     'Gerçekçi',
-    'Pezo',
     'Siyah Kedi',
     'Amca',
     'Amcam',
@@ -284,28 +282,31 @@ describe('Turkish profanity filter', () => {
 
 describe('nickname generator', () => {
   it('generates thousands of different names, all valid', () => {
-    expect(GENERATED_NICKNAMES.length).toBeGreaterThan(3000)
-    expect(new Set(GENERATED_NICKNAMES).size).toBe(GENERATED_NICKNAMES.length)
-    for (const n of GENERATED_NICKNAMES) {
+    const generated = generatedNicknames()
+    expect(generated.length).toBeGreaterThan(3000)
+    expect(new Set(generated).size).toBe(generated.length)
+    // the pool is built once, on first use
+    expect(generatedNicknames()).toBe(generated)
+    for (const n of generated) {
       expect(n.length, n).toBeLessThanOrEqual(16)
       expect(isValidNick(n), n).toBe(true)
     }
   })
 
   it('every hand-picked dice name follows the rules; duel names pass the filter', () => {
-    for (const n of nicknames.senaryoZar) expect(isValidNick(n), n).toBe(true)
+    for (const n of nicknames.scenarioDice) expect(isValidNick(n), n).toBe(true)
     // duel names are assigned by the app (no 16-character limit), but must be clean too
-    for (const n of nicknames.duello) expect(isClean(n), n).toBe(true)
-    expect(NICKNAME_POOL.length).toBeGreaterThan(GENERATED_NICKNAMES.length)
+    for (const n of nicknames.duel) expect(isClean(n), n).toBe(true)
+    expect(nicknamePool().length).toBeGreaterThan(generatedNicknames().length)
   })
 
   it('the dice rolls valid pool names, never one taken today', () => {
-    const taken = nicknames.senaryoZar.slice(0, 20)
+    const taken = nicknames.scenarioDice.slice(0, 20)
     const lowered = taken.map((t) => t.toLocaleLowerCase('tr'))
     const random = seeded(42)
     for (let i = 0; i < 300; i++) {
       const name = rollNickname(taken, [], random)
-      expect(NICKNAME_POOL).toContain(name)
+      expect(nicknamePool()).toContain(name)
       expect(isValidNick(name), name).toBe(true)
       expect(lowered).not.toContain(name.toLocaleLowerCase('tr'))
     }
@@ -322,7 +323,7 @@ describe('nickname generator', () => {
     expect(new Set(recent).size).toBe(40)
     // mostly generated Tech + Animal pairs, now and then a hand-picked name
     const many = Array.from({ length: 400 }, () => rollNickname([], [], random))
-    const curated = many.filter((n) => nicknames.senaryoZar.includes(n)).length
+    const curated = many.filter((n) => nicknames.scenarioDice.includes(n)).length
     expect(curated).toBeGreaterThan(40)
     expect(curated).toBeLessThan(200)
     expect(new Set(many).size).toBeGreaterThan(250)

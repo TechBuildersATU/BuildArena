@@ -112,7 +112,7 @@ export function demoDay(now = new Date()): { scores: ScoreEntry[]; duels: DuelRe
     }
   })
 
-  const duelNames = nicknames.duello
+  const duelNames = nicknames.duel
   const duels: DuelRecord[] = []
   for (let i = 0; i < 16; i++) {
     const task = findTask(pick(TASKS).id)!

@@ -1,6 +1,6 @@
 {
-  "aciklama": "Takma ad havuzu. 'senaryoZar' ve 'duello' el ile seçilmiş adlardır; 'uretec' kelime listelerinden 'Ön Hayvan' biçiminde (en fazla 16 karakter) binlerce ad üretilir. Hakaret anlamı da taşıyan hayvan adları (eşek, maymun, köpek, öküz, domuz, inek, keçi, çakal, yılan, tavuk, ayı) bilerek listede yok.",
-  "senaryoZar": [
+  "description": "Nickname pool. 'scenarioDice' and 'duel' are hand-picked names; 'generator' builds thousands of \"Prefix Animal\" names (at most 16 characters) from its word lists. Animal names that are also insults in Turkish (eşek, maymun, köpek, öküz, domuz, inek, keçi, çakal, yılan, tavuk, ayı) are left out on purpose.",
+  "scenarioDice": [
     "Cache Kedisi",
     "Null Baykuş",
     "Deploy Kartalı",
@@ -30,7 +30,7 @@
     "Bit Kelebeği",
     "Veri Vaşağı"
   ],
-  "duello": [
+  "duel": [
     "Bugsız Baykuş",
     "Turbo Kaplumbağa",
     "Gereksinim Ninjası",
@@ -52,8 +52,8 @@
     "Debug Dedektifi",
     "Spagetti Kod Şefi"
   ],
-  "uretec": {
-    "on": [
+  "generator": {
+    "prefixes": [
       "Turbo",
       "Piksel",
       "Async",
@@ -113,7 +113,7 @@
       "Sunucu",
       "Algoritma"
     ],
-    "hayvan": [
+    "animals": [
       "Kedi",
       "Baykuş",
       "Panda",
