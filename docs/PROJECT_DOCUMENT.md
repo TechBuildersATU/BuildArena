@@ -18,7 +18,14 @@ Product, Game Design and Technical Architecture Document
 | 1.2 | 24 October 2026 | v0.2 screen designs and palette applied · spinning metallic logo frame with sparks · API security · button-by-button test plan | ATÜ TechBuilders Software Team |
 | 1.3 | 25 October 2026 | Spinning metallic logo frame with sparks cancelled by club decision (section and files removed) · Ready for club approval | ATÜ TechBuilders Software Team |
 
-> **Note:** "BuildArena" is a working title and may change after a club vote. The screen images (`assets/ekranlar/`) show the club's **v0.2 design** (calm graphite theme, palette derived from the logo — Section 14). Sections 12.8 and 16.5 exist only in this English edition. The app's user interface is in **Turkish**; where useful, this English edition gives the Turkish on-screen label in parentheses. A Turkish edition of this document (`BuildArena_Proje_Dokumani.md` / `.pdf`) is the primary version.
+> **This is the planning document (v1.2, October 2026).** The shipped game follows it with the
+> deviations the club agreed later — listed in [`AGENTS.md`](../AGENTS.md) and the
+> [README](../README.md): **no API and no AI** (sections 12.1–12.3, 12.6–12.8 and their work
+> packages are cancelled), the "Renk Paleti" paper-and-ink design (`palette/`) instead of the
+> colour tables in section 14, a redesigned score, 16 scenarios and 15 duel tasks, and English data
+> keys and ids in the code (the schemas below show them).
+
+> **Note:** "BuildArena" is a working title and may change after a club vote. The screen images (`assets/screens/`) show the club's **v0.2 design** (calm graphite theme, palette derived from the logo — Section 14). Sections 12.8 and 16.5 exist only in this English edition. The app's user interface is in **Turkish**; where useful, this English edition gives the Turkish on-screen label in parentheses. The original Turkish edition is kept as `BuildArena_Project_Document_TR.pdf`.
 
 ---
 
@@ -132,7 +139,7 @@ flowchart TD
     S6 --> A
 ```
 
-![Duel mode user flow (club design v0.2)](assets/ekranlar/07_kullanici_akisi.png)
+![Duel mode user flow (club design v0.2)](assets/screens/07_user_flow.png)
 *Duel mode user flow from the club's v0.2 design: Home → Duel selection → task generation → task card → 90 s game → evaluation → result, with rematch, fallback plan and hybrid scoring notes.*
 
 ---
@@ -141,10 +148,10 @@ flowchart TD
 
 When the app is opened for the first time, a **short 5-slide introduction** is shown before the home screen. The goal is for a booth visitor to understand the game's logic, both modes and the scoring **in 30 seconds**. The tutorial screen follows the v0.2 design system: calm graphite background, flat surfaces, logo pink for emphasis (Section 14.2).
 
-![Tutorial screen — Duel slide](assets/ekranlar/09_tutorial.png)
+![Tutorial screen — Duel slide](assets/screens/09_tutorial.png)
 *Slide 3 of the tutorial: segmented slide bar and Skip button at the top, animated explanation in the middle, Back / progress dots / Next at the bottom.*
 
-![The 5 tutorial slides](assets/ekranlar/10_tutorial_slaytlar.png)
+![The 5 tutorial slides](assets/screens/10_tutorial_slides.png)
 *Overview of the five slides: Welcome → What is a requirement? → Duel → Scenario → Score and leaderboard.*
 
 ### 4.1 When is it shown?
@@ -189,13 +196,13 @@ Total viewing time with auto-advance is ~31 seconds; players can leave at any mo
 - Slide visuals are not static images; they are drawn with the game's real components (Card, PhoneBox, ScoreRing). The tutorial therefore stays up to date when the design changes, and it needs no internet.
 - Transitions use Framer Motion `AnimatePresence` (slide + fade, ~320 ms); swipes are detected with `drag="x"`.
 - `localStorage` reads/writes are wrapped in `try/catch`; if the record cannot be read, the tutorial is shown (safe default).
-- Reference HTML: `assets/tasarim_kaynak/09_tutorial.html` (`?s=1` … `?s=5`).
+- Reference HTML: `assets/design-source/09_tutorial.html` (`?s=1` … `?s=5`).
 
 ---
 
 ## 5. Home Screen
 
-![Home screen (v0.2)](assets/ekranlar/01_ana_ekran.png)
+![Home screen (v0.2)](assets/screens/01_home.png)
 *Home screen (v0.2): club logo at the top center with the rotating "ATÜ • TECHBUILDERS" text ring, Duel and Scenario buttons, and Leaderboard / Info / Settings at the top right.*
 
 | Element | Content |
@@ -239,7 +246,7 @@ The layout as described by the club: **Player 1 on the left** (requirement pool 
           PLAYER 1 ZONE              24 px dead zone             PLAYER 2 ZONE
 ```
 
-![Duel game screen reference design](assets/ekranlar/03_duello_oyun.png)
+![Duel game screen reference design](assets/screens/03_duel_game.png)
 *Duel screen (v0.2): pools on the outer edges, boxes (phone frames) side by side in the middle; Player 1 in blue, Player 2 in copper. Spectators can compare the two designs side by side.*
 
 | Zone | Content |
@@ -278,10 +285,10 @@ When a duel starts, the AI gives both players random, funny nicknames. Nicknames
 
 ### 6.5 Task card and results screen
 
-![Task card](assets/ekranlar/02_gorev_karti.png)
+![Task card](assets/screens/02_task_card.png)
 *Task card (v0.2): a plain "TASK #07 · MEDIUM" label, the task, target audience and rules; when each player taps "Ready" in their own corner, a 3-2-1 countdown starts.*
 
-![Results screen](assets/ekranlar/04_sonuc.png)
+![Results screen](assets/screens/04_result.png)
 *Results screen (v0.2): each player sees, on their own half, a score ring out of 100, a 4-part breakdown, the funny title the AI gave them and the jury comment.*
 
 The results screen keeps the score ring and the 4-part breakdown, and stays uncluttered (v0.2 removed the card list and combo chips):
@@ -625,68 +632,77 @@ flowchart LR
     T[Tablet<br/>React PWA] -->|/api/task<br/>/api/scenario<br/>/api/nickname<br/>/api/comment| P[Proxy<br/>Cloudflare Worker / Node + Hono]
     P -->|NVIDIA_API_KEY<br/>environment variable| N[NVIDIA NIM<br/>integrate.api.nvidia.com]
     P -->|schema validation · timeout · cache| P
-    T -.->|if the AI doesn't respond| B[(Local task bank<br/>senaryolar.json)]
+    T -.->|if the AI doesn't respond| B[(Local task bank<br/>scenarios.json)]
     T --> L[(IndexedDB<br/>leaderboard)]
 ```
 
-![Proposed system architecture (club design v0.2)](assets/ekranlar/08_mimari.png)
+![Proposed system architecture (club design v0.2)](assets/screens/08_architecture.png)
 *Club design v0.2: Tablet PWA ↔ proxy (Node.js / Cloudflare Worker: API key on the server only, schema validation, cache + limit) ↔ NVIDIA API catalog.*
 
 The proxy's jobs: store the key, fit the request into the template, **validate the response against the JSON schema**, 4 s timeout, rate limiting (at most 20 requests per minute), short-term cache for repeated tasks.
 
 ### 12.4 Task JSON schema (Duel)
 
-The JSON keys are Turkish so that both editions of this document describe the same code: `baslik` = title, `aciklama` = description, `ikon` = icon, `zorluk` = difficulty, `hedefKitle` = target audience, `ad` = name, `kartlar` = cards, `tur` = type (`kritik` critical / `onemli` important / `destek` supporting / `tuzak` trap), `agirlik` = weight, `gerekce` = rationale, `birlesimler` = combos.
+As planned, every card carried its type and weight. In the shipped bank (`src/data/tasks.json`,
+validated in `src/ai/schemas.ts`) a task lists its card ids by type instead — `critical` (weight 3),
+`important` (2), `support` (1), `traps` — and the cards themselves live in `src/data/cards.json`.
+Keys and ids are English; the texts are the Turkish game content.
 
 ```json
 {
-  "baslik": "Hastane Bilgi Yönetim Sistemi",
-  "aciklama": "Hastaların randevu alabildiği, doktorların hasta kayıtlarına güvenle ulaşabildiği bir sistem tasarla.",
-  "ikon": "hospital",
-  "zorluk": "orta",
-  "hedefKitle": [
-    { "ad": "Hasta",   "ikon": "user" },
-    { "ad": "Doktor",  "ikon": "stethoscope" },
-    { "ad": "Hemşire", "ikon": "heart-pulse" }
+  "id": "hospital",
+  "no": "01",
+  "title": "Hastane Bilgi Yönetim Sistemi",
+  "short": "Hastane",
+  "icon": "hospital",
+  "description": "Hastaların randevu alabildiği, doktorların hasta kayıtlarına güvenle ulaşabildiği bir hastane sistemi tasarla.",
+  "audience": [
+    { "name": "Hasta", "icon": "user" },
+    { "name": "Doktor", "icon": "stethoscope" },
+    { "name": "Hemşire", "icon": "heart-pulse" }
   ],
-  "kartlar": [
-    { "id": "randevu", "ad": "Randevu Al", "ikon": "calendar-plus", "nfr": false, "tur": "kritik", "agirlik": 3, "gerekce": "Hastanın ana işlemi" },
-    { "id": "sifre",   "ad": "Veri Şifreleme", "ikon": "lock", "nfr": true, "tur": "kritik", "agirlik": 3, "gerekce": "Sağlık verisi KVKK kapsamında" },
-    { "id": "sepet",   "ad": "Sepet", "ikon": "shopping-cart", "nfr": false, "tur": "tuzak", "agirlik": 0, "gerekce": "Hastanede alışveriş akışı yoktur" }
-  ],
-  "birlesimler": [
-    { "ad": "Doğru kişi doğru veri", "kartlar": ["hasta-kaydi", "rbac"] }
-  ]
+  "critical": ["appointment", "patient-record", "encryption"],
+  "important": ["rbac", "e-prescription", "lab-results", "audit-trail"],
+  "support": ["vitals"],
+  "traps": ["cart", "promo-code", "social-share", "loyalty", "qr-menu", "badges"],
+  "combos": [{ "name": "Doğru kişi, doğru veri", "cards": ["patient-record", "rbac"] }]
 }
 ```
+
+A card: `{ "id": "appointment", "name": "Randevu Al", "icon": "calendar-plus", "nfr": false }`.
 
 Validation rules: exactly 14 cards · 3 critical + 4 important + 1 supporting + 6 traps · total weight 18 · card name ≤ 2 words · icon on the allow-list · card ids in combos must be required cards. A response that fails validation is discarded and a task comes from the bank.
 
 ### 12.5 Scenario JSON schema
 
-Additional keys: `sistem` = system, `adimlar` = steps, `no` = number, `seviye` = level (`detay` detail / `genel` general), `durum` = situation, `secenekler` = options, `metin` = text, `puan` = score, `etki` = effect.
+Shown with the keys of the shipped bank (`src/data/scenarios.json`); the full schema, with the crisis
+intro fields (`time`, `place`, `scale`, `intro`, `audience`) and each option's `summary`, is in
+`src/ai/schemas.ts` and `docs/scenario-mode/SCENARIO_MODE.md` §9.1.
 
 ```json
 {
-  "baslik": "Yemekhane: Öğle Saati Krizi",
-  "sistem": "yemekhane",
-  "adimlar": [
+  "id": "cafeteria",
+  "title": "Yemekhane: Öğle Saati Krizi",
+  "system": "Yemekhane Bilgi Sistemi",
+  "steps": [
     {
       "no": 1,
-      "seviye": "detay",
-      "durum": "Öğrenciler turnikeden nasıl geçsin?",
-      "secenekler": [
-        { "id": "a", "metin": "NFC kart / telefon", "ikon": "nfc",       "puan": 20, "etki": "Kuyruk akıyor." },
-        { "id": "b", "metin": "QR kod",             "ikon": "qr-code",   "puan": 14, "etki": "Ekranı karanlık telefonlarda okuma sorunu." },
-        { "id": "c", "metin": "Kimlik no ile görevli", "ikon": "id-card", "puan": 4,  "etki": "Kuyruk kapıya kadar uzadı." },
-        { "id": "d", "metin": "Yüz tanıma",         "ikon": "scan-face", "puan": 6,  "etki": "KVKK açık rıza sorusu gündeme geldi." }
+      "level": "detail",
+      "topic": "turnike geçişi",
+      "situation": "Kapıda kuyruk büyüyor. Geçiş yöntemi öğle saatinin kaderini belirleyecek.",
+      "question": "Öğrenciler turnikeden nasıl geçsin?",
+      "options": [
+        { "id": "a", "text": "NFC kart / telefon", "icon": "nfc", "points": 20, "effect": "Kuyruk akıyor." },
+        { "id": "b", "text": "QR kod", "icon": "qr-code", "points": 14, "effect": "Ekranı karanlık telefonlarda okuma sorunu." },
+        { "id": "c", "text": "Kimlik no ile görevli", "icon": "id-card", "points": 4, "effect": "Kuyruk kapıya kadar uzadı." },
+        { "id": "d", "text": "Yüz tanıma", "icon": "scan-face", "points": 6, "effect": "KVKK açık rıza sorusu gündeme geldi." }
       ]
     }
   ]
 }
 ```
 
-Validation rules: exactly 5 steps · steps 1–4 `detay`, step 5 `genel` · 4 options per step · exactly one 20-point option per step · option text ≤ 6 words.
+Validation rules: exactly 5 steps · steps 1–4 `detail`, step 5 `general` · 4 options per step · exactly one 20-point option per step · option text ≤ 6 words.
 
 ### 12.6 Prompts (draft)
 
@@ -926,7 +942,7 @@ The only shared data are the task and the time; the player states never touch ea
 
 ### 13.5 Screen isolation (players can't interfere with each other)
 
-![Touch zones](assets/ekranlar/05_dokunma_bolgeleri.png)
+![Touch zones](assets/screens/05_touch_zones.png)
 
 | Rule | Implementation |
 |---|---|
@@ -984,7 +1000,7 @@ The blue–copper player pair remains distinguishable for color-blind players, a
 - **Lucide icons:** every card = 1 icon + at most 2 words.
 - Measurements: corner radius 10/16/24/32 px · spacing scale 4–8–12–16–24–32 px · minimum touch target 56×56 px.
 
-![Design system reference](assets/ekranlar/06_tasarim_sistemi.png)
+![Design system reference](assets/screens/06_design_system.png)
 *BuildArena design system v0.2: logo and color source, colors with contrast ratios, typography, components and icons.*
 
 ### 14.4 Motion and sound
@@ -1009,8 +1025,8 @@ Sound (optional): a short "click" on drop, a "tick-tock" in the last 10 seconds,
 
 The screens can be coded with Claude Code. The following go into the project folder and are given to Claude Code as references:
 
-- This document (`BuildArena_Proje_Dokumani.md` or `BuildArena_Project_Document_EN.md`)
-- The reference screens under `assets/ekranlar/` and the `tasarim_kaynak/` HTML files with `base.css` from the design zip
+- This document (`docs/PROJECT_DOCUMENT.md`)
+- The reference screens under `assets/screens/` and the `design-source/` HTML files with `base.css` from the design zip
 - `assets/logo/atu_techbuilders_logo.png`
 
 ### 15.1 Skills to use
@@ -1026,8 +1042,8 @@ The screens can be coded with Claude Code. The following go into the project fol
 
 ```text
 Create a React + TypeScript + Vite + Tailwind PWA named BuildArena that runs in landscape on a tablet.
-All product rules are in BuildArena_Project_Document_EN.md; read it first.
-Design reference: the v0.2 HTML screens in the tasarim_kaynak/ folder and base.css (palette in section 14.2).
+All product rules are in docs/PROJECT_DOCUMENT.md; read it first.
+Design reference: the v0.2 HTML screens in the design-source/ folder and base.css (palette in section 14.2).
 Keep the layout, component sizes and the v0.2 rules (flat, no glow, no neon gradients). Use the frontend-design skill.
 Logo: public/logo/atu_techbuilders_logo.png — do not modify it in any way.
 Follow the API security rules in section 12.8 and write the tests listed in section 16.5 for every button.
@@ -1487,17 +1503,17 @@ The daily schedule is the Section 16 work packages placed on the calendar.
 
 | Path | Content |
 |---|---|
-| `BuildArena_Proje_Dokumani.md` / `.pdf` | Turkish edition of this document (primary version) |
-| `BuildArena_Project_Document_EN.md` | This document (English edition) |
+| `BuildArena_Project_Document_TR.pdf` | The original Turkish edition of this document (PDF) |
+| `PROJECT_DOCUMENT.md` | This document (English edition) |
 | `assets/logo/atu_techbuilders_logo.png` | Club logo updated to "ATÜ" |
-| `assets/ekranlar/01–08_*.png` | The club's v0.2 screen designs (home, task card, duel, results, touch zones, design system, user flow, architecture) |
-| `assets/ekranlar/09–10_*.png` | Tutorial screen and the five tutorial slides (v0.2 style) |
-| `assets/tasarim_kaynak/09_tutorial.html` | HTML source of the tutorial screen (select a slide with `?s=1`…`?s=5`) |
+| `assets/screens/01–08_*.png` | The club's v0.2 screen designs (home, task card, duel, results, touch zones, design system, user flow, architecture) |
+| `assets/screens/09–10_*.png` | Tutorial screen and the five tutorial slides (v0.2 style) |
+| `assets/design-source/09_tutorial.html` | HTML source of the tutorial screen (select a slide with `?s=1`…`?s=5`) |
 
 ### Sources
 
 - Internal club source: *Software Requirements and System Examples* (Library, Cafeteria, Café, Hospital, Store requirements)
-- Internal club source: *BuildArena Documentation v0.1* and the `tasarim_kaynak/` screen designs
+- Internal club source: *BuildArena Documentation v0.1* and the `assets/design-source/` screen designs
 - [NVIDIA Build — model catalog](https://build.nvidia.com)
 - [NVIDIA Build Free API: 100+ AI Models on DGX Cloud (2026 Guide)](https://pasqualepillitteri.it/en/news/1621/nvidia-build-free-api-100-ai-models-2026)
 - [NVIDIA Developer Forum — NIM API rate limit (40 RPM) requests](https://forums.developer.nvidia.com/t/request-for-nvidia-nim-api-rate-limit-increase-40-200-rpm/375340)

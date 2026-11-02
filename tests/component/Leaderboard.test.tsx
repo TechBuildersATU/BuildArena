@@ -6,18 +6,18 @@ import { db, type DuelRecord, type ScoreEntry } from '@/db/database'
 import { useScenarioStore } from '@/stores/scenarioStore'
 import { renderApp } from './renderApp'
 
-const SCENARIO_IDS = ['yemekhane', 'kutuphane', 'kafe', 'hastane', 'magaza']
+const SCENARIO_IDS = ['cafeteria', 'library', 'cafe', 'hospital', 'store']
 
 function entries(count: number): ScoreEntry[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `e${i}`,
     nick: `Oyuncu ${i + 1}`,
     score: 100 - i * 5,
-    unvan: 'Mid Analist',
-    senaryo: SCENARIO_IDS[i % 5],
-    sure: 60,
-    zaman: i,
-    izin: i % 2 === 0,
+    title: 'Mid Analist',
+    scenarioId: SCENARIO_IDS[i % 5],
+    seconds: 60,
+    playedAt: i,
+    consent: i % 2 === 0,
   }))
 }
 
@@ -32,28 +32,28 @@ const rows = () => screen.queryAllByTestId('leaderboard-row')
 
 function duel(
   id: string,
-  zaman: number,
-  kazanan: 0 | 1 | -1,
+  playedAt: number,
+  winner: 0 | 1 | -1,
   totals: [number, number],
 ): DuelRecord {
   const p = (nick: string, total: number) => ({
     nick,
     total,
-    uyum: 0,
-    isabet: 0,
-    birlesim: 0,
-    hiz: 0,
-    ceza: 0,
-    kalan: 0,
+    coverage: 0,
+    accuracy: 0,
+    combo: 0,
+    speed: 0,
+    penalty: 0,
+    secondsLeft: 0,
     box: [],
-    tuzak: 0,
-    lakap: 'Kod Kartalı',
+    trapCount: 0,
+    epithet: 'Kod Kartalı',
   })
   return {
     id,
-    zaman,
-    gorev: 'hbys',
-    kazanan,
+    playedAt,
+    taskId: 'hospital',
+    winner,
     p: [p(`Sol ${id}`, totals[0]), p(`Sağ ${id}`, totals[1])],
   }
 }
@@ -96,8 +96,8 @@ describe('leaderboard', () => {
 
   it('the scenario filter shows only that crisis and Tümü brings everything back', async () => {
     await openBoard(entries(10))
-    await userEvent.click(screen.getByTestId('filter-kafe'))
-    expect(screen.getByTestId('filter-kafe')).toHaveAttribute('aria-pressed', 'true')
+    await userEvent.click(screen.getByTestId('filter-cafe'))
+    expect(screen.getByTestId('filter-cafe')).toHaveAttribute('aria-pressed', 'true')
     await waitFor(() => expect(screen.getByTestId('podium-1')).toHaveTextContent('Oyuncu 3'))
     expect(screen.getByTestId('podium-2')).toHaveTextContent('Oyuncu 8')
     expect(rows()).toHaveLength(0)
@@ -122,7 +122,16 @@ describe('leaderboard', () => {
 
   it('the filter has all sixteen crises', async () => {
     await openBoard(entries(1))
-    for (const id of [...SCENARIO_IDS, 'obs', 'servis', 'yurt', 'ring', 'otostop', 'wifi', 'bilet'])
+    for (const id of [
+      ...SCENARIO_IDS,
+      'student-portal',
+      'shuttle',
+      'dorm',
+      'campus-transit',
+      'ride-share',
+      'wifi',
+      'tickets',
+    ])
       expect(screen.getByTestId(`filter-${id}`)).toBeInTheDocument()
   })
 
@@ -133,7 +142,7 @@ describe('leaderboard', () => {
       duel('c', 2, 1, [30, 80]),
     ])
     await openBoard(entries(2))
-    expect(screen.getByTestId('tab-sen')).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByTestId('tab-scenario')).toHaveAttribute('aria-selected', 'true')
     await userEvent.click(screen.getByTestId('tab-duel'))
     expect(screen.getByTestId('tab-duel')).toHaveAttribute('aria-selected', 'true')
     expect(screen.queryByTestId('podium')).not.toBeInTheDocument()
@@ -144,12 +153,12 @@ describe('leaderboard', () => {
     expect(list[1]).toHaveTextContent('Sağ c')
     expect(within(list[1]).getByLabelText('kazanan')).toBeInTheDocument()
     expect(screen.getByTestId('duel-count')).toHaveTextContent('3 düello')
-    await userEvent.click(screen.getByTestId('tab-sen'))
+    await userEvent.click(screen.getByTestId('tab-scenario'))
     expect(await screen.findByTestId('podium')).toBeInTheDocument()
   })
 
-  it('?sekme=duel opens the duel tab; an empty day says so', async () => {
-    renderApp(`${ROUTES.leaderboard}?sekme=duel`)
+  it('?tab=duel opens the duel tab; an empty day says so', async () => {
+    renderApp(`${ROUTES.leaderboard}?tab=duel`)
     const pane = await screen.findByTestId('pane-duel')
     expect(await within(pane).findByText('Bugün henüz düello oynanmadı.')).toBeInTheDocument()
     expect(screen.getByTestId('tab-duel')).toHaveAttribute('aria-selected', 'true')

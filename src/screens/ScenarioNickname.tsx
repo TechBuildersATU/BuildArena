@@ -39,7 +39,7 @@ export function ScenarioNickname() {
   const taken = useMemo(() => (scores ?? []).map((e) => e.nick), [scores])
 
   const [nick, setNick] = useState('')
-  const [izin, setIzin] = useState(true)
+  const [consent, setConsent] = useState(true)
   const [shaking, setShaking] = useState(false)
   const [rolling, setRolling] = useState(0)
   const [spinning, setSpinning] = useState(false)
@@ -77,7 +77,7 @@ export function ScenarioNickname() {
       return bump()
     }
     sfx.tap()
-    begin(uniqueNick(trimmed, taken), izin)
+    begin(uniqueNick(trimmed, taken), consent)
     void navigate(ROUTES.scenarioIntro)
   }
   const guardedStart = usePressGuard(start)
@@ -294,16 +294,16 @@ export function ScenarioNickname() {
         <button
           type="button"
           role="switch"
-          aria-checked={izin}
+          aria-checked={consent}
           className={s.consent}
           data-testid="nick-consent"
           onClick={() => {
-            setIzin((v) => !v)
-            if (izin) sfx.toggleOff()
+            setConsent((v) => !v)
+            if (consent) sfx.toggleOff()
             else sfx.toggleOn()
           }}
         >
-          <span className={cn(s.switch, izin && s.switchOn)} />
+          <span className={cn(s.switch, consent && s.switchOn)} />
           <span>
             Takma adımın ve puanımın ATÜ TechBuilders sosyal medya hesaplarında paylaşılmasına izin
             veriyorum.

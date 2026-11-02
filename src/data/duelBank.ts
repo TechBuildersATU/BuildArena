@@ -4,12 +4,12 @@ import cardsRaw from './cards.json'
 import tasksRaw from './tasks.json'
 
 /** 44-card catalog and the 5 duel tasks, validated at startup. */
-export const CARDS: readonly Card[] = z.array(CardSchema).parse(cardsRaw.kartlar)
+export const CARDS: readonly Card[] = z.array(CardSchema).parse(cardsRaw.cards)
 export const TASKS: readonly Task[] = z
   .array(TaskSchema)
-  .parse(tasksRaw.gorevler)
+  .parse(tasksRaw.tasks)
   .map((t) => {
-    const missing = [...t.kritik, ...t.onemli, ...t.destek, ...t.tuzak].filter(
+    const missing = [...t.critical, ...t.important, ...t.support, ...t.traps].filter(
       (id) => !CARDS.some((c) => c.id === id),
     )
     if (missing.length) throw new Error(`${t.id}: bilinmeyen kart ${missing.join(', ')}`)
@@ -30,5 +30,5 @@ export function findTask(id: string | null | undefined): Task | undefined {
 
 /** All 14 cards of a task: required first, then traps. */
 export function taskCards(task: Task): string[] {
-  return [...task.kritik, ...task.onemli, ...task.destek, ...task.tuzak]
+  return [...task.critical, ...task.important, ...task.support, ...task.traps]
 }

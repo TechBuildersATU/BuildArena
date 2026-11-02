@@ -101,7 +101,7 @@ describe('music moods and volume', () => {
   it('the volume is remembered and kept within 0–100', () => {
     expect(DEFAULT_SETTINGS.volume).toBe(80)
     useSettingsStore.getState().set('volume', 35)
-    const saved = JSON.parse(window.localStorage.getItem('buildarena.ayarlar.v1') ?? '{}')
+    const saved = JSON.parse(window.localStorage.getItem('buildarena.settings.v1') ?? '{}')
     expect(saved.volume).toBe(35)
     expect(clampVolume(140)).toBe(100)
     expect(clampVolume(-5)).toBe(0)
@@ -113,16 +113,16 @@ describe('music moods and volume', () => {
 
 describe('settings', () => {
   it('duel lengths are 45 / 60 / 90 s; a device that saved 120 s falls back to 90 s', async () => {
-    window.localStorage.setItem('buildarena.ayarlar.v1', JSON.stringify({ duelSec: 120 }))
+    window.localStorage.setItem('buildarena.settings.v1', JSON.stringify({ duelSec: 120 }))
     vi.resetModules()
     const fresh = await import('@/stores/settingsStore')
     expect(fresh.DUEL_SECONDS).toEqual([45, 60, 90])
     expect(fresh.useSettingsStore.getState().duelSec).toBe(90)
-    window.localStorage.setItem('buildarena.ayarlar.v1', JSON.stringify({ duelSec: 45 }))
+    window.localStorage.setItem('buildarena.settings.v1', JSON.stringify({ duelSec: 45 }))
     vi.resetModules()
     const again = await import('@/stores/settingsStore')
     expect(again.useSettingsStore.getState().duelSec).toBe(45)
-    window.localStorage.removeItem('buildarena.ayarlar.v1')
+    window.localStorage.removeItem('buildarena.settings.v1')
   })
 
   it('music and effects are separate switches and are remembered on the device', () => {
@@ -132,7 +132,7 @@ describe('settings', () => {
     useSettingsStore.getState().toggle('sfx')
     useSettingsStore.getState().set('stepSec', 15)
     useSettingsStore.getState().set('duelSec', 60)
-    const saved = JSON.parse(window.localStorage.getItem('buildarena.ayarlar.v1') ?? '{}')
+    const saved = JSON.parse(window.localStorage.getItem('buildarena.settings.v1') ?? '{}')
     expect(saved).toMatchObject({ music: false, sfx: false, stepSec: 15, duelSec: 60 })
   })
 })

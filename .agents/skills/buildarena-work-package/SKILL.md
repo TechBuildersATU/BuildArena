@@ -11,33 +11,33 @@ description: >-
 
 ## 1. Read before writing code
 
-0. **All screens are built** from the club's full prototype `docs/tam_prototip/` (guide PDF +
-   `.txt`, playable `uygulama/`, screens `gorseller/`); it is the primary reference for any
+0. **All screens are built** from the club's full prototype `docs/full-prototype/` (guide PDF +
+   `.txt`, playable `app/`, screens `screens/`); it is the primary reference for any
    change. The club dropped the API: WP-11 and WP-12 are cancelled (no proxy, no AI calls).
-1. `docs/BuildArena_Project_Document_EN.md` §16.3 — the package's scope and **Done when**.
+1. `docs/PROJECT_DOCUMENT.md` §16.3 — the package's scope and **Done when**.
 2. The feature sections listed for it below, plus its rows in the §16.5 button matrix. For
-   anything in scenario mode, `docs/senaryo_modu/` (doc + playable prototype) is the spec.
-3. The matching reference image in `docs/assets/ekranlar/`.
+   anything in scenario mode, `docs/scenario-mode/` (doc + playable prototype) is the spec.
+3. The matching reference image in `docs/assets/screens/`.
 4. §16.2 dependencies: if a package it depends on isn't done, say so before starting.
 
-| WP    | Read                                                              | Main files                                                                      |
-| ----- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| WP-02 | §13.2, §13.3, §14                                                 | Skeleton — already in place                                                     |
-| WP-03 | §6.4, §7.4–7.5, §9, §10, §12.4–12.5                               | `src/data/*.json`, `src/ai/schemas.ts` (Zod), validation tests — scenarios done |
-| WP-04 | §6.2, §14, `06_tasarim_sistemi.png`                               | `src/components/*`, a component test page                                       |
-| WP-05 | §5, §14.4, `01_ana_ekran.png`                                     | `src/screens/Home.tsx`                                                          |
-| WP-06 | §6.2, §13.5, `05_dokunma_bolgeleri.png`                           | `src/game/drag.ts`, `src/game/touchIsolation.ts`                                |
-| WP-07 | §6.1–6.3, §6.5, §13.4, `02_gorev_karti.png`, `03_duello_oyun.png` | `DuelIntro.tsx`, `DuelGame.tsx`, `src/stores/*`                                 |
-| WP-08 | §11                                                               | `src/game/scoring.ts` + unit tests (81 / 62 example)                            |
-| WP-09 | §6.5, `04_sonuc.png`                                              | `DuelResult.tsx`                                                                |
-| WP-10 | §7, §11.2                                                         | `Scenario*.tsx`, `src/stores/scenarioStore.ts`                                  |
-| WP-11 | cancelled (no API)                                                | —                                                                               |
-| WP-12 | §12.1 (bank only)                                                 | `src/data/` banks, `src/ai/juryAnalysis.ts`, `src/ai/duelJury.ts`               |
-| WP-13 | §8                                                                | `Leaderboard.tsx`, `src/db/`                                                    |
-| WP-14 | §4, `09_tutorial.png`, `09_tutorial.html`                         | `Onboarding.tsx`, `src/data/tutorial.json`                                      |
-| WP-15 | §13.5, §12.8 (7), §16.3 WP-15                                     | `Admin.tsx`                                                                     |
-| WP-16 | §14.4                                                             | animations, `public/sounds/`                                                    |
-| WP-17 | §16.5, §17.1                                                      | `docs/test-report.md`                                                           |
+| WP    | Read                                                          | Main files                                                                      |
+| ----- | ------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| WP-02 | §13.2, §13.3, §14                                             | Skeleton — already in place                                                     |
+| WP-03 | §6.4, §7.4–7.5, §9, §10, §12.4–12.5                           | `src/data/*.json`, `src/ai/schemas.ts` (Zod), validation tests — scenarios done |
+| WP-04 | §6.2, §14, `06_design_system.png`                             | `src/components/*`, a component test page                                       |
+| WP-05 | §5, §14.4, `01_home.png`                                      | `src/screens/Home.tsx`                                                          |
+| WP-06 | §6.2, §13.5, `05_touch_zones.png`                             | `src/game/drag.ts`, `src/game/touchIsolation.ts`                                |
+| WP-07 | §6.1–6.3, §6.5, §13.4, `02_task_card.png`, `03_duel_game.png` | `DuelIntro.tsx`, `DuelGame.tsx`, `src/stores/*`                                 |
+| WP-08 | §11                                                           | `src/game/scoring.ts` + unit tests (81 / 62 example)                            |
+| WP-09 | §6.5, `04_result.png`                                         | `DuelResult.tsx`                                                                |
+| WP-10 | §7, §11.2                                                     | `Scenario*.tsx`, `src/stores/scenarioStore.ts`                                  |
+| WP-11 | cancelled (no API)                                            | —                                                                               |
+| WP-12 | §12.1 (bank only)                                             | `src/data/` banks, `src/ai/juryAnalysis.ts`, `src/ai/duelJury.ts`               |
+| WP-13 | §8                                                            | `Leaderboard.tsx`, `src/db/`                                                    |
+| WP-14 | §4, `09_tutorial.png`, `09_tutorial.html`                     | `Onboarding.tsx`, `src/data/tutorial.json`                                      |
+| WP-15 | §13.5, §12.8 (7), §16.3 WP-15                                 | `Admin.tsx`                                                                     |
+| WP-16 | §14.4                                                         | animations, `public/sounds/`                                                    |
+| WP-17 | §16.5, §17.1                                                  | `docs/test-report.md`                                                           |
 
 Already built (from the full prototype v0.3): WP-02 … WP-10 and WP-13 … WP-15 — data, design
 system, home + idle, duel (multi-touch, isolation, scoring, results), scenario mode, leaderboard
@@ -69,7 +69,7 @@ npm run check                 # lint → typecheck → unit → build → secret
 ```
 
 Then `npm run dev`, open `http://localhost:5173/?skipTutorial=1` at 1280×800, click every button
-on the touched screens and compare with `docs/tam_prototip/gorseller/`.
+on the touched screens and compare with `docs/full-prototype/screens/`.
 
 ## 6. Report
 

@@ -32,17 +32,17 @@ function picksFor(
   return choices.map<ScenarioPick>((k, i) => ({
     stepIndex: i,
     optionIndex: k,
-    puan: k === null ? 0 : sc.adimlar[i].secenekler[k].puan,
-    sure: k === null ? limit : seconds[i],
+    points: k === null ? 0 : sc.steps[i].options[k].points,
+    seconds: k === null ? limit : seconds[i],
     limit,
   }))
 }
 const bestOf = (id: string) =>
-  findScenario(id)!.adimlar.map((a) => a.secenekler.findIndex((o) => o.puan === 20))
+  findScenario(id)!.steps.map((a) => a.options.findIndex((o) => o.points === 20))
 const worstOf = (id: string) =>
-  findScenario(id)!.adimlar.map((a) => {
-    const min = Math.min(...a.secenekler.map((o) => o.puan))
-    return a.secenekler.findIndex((o) => o.puan === min)
+  findScenario(id)!.steps.map((a) => {
+    const min = Math.min(...a.options.map((o) => o.points))
+    return a.options.findIndex((o) => o.points === min)
   })
 const total = (id: string, picks: ScenarioPick[]) => scoreScenario(findScenario(id)!, picks).total
 const every = (sec: number) => Array<number>(5).fill(sec)
@@ -55,13 +55,13 @@ describe('scenario score — difficulty, accuracy, speed', () => {
   })
 
   it('harder steps (tempting runner-up, general decision) are worth more', () => {
-    const sc = findScenario('yemekhane')!
+    const sc = findScenario('cafeteria')!
     // 20/14/4/6 general · 6/20/3/0 · 10/2/20/5 · 8/12/4/20 · 20/8/4/0 general
     expect(stepMaxPoints(sc)).toEqual([21, 17, 19, 20, 23])
-    expect(sc.adimlar.map(difficultyOf)).toEqual(['zor', 'kolay', 'orta', 'orta', 'zor'])
+    expect(sc.steps.map(difficultyOf)).toEqual(['hard', 'easy', 'medium', 'medium', 'hard'])
     for (const s of SCENARIOS) {
       const max = stepMaxPoints(s)
-      const hard = s.adimlar.findIndex((a) => difficultyOf(a) === 'zor')
+      const hard = s.steps.findIndex((a) => difficultyOf(a) === 'hard')
       expect(hard).toBeGreaterThanOrEqual(0)
       expect(max[hard]).toBeGreaterThan(Math.min(...max))
     }
@@ -85,8 +85,8 @@ describe('scenario score — difficulty, accuracy, speed', () => {
   })
 
   it('an empty game (every step timed out) scores 0, not 20', () => {
-    const picks = picksFor('yemekhane', [null, null, null, null, null])
-    expect(total('yemekhane', picks)).toBe(0)
+    const picks = picksFor('cafeteria', [null, null, null, null, null])
+    expect(total('cafeteria', picks)).toBe(0)
     expect(titleFor(0)).toBe('Stajyer (ama umut var!)')
   })
 
@@ -104,18 +104,18 @@ describe('scenario score — difficulty, accuracy, speed', () => {
   })
 
   it('a fast wrong answer earns no extra speed points', () => {
-    const sc = findScenario('yemekhane')!
-    const wrong = (sure: number) =>
-      scoreScenario(sc, [{ stepIndex: 1, optionIndex: 3, puan: 0, sure, limit: 20 }]).total
+    const sc = findScenario('cafeteria')!
+    const wrong = (seconds: number) =>
+      scoreScenario(sc, [{ stepIndex: 1, optionIndex: 3, points: 0, seconds, limit: 20 }]).total
     expect(wrong(1)).toBe(0)
     expect(wrong(19)).toBe(0)
   })
 
   it('reproduces the worked example: 4 best + 1 weak decision → 81, Senior Analist', () => {
     // NFC · single transaction · cache + local auth · dish names only · low latency + atomic
-    const picks = picksFor('yemekhane', [0, 1, 2, 0, 0])
-    expect(picks.map((p) => p.puan)).toEqual([20, 20, 20, 8, 20])
-    const score = scoreScenario(findScenario('yemekhane')!, picks)
+    const picks = picksFor('cafeteria', [0, 1, 2, 0, 0])
+    expect(picks.map((p) => p.points)).toEqual([20, 20, 20, 8, 20])
+    const score = scoreScenario(findScenario('cafeteria')!, picks)
     expect(score.steps.map((s) => s.points)).toEqual([20, 16, 18, 5, 22])
     expect(score.total).toBe(81)
     expect(score.bestCount).toBe(4)
@@ -124,8 +124,8 @@ describe('scenario score — difficulty, accuracy, speed', () => {
   })
 
   it('a step whose time ran out scores 0 and costs its whole share', () => {
-    const picks = picksFor('yemekhane', [0, null, 2, 3, 0])
-    const score = scoreScenario(findScenario('yemekhane')!, picks)
+    const picks = picksFor('cafeteria', [0, null, 2, 3, 0])
+    const score = scoreScenario(findScenario('cafeteria')!, picks)
     expect(score.steps[1]).toMatchObject({ points: 0, accuracy: 0, speed: 0 })
     expect(score.total).toBe(78)
   })
@@ -139,8 +139,8 @@ describe('scenario score — difficulty, accuracy, speed', () => {
   })
 
   it('the time limit from the settings is respected (15 s)', () => {
-    expect(total('kafe', picksFor('kafe', bestOf('kafe'), every(15), 15))).toBe(90)
-    expect(total('kafe', picksFor('kafe', bestOf('kafe'), every(2), 15))).toBe(100)
+    expect(total('cafe', picksFor('cafe', bestOf('cafe'), every(15), 15))).toBe(90)
+    expect(total('cafe', picksFor('cafe', bestOf('cafe'), every(2), 15))).toBe(100)
   })
 
   it.each([
@@ -164,31 +164,31 @@ describe('scenario score — difficulty, accuracy, speed', () => {
   })
 
   it.each([
-    [20, 'iyi'],
-    [16, 'iyi'],
-    [15, 'orta'],
-    [8, 'orta'],
-    [7, 'zayif'],
-    [0, 'zayif'],
-  ] as const)('step quality %i is "%s"', (puan, status) => {
-    expect(stepStatus(puan)).toBe(status)
+    [20, 'good'],
+    [16, 'good'],
+    [15, 'average'],
+    [8, 'average'],
+    [7, 'weak'],
+    [0, 'weak'],
+  ] as const)('step quality %i is "%s"', (points, status) => {
+    expect(stepStatus(points)).toBe(status)
   })
 })
 
 describe('duel score — partial credit, traps, speed', () => {
-  const task = findTask('hbys')!
+  const task = findTask('hospital')!
   // kritik randevu hastakaydi sifreleme · önemli rbac recete tahlil denetim · destek vital
   const perfect = [
-    'randevu',
-    'hastakaydi',
-    'sifreleme',
+    'appointment',
+    'patient-record',
+    'encryption',
     'rbac',
-    'recete',
-    'tahlil',
-    'denetim',
-    'vital',
+    'e-prescription',
+    'lab-results',
+    'audit-trail',
+    'vitals',
   ]
-  const traps = ['sepet', 'kampanya', 'paylas', 'sadakat', 'qrmenu', 'rozet']
+  const traps = ['cart', 'promo-code', 'social-share', 'loyalty', 'qr-menu', 'badges']
 
   it('the parts add up to 100', () => {
     const { coverage, precision, combos, speed } = DUEL_RULES
@@ -197,7 +197,7 @@ describe('duel score — partial credit, traps, speed', () => {
 
   it('an empty box scores 0', () => {
     const r = scoreDuel(task, [], 90, 90)
-    expect(r).toMatchObject({ uyum: 0, isabet: 0, birlesim: 0, hiz: 0, ceza: 0, total: 0 })
+    expect(r).toMatchObject({ coverage: 0, accuracy: 0, combo: 0, speed: 0, penalty: 0, total: 0 })
   })
 
   it('the perfect design scores 100 with full time left, 90 at the buzzer', () => {
@@ -207,39 +207,39 @@ describe('duel score — partial credit, traps, speed', () => {
 
   it('every trap costs 5 points and the total never goes below 0', () => {
     const clean = scoreDuel(task, perfect.slice(0, 6), 30, 90)
-    const trapped = scoreDuel(task, [...perfect.slice(0, 6), 'sepet', 'kampanya'], 30, 90)
-    expect(trapped.ceza).toBe(-10)
-    expect(trapped.traps).toEqual(['sepet', 'kampanya'])
+    const trapped = scoreDuel(task, [...perfect.slice(0, 6), 'cart', 'promo-code'], 30, 90)
+    expect(trapped.penalty).toBe(-10)
+    expect(trapped.traps).toEqual(['cart', 'promo-code'])
     expect(trapped.total).toBeLessThan(clean.total - 5)
     expect(scoreDuel(task, traps, 80, 90).total).toBe(0)
   })
 
   it('critical cards count more than support cards', () => {
-    const critical = scoreDuel(task, ['randevu'], 0, 90)
-    const support = scoreDuel(task, ['vital'], 0, 90)
-    expect(critical.uyum).toBeGreaterThan(support.uyum)
-    expect(critical.uyum).toBe(Math.round((55 * 3) / 18))
+    const critical = scoreDuel(task, ['appointment'], 0, 90)
+    const support = scoreDuel(task, ['vitals'], 0, 90)
+    expect(critical.coverage).toBeGreaterThan(support.coverage)
+    expect(critical.coverage).toBe(Math.round((55 * 3) / 18))
   })
 
   it('combos only count when all their cards are in the box', () => {
-    expect(scoreDuel(task, ['hastakaydi'], 0, 90).done).toHaveLength(0)
-    const r = scoreDuel(task, ['hastakaydi', 'rbac', 'sifreleme'], 0, 90)
-    expect(r.done.map((b) => b.ad)).toEqual(['Doğru kişi, doğru veri', 'KVKK uyumu'])
-    expect(r.birlesim).toBe(10)
+    expect(scoreDuel(task, ['patient-record'], 0, 90).done).toHaveLength(0)
+    const r = scoreDuel(task, ['patient-record', 'rbac', 'encryption'], 0, 90)
+    expect(r.done.map((b) => b.name)).toEqual(['Doğru kişi, doğru veri', 'KVKK uyumu'])
+    expect(r.combo).toBe(10)
   })
 
   it('rushing a poor design earns little speed bonus', () => {
-    expect(scoreDuel(task, ['vital'], 88, 90).hiz).toBeLessThanOrEqual(1)
-    expect(scoreDuel(task, perfect, 88, 90).hiz).toBe(10)
+    expect(scoreDuel(task, ['vitals'], 88, 90).speed).toBeLessThanOrEqual(1)
+    expect(scoreDuel(task, perfect, 88, 90).speed).toBe(10)
   })
 
   it('lists the missing critical/important cards for the jury', () => {
-    expect(scoreDuel(task, ['randevu', 'rbac'], 0, 90).missing).toEqual([
-      'hastakaydi',
-      'sifreleme',
-      'recete',
-      'tahlil',
-      'denetim',
+    expect(scoreDuel(task, ['appointment', 'rbac'], 0, 90).missing).toEqual([
+      'patient-record',
+      'encryption',
+      'e-prescription',
+      'lab-results',
+      'audit-trail',
     ])
   })
 
@@ -250,14 +250,14 @@ describe('duel score — partial credit, traps, speed', () => {
     expect(duelWinner([b, a])).toBe(1)
     expect(
       duelWinner([
-        { ...a, traps: ['sepet'] },
+        { ...a, traps: ['cart'] },
         { ...a, traps: [] },
       ]),
     ).toBe(1)
     expect(
       duelWinner([
-        { ...a, kalan: 10 },
-        { ...a, kalan: 20 },
+        { ...a, secondsLeft: 10 },
+        { ...a, secondsLeft: 20 },
       ]),
     ).toBe(1)
     expect(duelWinner([a, { ...a }])).toBe(-1)
@@ -272,12 +272,12 @@ describe('duel score — partial credit, traps, speed', () => {
 })
 
 describe('leaderboard order (§8.1)', () => {
-  const e = (id: string, score: number, sure: number, zaman: number, izin = true) => ({
+  const e = (id: string, score: number, seconds: number, playedAt: number, consent = true) => ({
     id,
     score,
-    sure,
-    zaman,
-    izin,
+    seconds,
+    playedAt,
+    consent,
   })
 
   it('sorts by score, then shorter time, then earlier game', () => {

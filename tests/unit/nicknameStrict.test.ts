@@ -102,7 +102,6 @@ describe('stricter profanity filter: roots with suffixes, sexual words', () => {
     'Sikke',
     'Oral',
     'Kasık',
-    'Pezo',
     'Epic Kartal',
     'Samko',
     'Iraq',

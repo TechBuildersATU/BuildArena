@@ -3,20 +3,20 @@ import { findScenario } from '@/data/scenarioBank'
 import type { DuelRecord, ScoreEntry } from '@/db/database'
 import { dayFacts, dayStats } from '@/game/dayStats'
 
-const sc = findScenario('kafe')!
-const bestIds = sc.adimlar.map((a) => a.secenekler.find((o) => o.puan === 20)!.id)
+const sc = findScenario('cafe')!
+const bestIds = sc.steps.map((a) => a.options.find((o) => o.points === 20)!.id)
 
 function play(id: string, score: number, hour: number, missStep?: number): ScoreEntry {
   return {
     id,
     nick: id,
     score,
-    unvan: 'Mid Analist',
-    senaryo: 'kafe',
-    sure: 60,
-    zaman: new Date(2026, 10, 4, hour, 15).getTime(),
-    izin: true,
-    secimler: bestIds.map((b, i) => (i === missStep ? null : b)),
+    title: 'Mid Analist',
+    scenarioId: 'cafe',
+    seconds: 60,
+    playedAt: new Date(2026, 10, 4, hour, 15).getTime(),
+    consent: true,
+    choices: bestIds.map((b, i) => (i === missStep ? null : b)),
   }
 }
 
@@ -24,21 +24,21 @@ const duel = (box: string[], hour: number): DuelRecord => {
   const p = (b: string[]) => ({
     nick: 'x',
     total: 50,
-    uyum: 0,
-    isabet: 0,
-    birlesim: 0,
-    hiz: 0,
-    ceza: 0,
-    kalan: 0,
+    coverage: 0,
+    accuracy: 0,
+    combo: 0,
+    speed: 0,
+    penalty: 0,
+    secondsLeft: 0,
     box: b,
-    tuzak: 0,
-    lakap: '',
+    trapCount: 0,
+    epithet: '',
   })
   return {
     id: `d${hour}${box.join()}`,
-    zaman: new Date(2026, 10, 4, hour).getTime(),
-    gorev: 'hbys',
-    kazanan: 0,
+    playedAt: new Date(2026, 10, 4, hour).getTime(),
+    taskId: 'hospital',
+    winner: 0,
     p: [p(box), p([])],
   }
 }
@@ -46,7 +46,14 @@ const duel = (box: string[], hour: number): DuelRecord => {
 describe('end-of-day summary', () => {
   it('an empty day has zero counts and no highlights', () => {
     const st = dayStats([], [])
-    expect(st).toMatchObject({ senaryo: 0, duello: 0, ort: 0, best: 0, hard: null, trap: null })
+    expect(st).toMatchObject({
+      scenarioGames: 0,
+      duelGames: 0,
+      average: 0,
+      best: 0,
+      hard: null,
+      trap: null,
+    })
     expect(dayFacts(st)).toEqual([])
   })
 
@@ -57,11 +64,11 @@ describe('end-of-day summary', () => {
       play('c', 60, 11, 3),
       play('d', 80, 11),
     ]
-    const duels = [duel(['sepet', 'randevu'], 10), duel(['sepet'], 10), duel(['rozet'], 14)]
+    const duels = [duel(['cart', 'appointment'], 10), duel(['cart'], 10), duel(['badges'], 14)]
     const st = dayStats(scores, duels)
-    expect(st.senaryo).toBe(4)
-    expect(st.duello).toBe(3)
-    expect(st.ort).toBe(75)
+    expect(st.scenarioGames).toBe(4)
+    expect(st.duelGames).toBe(3)
+    expect(st.average).toBe(75)
     expect(st.best).toBe(90)
     expect(st.hard).toMatchObject({ stepIndex: 3, rate: 0.25, plays: 4 })
     expect(st.popular).toMatchObject({ plays: 4 })

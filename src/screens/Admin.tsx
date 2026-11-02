@@ -181,7 +181,7 @@ function TopPane() {
         <div className={s.alist} data-testid="admin-top3">
           {top.length ? (
             top.map((e, i) => {
-              const sc = findScenario(e.senaryo)
+              const sc = findScenario(e.scenarioId)
               return (
                 <div key={e.id} className={s.arow} data-testid="admin-top3-row">
                   <span className={s.md} style={{ '--m': MEDAL[i] } as CSSProperties}>
@@ -191,7 +191,7 @@ function TopPane() {
                     <b>{e.nick}</b>
                     <br />
                     <small>
-                      {e.unvan} · {sc ? shortName(sc) : e.senaryo}
+                      {e.title} · {sc ? shortName(sc) : e.scenarioId}
                     </small>
                   </span>
                   <span className={s.arowScore}>{e.score}</span>
@@ -286,9 +286,9 @@ function StatsPane() {
   }, [st, facts])
 
   const tiles: [number, string][] = [
-    [st.senaryo, 'kriz çözüldü'],
-    [st.duello, 'düello oynandı'],
-    [st.ort, 'ortalama senaryo puanı'],
+    [st.scenarioGames, 'kriz çözüldü'],
+    [st.duelGames, 'düello oynandı'],
+    [st.average, 'ortalama senaryo puanı'],
   ]
 
   return (

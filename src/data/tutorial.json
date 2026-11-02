@@ -1,40 +1,40 @@
 {
-  "aciklama": "İlk açılış tanıtımı (proje dokümanı §4.2): başlık en fazla 6, alt yazı en fazla 14 kelime. 'vurgu' başlığın pembe kısmıdır. Süreler saniye.",
-  "slaytlar": [
+  "description": "First-launch tutorial (project document §4.2): a title of at most 6 words, a subtitle of at most 14 words. 'highlight' is the pink part of the title. 'seconds' is how long a slide stays.",
+  "slides": [
     {
-      "etiket": "HOŞ GELDİN",
-      "baslik": "BuildArena'ya",
-      "vurgu": "hoş geldin!",
-      "metin": "Doğru kullanıcıya doğru özellik. 2 dakikada bir uygulama tasarla.",
-      "sure": 5
+      "tag": "HOŞ GELDİN",
+      "title": "BuildArena'ya",
+      "highlight": "hoş geldin!",
+      "text": "Doğru kullanıcıya doğru özellik. 2 dakikada bir uygulama tasarla.",
+      "seconds": 5
     },
     {
-      "etiket": "GEREKSİNİM NEDİR?",
-      "baslik": "Her özellik",
-      "vurgu": "iyi değildir",
-      "metin": "Hastane uygulamasında randevu gerekir, sepet gerekmez. İşte gereksinim analizi bu!",
-      "sure": 6
+      "tag": "GEREKSİNİM NEDİR?",
+      "title": "Her özellik",
+      "highlight": "iyi değildir",
+      "text": "Hastane uygulamasında randevu gerekir, sepet gerekmez. İşte gereksinim analizi bu!",
+      "seconds": 6
     },
     {
-      "etiket": "DÜELLO MODU",
-      "baslik": "Sürükle, bırak,",
-      "vurgu": "kapış!",
-      "metin": "Uygun kartları kendi kutuna sürükle. Tuzak kartlar puan kaybettirir!",
-      "sure": 7
+      "tag": "DÜELLO MODU",
+      "title": "Sürükle, bırak,",
+      "highlight": "kapış!",
+      "text": "Uygun kartları kendi kutuna sürükle. Tuzak kartlar puan kaybettirir!",
+      "seconds": 7
     },
     {
-      "etiket": "SENARYO MODU",
-      "baslik": "Her karar",
-      "vurgu": "sonrakini etkiler",
-      "metin": "Tek başına oyna: her adımda en doğru seçeneğe dokun, 5 adımda zirveye çık.",
-      "sure": 7
+      "tag": "SENARYO MODU",
+      "title": "Her karar",
+      "highlight": "sonrakini etkiler",
+      "text": "Tek başına oyna: her adımda en doğru seçeneğe dokun, 5 adımda zirveye çık.",
+      "seconds": 7
     },
     {
-      "etiket": "PUAN VE SKOR TABLOSU",
-      "baslik": "Doğru karar kazandırır,",
-      "vurgu": "zirveye çık",
-      "metin": "Zor kararlar daha çok puan getirir, hızlı olan bonus alır. Günün ilk 3'ü paylaşılır!",
-      "sure": 6
+      "tag": "PUAN VE SKOR TABLOSU",
+      "title": "Doğru karar kazandırır,",
+      "highlight": "zirveye çık",
+      "text": "Zor kararlar daha çok puan getirir, hızlı olan bonus alır. Günün ilk 3'ü paylaşılır!",
+      "seconds": 6
     }
   ]
 }

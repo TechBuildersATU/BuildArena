@@ -6,22 +6,22 @@ import { findTask, taskCards, TASKS } from '@/data/duelBank'
 import nicknames from '@/data/nicknames.json'
 import { newId, saveDuel, type DuelRecord } from '@/db/database'
 import type { PlayerBoard } from '@/game/duelBox'
-import { GENERATED_NICKNAMES } from '@/game/nickname'
+import { generatedNicknames } from '@/game/nickname'
 import { gameRandom, pickOne, shuffle } from '@/game/random'
 import { duelWinner, scoreDuel, type DuelScore } from '@/game/scoring'
 import { lowerTr } from '@/utils/text'
 
 // One duel: task card → both "Ready" → 3-2-1 → play → result (document §6, full prototype §4).
 
-const RECENT_KEY = 'buildarena.duello.sonAdlar'
+const RECENT_KEY = 'buildarena.duel.recentNames'
 const RECENT_MAX = 50
 /** how many names shown on one task card the dice avoids repeating */
 const SHOWN_MAX = 40
 
 export interface PlayerResult extends DuelScore {
   box: string[]
-  lakap: string
-  yorum: string
+  epithet: string
+  comment: string
 }
 
 export interface DuelResult {
@@ -49,17 +49,26 @@ interface DuelState {
   toggleReady: (p: 0 | 1) => void
   start: (duration: number) => void
   setBoard: (p: 0 | 1, board: PlayerBoard) => void
-  finishSide: (p: 0 | 1, kalan: number) => void
+  finishSide: (p: 0 | 1, secondsLeft: number) => void
   /** Scores both players and saves the duel; idempotent. */
   end: () => DuelResult
 }
 
-const emptyBoard = (): PlayerBoard => ({ pool: [], box: [], hist: [], done: false, kalan: null })
+const emptyBoard = (): PlayerBoard => ({
+  pool: [],
+  box: [],
+  hist: [],
+  done: false,
+  secondsLeft: null,
+})
+
+let namePool: readonly string[] | undefined
 
 /** Funny duel names: the curated lists first, plus the generated "Tech Animal" pool. */
-const NAME_POOL = [
-  ...new Set([...nicknames.duello, ...nicknames.senaryoZar, ...GENERATED_NICKNAMES]),
-]
+function duelNamePool(): readonly string[] {
+  namePool ??= [...new Set([...nicknames.duel, ...nicknames.scenarioDice, ...generatedNicknames()])]
+  return namePool
+}
 
 function recentNames(): string[] {
   try {
@@ -79,11 +88,11 @@ export function pickDuelNames(
   // half the time from the hand-written funny names, otherwise from the whole pool
   const draw = () => {
     for (let i = 0; i < 50; i++) {
-      const source = random() < 0.5 ? nicknames.duello : NAME_POOL
+      const source = random() < 0.5 ? nicknames.duel : duelNamePool()
       const name = pickOne(source, random)
       if (!blocked.has(lowerTr(name))) return name
     }
-    return pickOne(NAME_POOL, random)
+    return pickOne(duelNamePool(), random)
   }
   const a = draw()
   blocked.add(lowerTr(a))
@@ -173,10 +182,10 @@ export const useDuelStore = create<DuelState>((set, get) => ({
       return { players }
     }),
 
-  finishSide: (p, kalan) => {
+  finishSide: (p, secondsLeft) => {
     const board = get().players[p]
     if (board.done || get().phase !== 'play') return
-    get().setBoard(p, { ...board, done: true, kalan })
+    get().setBoard(p, { ...board, done: true, secondsLeft })
   },
 
   end: () => {
@@ -186,27 +195,27 @@ export const useDuelStore = create<DuelState>((set, get) => ({
     const task = findTask(taskId)
     if (!task) throw new Error('end() without a task')
     const r = players.map((pl) => {
-      const s = scoreDuel(task, pl.box, pl.kalan ?? 0, duration)
+      const s = scoreDuel(task, pl.box, pl.secondsLeft ?? 0, duration)
       return { ...s, box: [...pl.box], ...duelJury(task, s) }
     }) as [PlayerResult, PlayerResult]
     const win = duelWinner(r)
     const record: DuelRecord = {
       id: newId('d'),
-      zaman: Date.now(),
-      gorev: task.id,
-      kazanan: win,
+      playedAt: Date.now(),
+      taskId: task.id,
+      winner: win,
       p: r.map((x, i) => ({
         nick: names[i],
         total: x.total,
-        uyum: x.uyum,
-        isabet: x.isabet,
-        birlesim: x.birlesim,
-        hiz: x.hiz,
-        ceza: x.ceza,
-        kalan: x.kalan,
+        coverage: x.coverage,
+        accuracy: x.accuracy,
+        combo: x.combo,
+        speed: x.speed,
+        penalty: x.penalty,
+        secondsLeft: x.secondsLeft,
         box: x.box,
-        tuzak: x.traps.length,
-        lakap: x.lakap,
+        trapCount: x.traps.length,
+        epithet: x.epithet,
       })) as DuelRecord['p'],
     }
     const result: DuelResult = { r, win, record }

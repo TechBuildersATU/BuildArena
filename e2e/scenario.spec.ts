@@ -50,7 +50,7 @@ test('a full game: nickname → wheel → crisis → 5 decisions → final → l
   await expect(page.getByTestId('question')).toHaveText('Öğrenciler turnikeden nasıl geçsin?')
   await expect(page.getByTestId('chain-node-1')).toHaveAttribute('data-state', 'cur')
   // harder steps are worth more, and the player sees it
-  await expect(page.getByTestId('step-worth')).toHaveAttribute('data-difficulty', 'zor')
+  await expect(page.getByTestId('step-worth')).toHaveAttribute('data-difficulty', 'hard')
   await expect(page.getByTestId('step-worth')).toHaveText('Zor karar · 21 puan')
   expect(await scanA11y(page)).toEqual([])
 
@@ -85,7 +85,7 @@ test('a full game: nickname → wheel → crisis → 5 decisions → final → l
   const statuses = await page
     .locator('[data-testid^="final-node-"]')
     .evaluateAll((n) => n.map((el) => el.getAttribute('data-status')))
-  expect(statuses).toEqual(['iyi', 'iyi', 'iyi', 'orta', 'iyi'])
+  expect(statuses).toEqual(['good', 'good', 'good', 'average', 'good'])
   await expect(page.getByTestId('result-analysis')).toHaveText(
     'Turnike geçişi, atomik işlem ve yoğun saat performansı kararların çok sağlam. ' +
       'Menü bilgisi tarafında küçük bir eksik var: "Menü + kalori + alerjen" daha iyi işlerdi. ' +
@@ -141,11 +141,19 @@ test('the crisis wheel has sixteen crises, stamps the winner and opens the intro
   await page.getByTestId('scenario-start').tap()
   await expect(page.getByTestId('scenario-wheel')).toContainText('Hazır ol, Korkut!')
   await expect(page.locator('[data-testid^="wheel-tile-"]')).toHaveCount(16)
-  await expect(page.getByTestId('wheel-tile-kafe')).toHaveAttribute('data-state', 'win', {
+  await expect(page.getByTestId('wheel-tile-cafe')).toHaveAttribute('data-state', 'win', {
     timeout: 8_000,
   })
   await expect(page.getByTestId('wheel-stamp')).toHaveText('KRİZ SEÇİLDİ')
-  for (const id of ['yemekhane', 'kutuphane', 'hastane', 'magaza', 'obs', 'ring', 'wifi']) {
+  for (const id of [
+    'cafeteria',
+    'library',
+    'hospital',
+    'store',
+    'student-portal',
+    'campus-transit',
+    'wifi',
+  ]) {
     await expect(page.getByTestId(`wheel-tile-${id}`)).toHaveAttribute('data-state', 'lose')
   }
   // faded losing tiles are decorative; the winner and the stamp carry the information

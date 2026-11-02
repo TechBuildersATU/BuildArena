@@ -110,7 +110,7 @@ npm run check                                    # before calling a WP done
 ## Manual click-through (every UI change)
 
 `npm run dev`, open `http://localhost:5173/?skipTutorial=1` in the browser at 1280×800, tap every
-button on the screens you touched, and compare with `docs/tam_prototip/gorseller/*.png`. Anything that
+button on the screens you touched, and compare with `docs/full-prototype/screens/*.png`. Anything that
 needs the real tablet or two people (simultaneous drags, booth lighting, kiosk lock) goes into the
 report as a manual check.
 

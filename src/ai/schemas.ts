@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { ICON_NAMES } from '@/components/icons'
 
-// Scenario bank / AI scenario schema (scenario doc §9.1). Keys are Turkish, as in the documents.
+// Scenario bank schema (scenario doc §9.1). Keys and ids are English; the texts are the Turkish game content.
 // A response that fails validation is discarded and a scenario comes from the bank.
 
 const IconName = z.enum(ICON_NAMES)
@@ -14,62 +14,62 @@ export function wordCount(text: string): number {
 export const OptionSchema = z
   .object({
     id: z.enum(['a', 'b', 'c', 'd']),
-    metin: z
+    text: z
       .string()
       .min(1)
-      .refine((t) => wordCount(t) <= 6, 'Seçenek metni en fazla 6 kelime'),
-    ikon: IconName,
-    puan: z.number().int().min(0).max(20),
-    etki: z.string().min(1),
-    ozet: z.string().min(1),
+      .refine((t) => wordCount(t) <= 6, 'An option text has at most 6 words'),
+    icon: IconName,
+    points: z.number().int().min(0).max(20),
+    effect: z.string().min(1),
+    summary: z.string().min(1),
   })
   .strict()
 
 export const StepSchema = z
   .object({
     no: z.number().int().min(1).max(5),
-    seviye: z.enum(['detay', 'genel']),
-    konu: z.string().min(1),
-    durum: z.string().min(1),
-    soru: z.string().min(1),
-    secenekler: z.array(OptionSchema).length(4),
+    level: z.enum(['detail', 'general']),
+    topic: z.string().min(1),
+    situation: z.string().min(1),
+    question: z.string().min(1),
+    options: z.array(OptionSchema).length(4),
   })
   .strict()
-  .refine((s) => s.secenekler.filter((o) => o.puan === 20).length === 1, {
-    message: 'Her adımda tam bir 20 puanlık seçenek olmalı',
+  .refine((s) => s.options.filter((o) => o.points === 20).length === 1, {
+    message: 'Every step needs exactly one 20-point option',
   })
 
 export const ScenarioSchema = z
   .object({
     id: z.string().regex(/^[a-z0-9-]+$/),
-    baslik: z.string().includes(':'),
-    sistem: z.string().min(1),
-    ikon: IconName,
-    saat: z.string().regex(/^\d{2}:\d{2}$/),
-    yer: z.string().min(1),
-    olcek: z.string().min(1),
-    giris: z.string().min(1),
-    hedefKitle: z.array(z.object({ ad: z.string().min(1), ikon: IconName }).strict()).min(1),
-    adimlar: z.array(StepSchema).length(5),
+    title: z.string().includes(':'),
+    system: z.string().min(1),
+    icon: IconName,
+    time: z.string().regex(/^\d{2}:\d{2}$/),
+    place: z.string().min(1),
+    scale: z.string().min(1),
+    intro: z.string().min(1),
+    audience: z.array(z.object({ name: z.string().min(1), icon: IconName }).strict()).min(1),
+    steps: z.array(StepSchema).length(5),
   })
   .strict()
-  .refine((s) => s.adimlar.every((a, i) => a.no === i + 1), {
-    message: 'Adımlar 1–5 sırasıyla numaralanmalı',
+  .refine((s) => s.steps.every((a, i) => a.no === i + 1), {
+    message: 'Steps are numbered 1–5 in order',
   })
-  .refine((s) => s.adimlar.every((a, i) => a.seviye === (i < 4 ? 'detay' : 'genel')), {
-    message: 'Adım 1–4 detay, adım 5 genel olmalı',
+  .refine((s) => s.steps.every((a, i) => a.level === (i < 4 ? 'detail' : 'general')), {
+    message: 'Steps 1–4 are detail steps, step 5 is the general one',
   })
 
 export const TitleBandSchema = z
-  .object({ min: z.number().int(), max: z.number().int(), ad: z.string().min(1) })
+  .object({ min: z.number().int(), max: z.number().int(), name: z.string().min(1) })
   .strict()
 
 export const ScenarioBankSchema = z
   .object({
-    surum: z.string(),
-    aciklama: z.string(),
-    unvanlar: z.array(TitleBandSchema).min(1),
-    senaryolar: z.array(ScenarioSchema).min(1),
+    version: z.string(),
+    description: z.string(),
+    titles: z.array(TitleBandSchema).min(1),
+    scenarios: z.array(ScenarioSchema).min(1),
   })
   .strict()
 
@@ -84,11 +84,11 @@ export type ScenarioBank = z.infer<typeof ScenarioBankSchema>
 export const CardSchema = z
   .object({
     id: z.string().regex(/^[a-z0-9-]+$/),
-    ad: z
+    name: z
       .string()
       .min(1)
-      .refine((t) => wordCount(t) <= 3, 'Kart adı kısa olmalı'),
-    ikon: IconName,
+      .refine((t) => wordCount(t) <= 3, 'A card name has at most 3 words'),
+    icon: IconName,
     nfr: z.boolean(),
   })
   .strict()
@@ -97,29 +97,29 @@ export const TaskSchema = z
   .object({
     id: z.string().regex(/^[a-z0-9-]+$/),
     no: z.string().regex(/^\d{2}$/),
-    baslik: z.string().min(1),
-    kisa: z.string().min(1),
-    ikon: IconName,
-    aciklama: z.string().min(1),
-    hedefKitle: z.array(z.object({ ad: z.string().min(1), ikon: IconName }).strict()).min(1),
-    kritik: z.array(z.string()).length(3),
-    onemli: z.array(z.string()).length(4),
-    destek: z.array(z.string()).length(1),
-    tuzak: z.array(z.string()).length(6),
-    birlesimler: z
-      .array(z.object({ ad: z.string().min(1), kartlar: z.array(z.string()).length(2) }).strict())
+    title: z.string().min(1),
+    short: z.string().min(1),
+    icon: IconName,
+    description: z.string().min(1),
+    audience: z.array(z.object({ name: z.string().min(1), icon: IconName }).strict()).min(1),
+    critical: z.array(z.string()).length(3),
+    important: z.array(z.string()).length(4),
+    support: z.array(z.string()).length(1),
+    traps: z.array(z.string()).length(6),
+    combos: z
+      .array(z.object({ name: z.string().min(1), cards: z.array(z.string()).length(2) }).strict())
       .min(1),
   })
   .strict()
-  .refine((t) => new Set([...t.kritik, ...t.onemli, ...t.destek, ...t.tuzak]).size === 14, {
-    message: 'Bir görevde 14 farklı kart olmalı',
+  .refine((t) => new Set([...t.critical, ...t.important, ...t.support, ...t.traps]).size === 14, {
+    message: 'A task has 14 different cards',
   })
   .refine(
     (t) => {
-      const required = new Set([...t.kritik, ...t.onemli, ...t.destek])
-      return t.birlesimler.every((b) => b.kartlar.every((c) => required.has(c)))
+      const required = new Set([...t.critical, ...t.important, ...t.support])
+      return t.combos.every((b) => b.cards.every((c) => required.has(c)))
     },
-    { message: 'Birleşimler yalnızca gerekli kartlardan oluşmalı' },
+    { message: 'Combos only use required cards' },
   )
 
 export type Card = z.infer<typeof CardSchema>

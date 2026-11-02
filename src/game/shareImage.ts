@@ -339,7 +339,7 @@ export async function drawShareImage(
       x.fillText(' /100', sx + sw, ay + (story ? 172 : 148))
       x.textAlign = 'center'
       x.font = font(600, story ? 26 : 22)
-      x.fillText(shortTitle(e.unvan), X + colW / 2, ay + (story ? 210 : 182))
+      x.fillText(shortTitle(e.title), X + colW / 2, ay + (story ? 210 : 182))
     }
   })
   footer(x, W, H, story, 'ATÜ TechBuilders · Yazılım üretir, kampüse değer katarız.')
@@ -374,9 +374,9 @@ export async function drawStatsImage(
   // three number tiles
   y += story ? 70 : 40
   const tiles: [number, string][] = [
-    [st.senaryo, 'kriz çözüldü'],
-    [st.duello, 'düello oynandı'],
-    [st.ort, 'ortalama puan'],
+    [st.scenarioGames, 'kriz çözüldü'],
+    [st.duelGames, 'düello oynandı'],
+    [st.average, 'ortalama puan'],
   ]
   const tw = (W - 2 * M - 2 * 24) / 3
   const th = story ? 200 : 150
@@ -411,7 +411,7 @@ export async function drawStatsImage(
     x.fillStyle = HEX.ink
     x.font = font(700, story ? 28 : 24)
     x.textBaseline = 'middle'
-    x.fillText(u.ad, M, Y + bh / 2)
+    x.fillText(u.name, M, Y + bh / 2)
     x.fillStyle = HEX.card
     roundRect(x, M + lw, Y, bw, bh, bh / 2)
     x.fill()

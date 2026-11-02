@@ -8,69 +8,69 @@ import { shortTitle } from './scoring'
 // End-of-day summary for the staff menu (full prototype §7.2). No personal data: only counts.
 
 export interface DayStats {
-  senaryo: number
-  duello: number
-  ort: number
+  scenarioGames: number
+  duelGames: number
+  average: number
   best: number
   /** step where the fewest players found the best option (at least 3 plays) */
   hard: { scenario: Scenario; stepIndex: number; rate: number; plays: number } | null
   popular: { scenario: Scenario; plays: number } | null
   trap: { card: string; icon: string; count: number } | null
   peak: { hour: number; games: number } | null
-  titles: { ad: string; n: number }[]
+  titles: { name: string; n: number }[]
 }
 
 export function dayStats(scores: readonly ScoreEntry[], duels: readonly DuelRecord[]): DayStats {
-  const ort = scores.length
+  const average = scores.length
     ? Math.round(scores.reduce((a, e) => a + e.score, 0) / scores.length)
     : 0
 
   let hard: DayStats['hard'] = null
   for (const sc of SCENARIOS) {
-    const plays = scores.filter((e) => e.senaryo === sc.id && Array.isArray(e.secimler))
+    const plays = scores.filter((e) => e.scenarioId === sc.id && Array.isArray(e.choices))
     if (plays.length < 3) continue
-    sc.adimlar.forEach((a, i) => {
-      const bestId = a.secenekler.find((o) => o.puan === 20)?.id
-      const rate = plays.filter((e) => e.secimler?.[i] === bestId).length / plays.length
+    sc.steps.forEach((a, i) => {
+      const bestId = a.options.find((o) => o.points === 20)?.id
+      const rate = plays.filter((e) => e.choices?.[i] === bestId).length / plays.length
       if (!hard || rate < hard.rate)
         hard = { scenario: sc, stepIndex: i, rate, plays: plays.length }
     })
   }
 
   const byScenario = new Map<string, number>()
-  for (const e of scores) byScenario.set(e.senaryo, (byScenario.get(e.senaryo) ?? 0) + 1)
+  for (const e of scores) byScenario.set(e.scenarioId, (byScenario.get(e.scenarioId) ?? 0) + 1)
   const popId = [...byScenario.entries()].sort((a, b) => b[1] - a[1])[0]
   const popScenario = popId && findScenario(popId[0])
 
   const traps = new Map<string, number>()
   for (const d of duels) {
-    const task: Task | undefined = findTask(d.gorev)
+    const task: Task | undefined = findTask(d.taskId)
     if (!task) continue
     for (const p of d.p)
-      for (const c of p.box) if (task.tuzak.includes(c)) traps.set(c, (traps.get(c) ?? 0) + 1)
+      for (const c of p.box) if (task.traps.includes(c)) traps.set(c, (traps.get(c) ?? 0) + 1)
   }
   const trapTop = [...traps.entries()].sort((a, b) => b[1] - a[1])[0]
 
   const hours = new Map<number, number>()
   for (const e of [...scores, ...duels]) {
-    const h = new Date(e.zaman).getHours()
+    const h = new Date(e.playedAt).getHours()
     hours.set(h, (hours.get(h) ?? 0) + 1)
   }
   const peak = [...hours.entries()].sort((a, b) => b[1] - a[1])[0]
 
   return {
-    senaryo: scores.length,
-    duello: duels.length,
-    ort,
+    scenarioGames: scores.length,
+    duelGames: duels.length,
+    average,
     best: scores.length ? Math.max(...scores.map((e) => e.score)) : 0,
     hard,
     popular: popScenario ? { scenario: popScenario, plays: popId[1] } : null,
     trap: trapTop
-      ? { card: cardOf(trapTop[0]).ad, icon: cardOf(trapTop[0]).ikon, count: trapTop[1] }
+      ? { card: cardOf(trapTop[0]).name, icon: cardOf(trapTop[0]).icon, count: trapTop[1] }
       : null,
     peak: peak ? { hour: peak[0], games: peak[1] } : null,
-    titles: SCENARIO_BANK.unvanlar.map((u) => ({
-      ad: shortTitle(u.ad),
+    titles: SCENARIO_BANK.titles.map((u) => ({
+      name: shortTitle(u.name),
       n: scores.filter((e) => e.score >= u.min && e.score <= u.max).length,
     })),
   }
@@ -87,19 +87,19 @@ export interface DayFact {
 export function dayFacts(st: DayStats): DayFact[] {
   const facts: DayFact[] = []
   if (st.hard) {
-    const step = st.hard.scenario.adimlar[st.hard.stepIndex]
+    const step = st.hard.scenario.steps[st.hard.stepIndex]
     facts.push({
       icon: 'flame',
       label: 'En zor karar',
-      value: `${shortName(st.hard.scenario)} · ${step.konu.charAt(0).toLocaleUpperCase('tr')}${step.konu.slice(1)}`,
+      value: `${shortName(st.hard.scenario)} · ${step.topic.charAt(0).toLocaleUpperCase('tr')}${step.topic.slice(1)}`,
       side: `%${Math.round(st.hard.rate * 100)} doğru`,
     })
   }
   if (st.popular)
     facts.push({
-      icon: st.popular.scenario.ikon,
+      icon: st.popular.scenario.icon,
       label: 'En popüler kriz',
-      value: st.popular.scenario.baslik,
+      value: st.popular.scenario.title,
       side: `${st.popular.plays} oyun`,
     })
   if (st.trap)

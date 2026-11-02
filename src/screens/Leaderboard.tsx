@@ -20,10 +20,10 @@ import { formatClock, initialOf } from '@/utils/text'
 
 const MEDAL = ['var(--gold)', 'var(--silver)', 'var(--bronze)']
 
-type Tab = 'sen' | 'duel'
+type Tab = 'scenario' | 'duel'
 
 // Today's leaderboard (§8): the Scenario tab (podium, list, scenario filter, "SEN" highlight)
-// and today's duels (newest first, crown on the winner). ?sekme=duel opens the duel tab.
+// and today's duels (newest first, crown on the winner). ?tab=duel opens the duel tab.
 export function Leaderboard() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -32,7 +32,7 @@ export function Leaderboard() {
   const me = useScenarioStore((st) => st.entry?.id)
   const reset = useScenarioStore((st) => st.reset)
   const unlockStaff = useUiStore((st) => st.unlockStaff)
-  const [tab, setTab] = useState<Tab>(() => (params.get('sekme') === 'duel' ? 'duel' : 'sen'))
+  const [tab, setTab] = useState<Tab>(() => (params.get('tab') === 'duel' ? 'duel' : 'scenario'))
   const [filter, setFilter] = useState('all')
   const [round, setRound] = useState(0)
   const [pinOpen, setPinOpen] = useState(false)
@@ -44,7 +44,7 @@ export function Leaderboard() {
     sfx.pick()
   }, [])
 
-  const list = rankEntries(scores ?? []).filter((e) => filter === 'all' || e.senaryo === filter)
+  const list = rankEntries(scores ?? []).filter((e) => filter === 'all' || e.scenarioId === filter)
   const [date] = useState(() =>
     new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }),
   )
@@ -79,13 +79,13 @@ export function Leaderboard() {
         </div>
         <span className={s.chip}>
           <Icon name="calendar" />
-          {date} · {tab === 'sen' ? 'Senaryo' : 'Düello'}
+          {date} · {tab === 'scenario' ? 'Senaryo' : 'Düello'}
         </span>
         <div className={s.barR}>
           <div className={s.tabs} role="tablist" aria-label="Skor tablosu">
             {(
               [
-                ['sen', 'route', 'Senaryo'],
+                ['scenario', 'route', 'Senaryo'],
                 ['duel', 'swords', 'Günün Düelloları'],
               ] as const
             ).map(([id, icon, label]) => (
@@ -106,8 +106,8 @@ export function Leaderboard() {
         </div>
       </header>
 
-      {tab === 'sen' ? (
-        <div className={cn(s.pane, s.boardGo)} key={`sen${round}`} data-testid="pane-sen">
+      {tab === 'scenario' ? (
+        <div className={cn(s.pane, s.boardGo)} key={`scenario${round}`} data-testid="pane-scenario">
           <div className={s.fltrow}>
             <span className={s.eyebrow}>
               <Icon name="filter" />
@@ -135,7 +135,7 @@ export function Leaderboard() {
                   data-testid={`filter-${sc.id}`}
                   onClick={() => choose(sc.id)}
                 >
-                  <Icon name={sc.ikon} />
+                  <Icon name={sc.icon} />
                 </button>
               ))}
             </div>
@@ -247,7 +247,7 @@ function Board({ list, me }: { list: ScoreEntry[]; me: string | undefined }) {
               </div>
             )
           }
-          const sc = findScenario(e.senaryo)
+          const sc = findScenario(e.scenarioId)
           return (
             <div
               key={place}
@@ -270,12 +270,12 @@ function Board({ list, me }: { list: ScoreEntry[]; me: string | undefined }) {
                   {e.score}
                   <small> /100</small>
                 </div>
-                <div className={s.pu}>{shortTitle(e.unvan)}</div>
+                <div className={s.pu}>{shortTitle(e.title)}</div>
               </div>
               <div className={s.bar2}>
                 <b>{place + 1}</b>
-                {sc && <Icon name={sc.ikon} />}
-                {e.izin && <Icon name="megaphone" aria-label="paylaşım izni var" />}
+                {sc && <Icon name={sc.icon} />}
+                {e.consent && <Icon name="megaphone" aria-label="paylaşım izni var" />}
               </div>
             </div>
           )
@@ -319,7 +319,7 @@ function Board({ list, me }: { list: ScoreEntry[]; me: string | undefined }) {
 }
 
 function DuelList({ duels }: { duels: DuelRecord[] }) {
-  const list = [...duels].sort((a, b) => b.zaman - a.zaman).slice(0, 8)
+  const list = [...duels].sort((a, b) => b.playedAt - a.playedAt).slice(0, 8)
   return (
     <div className={s.dlist} data-testid="duel-list">
       <div className={s.dh}>
@@ -333,13 +333,13 @@ function DuelList({ duels }: { duels: DuelRecord[] }) {
         <div className={s.tempty}>Bugün henüz düello oynanmadı.</div>
       ) : (
         list.map((d, i) => {
-          const task = findTask(d.gorev)
+          const task = findTask(d.taskId)
           const player = (k: 0 | 1) => (
-            <span className={cn(s.dpl, k === 1 && s.dplR, d.kazanan === 1 - k && s.dLoser)}>
+            <span className={cn(s.dpl, k === 1 && s.dplR, d.winner === 1 - k && s.dLoser)}>
               <i className={s.ddot} style={{ '--m': `var(--p${k + 1})` } as CSSProperties} />
               <span>{d.p[k].nick}</span>
               <span className={s.dpts}>{d.p[k].total}</span>
-              {d.kazanan === k && <Icon name="crown" aria-label="kazanan" />}
+              {d.winner === k && <Icon name="crown" aria-label="kazanan" />}
             </span>
           )
           return (
@@ -348,15 +348,15 @@ function DuelList({ duels }: { duels: DuelRecord[] }) {
               className={s.dr}
               style={{ '--r': i } as CSSProperties}
               data-testid="duel-row"
-              data-winner={d.kazanan}
+              data-winner={d.winner}
             >
-              <span className={s.tm}>{formatClock(d.zaman)}</span>
+              <span className={s.tm}>{formatClock(d.playedAt)}</span>
               <span className={s.dtk}>
-                {task && <Icon name={task.ikon} />}
-                {task ? task.kisa : d.gorev}
+                {task && <Icon name={task.icon} />}
+                {task ? task.short : d.taskId}
               </span>
               {player(0)}
-              <span className={s.vs2}>{d.kazanan === -1 ? 'BERABERE' : 'VS'}</span>
+              <span className={s.vs2}>{d.winner === -1 ? 'BERABERE' : 'VS'}</span>
               {player(1)}
             </div>
           )
@@ -377,7 +377,7 @@ function Row({
   order: number
   me?: string
 }) {
-  const sc = findScenario(entry.senaryo)
+  const sc = findScenario(entry.scenarioId)
   const mine = entry.id === me
   return (
     <div
@@ -392,14 +392,14 @@ function Row({
       <span className={s.rowName}>
         <span>{entry.nick}</span>
         {mine && <span className={s.tag}>SEN</span>}
-        {entry.izin && <Icon name="megaphone" aria-label="paylaşım izni var" />}
+        {entry.consent && <Icon name="megaphone" aria-label="paylaşım izni var" />}
       </span>
       <span className={s.sn}>
-        {sc && <Icon name={sc.ikon} />}
-        <span>{sc ? shortName(sc) : entry.senaryo}</span>
+        {sc && <Icon name={sc.icon} />}
+        <span>{sc ? shortName(sc) : entry.scenarioId}</span>
       </span>
-      <span className={s.un}>{shortTitle(entry.unvan)}</span>
-      <span className={s.tm}>{formatClock(entry.zaman)}</span>
+      <span className={s.un}>{shortTitle(entry.title)}</span>
+      <span className={s.tm}>{formatClock(entry.playedAt)}</span>
       <span className={s.sc}>{entry.score}</span>
     </div>
   )

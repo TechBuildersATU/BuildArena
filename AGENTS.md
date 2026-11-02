@@ -9,36 +9,42 @@ funny titles and the nickname filter are all local and deterministic. Don't add 
 
 ## Specs (read the relevant section before every task)
 
-1. **`docs/tam_prototip/` — the full prototype (v0.3) is the primary reference.** The club built it
-   as the almost-final app: `BuildArena_Tam_Prototip_Kilavuz.pdf` (+ a text extraction `.txt`),
-   the playable prototype `uygulama/index.html` (`js/*.js`, `css/uygulama.css`), screens
-   `gorseller/*.png`, data `veri/senaryolar.json`. Every screen of the app is a port of it.
-2. **`docs/renk_paleti/` — the colour palette and component language (wins over the prototype's
-   dark theme):** `BuildArena_Renk_Paleti.html` (open it in a browser), screenshots
-   `bilesenler.png`, `ekranlar.png`. Mirrored in `src/styles/tokens.css`.
-3. `docs/senaryo_modu/` — the scenario-mode document and prototype (nickname, wheel, crisis,
-   steps, final, leaderboard, top-3 export).
-4. `docs/BuildArena_Project_Document_EN.md` (Turkish edition `docs/BuildArena_Proje_Dokumani.md`
-   wins if they disagree) — product rules, schemas, tests. Its AI/proxy chapters (§12.2–12.3,
+1. **`docs/full-prototype/` — the full prototype (v0.3) is the primary reference.** The club built it
+   as the almost-final app: `BuildArena_Full_Prototype_Guide_TR.pdf` (Turkish, + a text extraction
+   `.txt`), the playable prototype `app/index.html` (`js/*.js`, `css/uygulama.css`; the club's
+   original Turkish code, kept as delivered), screens `screens/*.png`, data `data/senaryolar.json`.
+   Every screen of the app is a port of it.
+2. **`docs/palette/` — the colour palette and component language (wins over the prototype's
+   dark theme):** `BuildArena_Palette.html` (open it in a browser), screenshots
+   `components.png`, `screens.png`. Mirrored in `src/styles/tokens.css`.
+3. `docs/scenario-mode/SCENARIO_MODE.md` — the scenario-mode document (English edition of the
+   club's Turkish `.pdf`/`.docx`) and its playable prototype (nickname, wheel, crisis, steps,
+   final, leaderboard, top-3 export).
+4. `docs/PROJECT_DOCUMENT.md` (the original Turkish edition is `BuildArena_Project_Document_TR.pdf`)
+   — product rules, schemas, tests. Its AI/proxy chapters (§12.2–12.3,
    §12.6–12.8 API parts, WP-11/12) are **cancelled**, and its colour tables (§14) are replaced
    by the palette above.
 
 Deliberate deviations from the prototype, decided with the club:
 
 - **Scoring** (`src/game/scoring.ts`, unit-tested):
-  - Scenario: each step's maximum comes from its difficulty (tempting runner-up option, "genel"
-    step), shared out to exactly 100. Accuracy is convex (`(puan/20)^1.5`). 10 % of each step is
+  - Scenario: each step's maximum comes from its difficulty (tempting runner-up option, the
+    `general` step), shared out to exactly 100. Accuracy is convex (`(points/20)^1.5`). 10 % of each step is
     speed (full in the first 2 s, then linear to 0 at the limit), multiplied by accuracy.
     A timed-out step scores 0, so an empty game scores 0.
-  - Duel: coverage 55 (kritik 3 / önemli 2 / destek 1), precision–recall F1 20, combos 15,
+  - Duel: coverage 55 (critical 3 / important 2 / support 1), precision–recall F1 20, combos 15,
     speed 10 × quality, −5 per trap, never below 0. An empty box scores 0; two empty boxes draw.
 - **Nickname**: no on-screen keyboard and no ready-name panel; a text field (tablet keyboard)
   with a dice inside it. The dice rolls like a slot machine through the ~3,700 generated
   "Tech Animal" names plus the hand-picked ones (`rollNickname`), never a name taken today or
-  shown recently. The Turkish/English filter (`src/game/nickname.ts`, `src/data/badwords.json`)
-  normalises letters, digits, symbols, spaced letters and repeats; roots (`kok`) catch
-  anything starting with them, with clean words listed in `kokIstisna` (Ocak, Boksör, Seksen …);
-  keep its false-positive tests green when you extend the lists. The duel name dice rolls without
+  shown recently. The Turkish/English profanity filter (`src/game/profanity.ts`, lists in
+  `src/data/badwords.json`, wired in `src/game/nickname.ts`) reads every name in several ways
+  (Turkish letters, digits and symbols, q/w, stretched letters, split letters, CamelCase, glued
+  words) and refuses `exact` words, `roots` (strict ones such as am / sik / göt / oç / piç refuse
+  every word starting with them), `suffixes` and `fragments`; a hit is forgiven only when a
+  `cleanWords` entry, matched with its Turkish letters, covers it completely (Amca, Sikke, Sıkı,
+  Ocak …). `tests/unit/profanity.test.ts` tries thousands of disguises and the clean look-alikes;
+  keep both sides green when you extend the lists. The duel name dice rolls without
   limit too.
 - **Content**: 16 scenarios (step 5 asks in plain words what the system must never give up while
   it grows; no "fonksiyonel olmayan" jargon), 15 duel tasks, 84 cards.
@@ -112,13 +118,15 @@ The user's standing requirement: **every button and every page is tested while d
   have their own specs (`duel`, `scenario`, `staff`, `home-tutorial`). Multi-touch is tested with
   real CDP touch events (`e2e/duel.spec.ts`).
 - After any UI change, run the dev server and click through the touched screens at 1280×800;
-  compare with `docs/tam_prototip/gorseller/`.
+  compare with `docs/full-prototype/screens/`.
 - Never delete, skip or loosen a failing test to get green. Fix the code, or explain and ask.
 
 ## Code conventions
 
-- UI text is **Turkish**; code, comments and identifiers are English. JSON data keys are Turkish
-  (`baslik`, `kartlar`, `tur`, `agirlik` …).
+- UI text and game content are **Turkish**; everything else is English: code, comments,
+  identifiers, CSS classes, test ids, JSON data keys and ids (`title`, `steps`, `options`,
+  `points`, `traps`, `cafeteria`, `appointment` …), docs. Records saved by older builds with
+  Turkish fields are upgraded by `src/db/legacy.ts` (IndexedDB version 3); don't add Turkish names.
 - Every screen root and interactive element has a `data-testid` (kebab-case): screens `home`,
   `task-card`, `duel-game` …; buttons `btn-duel`, `tutorial-next`; per player `p1-finish`,
   `p2-card-<id>`.
@@ -134,7 +142,7 @@ The user's standing requirement: **every button and every page is tested while d
 - Folder structure: `app/ audio/ screens/ components/ game/ stores/ ai/ data/ db/ styles/`
   (`ai/` now holds the zod schemas and the local jury templates).
 
-## Design — the club's palette wins (`docs/renk_paleti/`)
+## Design — the club's palette wins (`docs/palette/`)
 
 - "Paper, ink and four printed colours": a board game, not a dark screen. Paper `--paper`
   background, white `--card`s, ink `--ink` text and 2 px lines (`--border`), hard ink shadows

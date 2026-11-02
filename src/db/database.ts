@@ -1,57 +1,83 @@
 import Dexie, { type EntityTable } from 'dexie'
 import { useLiveQuery } from 'dexie-react-hooks'
 import type { RankedEntry } from '@/game/scoring'
+import { upgradeDuelRecord, upgradeScoreRecord } from './legacy'
 
 // Scores and duels in IndexedDB (document §8): they survive reloads and restarts. Only
 // nicknames, scores, titles, scenario/task ids, times, choices and the consent flag are stored.
 
 export interface ScoreEntry extends RankedEntry {
   nick: string
-  unvan: string
+  title: string
   /** scenario id */
-  senaryo: string
+  scenarioId: string
   /** consent to share on the club's social media */
-  izin: boolean
+  consent: boolean
   /** chosen option id per step (null = time ran out); feeds the day's "hardest decision" */
-  secimler?: (string | null)[]
+  choices?: (string | null)[]
 }
 
 export interface DuelPlayerRecord {
   nick: string
   total: number
-  uyum: number
-  isabet: number
-  birlesim: number
-  hiz: number
-  ceza: number
-  kalan: number
+  coverage: number
+  accuracy: number
+  combo: number
+  speed: number
+  penalty: number
+  secondsLeft: number
   box: string[]
-  tuzak: number
-  lakap: string
+  trapCount: number
+  epithet: string
 }
 
 export interface DuelRecord {
   id: string
-  zaman: number
+  playedAt: number
   /** task id */
-  gorev: string
+  taskId: string
   /** 0 / 1, or -1 for a draw */
-  kazanan: 0 | 1 | -1
+  winner: 0 | 1 | -1
   p: [DuelPlayerRecord, DuelPlayerRecord]
 }
 
-type Archived<T> = T & { arsivGunu: string }
+type Archived<T> = T & { archiveDay: string }
 
-class BuildArenaDb extends Dexie {
+export class BuildArenaDb extends Dexie {
   scores!: EntityTable<ScoreEntry, 'id'>
   archive!: EntityTable<Archived<ScoreEntry>, 'id'>
   duels!: EntityTable<DuelRecord, 'id'>
   duelArchive!: EntityTable<Archived<DuelRecord>, 'id'>
 
-  constructor() {
-    super('buildarena')
+  constructor(name = 'buildarena') {
+    super(name)
+    // Versions 1–2 were written with Turkish field names (zaman, arsivGunu …); version 3 renames
+    // the indexes and rewrites every saved record in English (legacy.ts).
     this.version(1).stores({ scores: 'id, zaman', archive: 'id, arsivGunu' })
     this.version(2).stores({ duels: 'id, zaman', duelArchive: 'id, arsivGunu' })
+    this.version(3)
+      .stores({
+        scores: 'id, playedAt',
+        archive: 'id, archiveDay',
+        duels: 'id, playedAt',
+        duelArchive: 'id, archiveDay',
+      })
+      .upgrade(async (tx) => {
+        for (const table of ['scores', 'archive'])
+          await tx
+            .table(table)
+            .toCollection()
+            .modify((record, ref) => {
+              ref.value = upgradeScoreRecord(record)
+            })
+        for (const table of ['duels', 'duelArchive'])
+          await tx
+            .table(table)
+            .toCollection()
+            .modify((record, ref) => {
+              ref.value = upgradeDuelRecord(record)
+            })
+      })
   }
 }
 
@@ -80,8 +106,8 @@ export async function archiveAndReset(now = Date.now()): Promise<number> {
   return db.transaction('rw', [db.scores, db.archive, db.duels, db.duelArchive], async () => {
     const scores = await db.scores.toArray()
     const duels = await db.duels.toArray()
-    await db.archive.bulkPut(scores.map((e) => ({ ...e, arsivGunu: day })))
-    await db.duelArchive.bulkPut(duels.map((d) => ({ ...d, arsivGunu: day })))
+    await db.archive.bulkPut(scores.map((e) => ({ ...e, archiveDay: day })))
+    await db.duelArchive.bulkPut(duels.map((d) => ({ ...d, archiveDay: day })))
     await db.scores.clear()
     await db.duels.clear()
     return scores.length + duels.length

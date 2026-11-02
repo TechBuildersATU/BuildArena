@@ -1,28 +1,37 @@
 import { describe, expect, it } from 'vitest'
 import { pickCrisis, wheelHops } from '@/game/crisisWheel'
 
-const IDS = ['yemekhane', 'kutuphane', 'kafe', 'hastane', 'magaza', 'obs', 'servis', 'yurt']
+const IDS = [
+  'cafeteria',
+  'library',
+  'cafe',
+  'hospital',
+  'store',
+  'student-portal',
+  'shuttle',
+  'dorm',
+]
 
 describe('crisis wheel (scenario doc §3.2)', () => {
   it('never lands on the scenario last played on this device', () => {
     for (let i = 0; i < 500; i++) {
-      const { target } = pickCrisis(IDS, 'kafe')
-      expect(IDS[target]).not.toBe('kafe')
+      const { target } = pickCrisis(IDS, 'cafe')
+      expect(IDS[target]).not.toBe('cafe')
     }
   })
 
   it('every other scenario can come up', () => {
     const seen = new Set<string>()
     for (let i = 0; i < 7; i++)
-      seen.add(IDS[pickCrisis(IDS, 'kafe', undefined, () => i / 7 + 0.01).target])
+      seen.add(IDS[pickCrisis(IDS, 'cafe', undefined, () => i / 7 + 0.01).target])
     expect([...seen].sort()).toEqual([
-      'hastane',
-      'kutuphane',
-      'magaza',
-      'obs',
-      'servis',
-      'yemekhane',
-      'yurt',
+      'cafeteria',
+      'dorm',
+      'hospital',
+      'library',
+      'shuttle',
+      'store',
+      'student-portal',
     ])
   })
 
@@ -31,7 +40,7 @@ describe('crisis wheel (scenario doc §3.2)', () => {
   })
 
   it('?seed=N forces scenario N % 8 from the first tile', () => {
-    expect(pickCrisis(IDS, 'yemekhane', 0)).toEqual({ target: 0, start: 0 })
+    expect(pickCrisis(IDS, 'cafeteria', 0)).toEqual({ target: 0, start: 0 })
     expect(pickCrisis(IDS, null, 7)).toEqual({ target: 7, start: 0 })
     expect(pickCrisis(IDS, null, 10)).toEqual({ target: 2, start: 0 })
   })

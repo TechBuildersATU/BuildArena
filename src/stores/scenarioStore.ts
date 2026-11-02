@@ -8,12 +8,12 @@ import { scoreScenario, titleFor, totalTime, type ScenarioPick } from '@/game/sc
 
 interface ScenarioSession {
   nick: string
-  izin: boolean
+  consent: boolean
   scenarioId: string | null
   picks: ScenarioPick[]
   /** set once the game is finished and saved */
   entry: ScoreEntry | null
-  begin: (nick: string, izin: boolean) => void
+  begin: (nick: string, consent: boolean) => void
   chooseScenario: (id: string) => void
   addPick: (pick: ScenarioPick) => void
   /** Builds and saves the leaderboard entry; calling it again returns the same entry. */
@@ -23,19 +23,19 @@ interface ScenarioSession {
 
 export const useScenarioStore = create<ScenarioSession>((set, get) => ({
   nick: '',
-  izin: true,
+  consent: true,
   scenarioId: null,
   picks: [],
   entry: null,
 
-  begin: (nick, izin) => set({ nick, izin, scenarioId: null, picks: [], entry: null }),
+  begin: (nick, consent) => set({ nick, consent, scenarioId: null, picks: [], entry: null }),
 
   chooseScenario: (id) => set({ scenarioId: id, picks: [], entry: null }),
 
   addPick: (pick) => set((s) => ({ picks: [...s.picks, pick] })),
 
   finish: () => {
-    const { entry, nick, izin, scenarioId, picks } = get()
+    const { entry, nick, consent, scenarioId, picks } = get()
     if (entry) return entry
     const scenario = findScenario(scenarioId)
     if (!scenario) throw new Error('finish() without a scenario')
@@ -44,13 +44,13 @@ export const useScenarioStore = create<ScenarioSession>((set, get) => ({
       id: newId('k'),
       nick,
       score: total,
-      unvan: titleFor(total),
-      senaryo: scenario.id,
-      sure: totalTime(picks),
-      zaman: Date.now(),
-      izin,
-      secimler: picks.map((p) =>
-        p.optionIndex === null ? null : scenario.adimlar[p.stepIndex].secenekler[p.optionIndex].id,
+      title: titleFor(total),
+      scenarioId: scenario.id,
+      seconds: totalTime(picks),
+      playedAt: Date.now(),
+      consent,
+      choices: picks.map((p) =>
+        p.optionIndex === null ? null : scenario.steps[p.stepIndex].options[p.optionIndex].id,
       ),
     }
     set({ entry: created })
@@ -59,5 +59,5 @@ export const useScenarioStore = create<ScenarioSession>((set, get) => ({
     return created
   },
 
-  reset: () => set({ nick: '', izin: true, scenarioId: null, picks: [], entry: null }),
+  reset: () => set({ nick: '', consent: true, scenarioId: null, picks: [], entry: null }),
 }))

@@ -24,7 +24,7 @@ export function DuelResult() {
   const result = useDuelStore((st) => st.result)
   const task = findTask(useDuelStore((st) => st.taskId))
   if (!result || !task) return <Navigate to={ROUTES.duelIntro} replace />
-  return <ResultView result={result} taskTitle={task.baslik} taskIcon={task.ikon} />
+  return <ResultView result={result} taskTitle={task.title} taskIcon={task.icon} />
 }
 
 function ResultView({
@@ -63,7 +63,7 @@ function ResultView({
   })
   const board = usePressGuard(() => {
     sfx.tap()
-    void navigate(`${ROUTES.leaderboard}?sekme=duel`)
+    void navigate(`${ROUTES.leaderboard}?tab=duel`)
   })
 
   return (
@@ -120,10 +120,10 @@ function ResultHalf({ side, name, x, win }: HalfProps) {
   const tag = `p${side + 1}`
 
   const parts = [
-    { icon: 'users', label: 'Hedef kitle uyumu', value: x.uyum, max: DUEL_RULES.coverage },
-    { icon: 'target', label: 'İsabet', value: x.isabet, max: DUEL_RULES.precision },
-    { icon: 'link-2', label: 'Birleşimler', value: x.birlesim, max: DUEL_RULES.combos },
-    { icon: 'timer', label: 'Hız bonusu', value: x.hiz, max: DUEL_RULES.speed },
+    { icon: 'users', label: 'Hedef kitle uyumu', value: x.coverage, max: DUEL_RULES.coverage },
+    { icon: 'target', label: 'İsabet', value: x.accuracy, max: DUEL_RULES.precision },
+    { icon: 'link-2', label: 'Birleşimler', value: x.combo, max: DUEL_RULES.combos },
+    { icon: 'timer', label: 'Hız bonusu', value: x.speed, max: DUEL_RULES.speed },
   ]
 
   useEffect(() => {
@@ -152,7 +152,7 @@ function ResultHalf({ side, name, x, win }: HalfProps) {
       await sleep(dur(150), signal)
       setBadge(true)
       await sleep(dur(400), signal)
-      if (comment.current) await typewrite(comment.current, x.yorum, dur(18), signal)
+      if (comment.current) await typewrite(comment.current, x.comment, dur(18), signal)
     })().catch(ignoreAbort)
     return () => run.abort()
   }, [x, side])
@@ -185,7 +185,7 @@ function ResultHalf({ side, name, x, win }: HalfProps) {
           LAKABIN
         </small>
         <b className={cn(stamped && d.stampOn)} data-testid={`${tag}-title`}>
-          “{x.lakap}”
+          “{x.epithet}”
         </b>
       </div>
       <div className={d.srow}>
@@ -236,13 +236,13 @@ function ResultHalf({ side, name, x, win }: HalfProps) {
               </div>
             </div>
           ))}
-          {x.ceza < 0 && (
+          {x.penalty < 0 && (
             <div className={cn(d.brow, d.browPenalty)} data-testid={`${tag}-penalty`}>
               <div className={d.ri}>
                 <Icon name="ban" />
               </div>
               <span>Tuzak cezası · {x.traps.length} kart</span>
-              <em>{x.ceza}</em>
+              <em>{x.penalty}</em>
             </div>
           )}
         </div>
